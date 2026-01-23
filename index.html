@@ -7822,7 +7822,7 @@ height: 100%;
     
     // מגבלות גרסה חינמית
     const FREE_LIMITS = {
-      maxNotebooks: 3,
+      maxNotebooks: 4,
       maxPages: {
         lined: 20,
         grid: 20,
@@ -7862,7 +7862,7 @@ autoSaveInterval: null,
       searchQuery: '',
       filteredEvents: [],
       
-      // מחברות ברירת מחדל
+      // מחברות ברירת מחדל (4 מחברות לגרסה חינמית)
       subjects: {
         math: {
           title: 'מתמטיקה',
@@ -7872,8 +7872,8 @@ autoSaveInterval: null,
           pageType: 'grid',
           pages: [
             {
-              title: 'משוואות ריבועיות',
-              content: 'משוואה ריבועית היא משוואה מהצורה ax² + bx + c = 0\n\nדרכי פתרון:\n1. פירוק לגורמים\n2. השלמה לריבוע מושלם\n3. נוסחת השורשים\n\nנוסחת השורשים:\nx = (-b ± √(b²-4ac)) / 2a',
+              title: 'דף ראשון',
+              content: 'ברוכים הבאים למחברת מתמטיקה!\nהתחילו לכתוב כאן...',
               date: new Date().toLocaleDateString('he-IL')
             }
           ]
@@ -7886,22 +7886,8 @@ autoSaveInterval: null,
           pageType: 'lined',
           pages: [
             {
-              title: 'הדקדוק - זמני הפועל',
-              content: 'זמני הפועל בעברית:\n\n1. עבר - מתאר פעולה שהתרחשה בעבר\n2. הווה - מתאר פעולה המתרחשת עכשיו\n3. עתיד - מתאר פעולה שתתרחש בעתיד\n4. ציווי - מבטא ציווי או בקשה',
-              date: new Date().toLocaleDateString('he-IL')
-            }
-          ]
-        },
-        english: {
-          title: 'English',
-          icon: '🌍',
-          color: '#3498db',
-          description: 'Grammar, Literature & Writing',
-          pageType: 'lined',
-          pages: [
-            {
-              title: 'Present Tenses',
-              content: 'Present Tenses in English:\n\n1. Present Simple - habits, facts\n2. Present Continuous - actions happening now\n3. Present Perfect - completed actions with present relevance\n4. Present Perfect Continuous - ongoing actions',
+              title: 'דף ראשון',
+              content: 'ברוכים הבאים למחברת עברית!\nהתחילו לכתוב כאן...',
               date: new Date().toLocaleDateString('he-IL')
             }
           ]
@@ -7914,36 +7900,22 @@ autoSaveInterval: null,
           pageType: 'lined',
           pages: [
             {
-              title: 'חוקי ניוטון',
-              content: 'שלושת חוקי התנועה של ניוטון:\n\n1. חוק האינרציה\n2. חוק התאוצה: F = ma\n3. חוק הפעולה והתגובה',
+              title: 'דף ראשון',
+              content: 'ברוכים הבאים למחברת מדעים!\nהתחילו לכתוב כאן...',
               date: new Date().toLocaleDateString('he-IL')
             }
           ]
         },
-        history: {
-          title: 'היסטוריה',
-          icon: '🏛️',
-          color: '#d35400',
-          description: 'תולדות ישראל והעולם',
-          pageType: 'lined',
+        drawing: {
+          title: 'ציור',
+          icon: '🎨',
+          color: '#9b59b6',
+          description: 'מחברת ציור חלקה',
+          pageType: 'blank',
           pages: [
             {
-              title: 'מלחמת העצמאות',
-              content: 'מלחמת העצמאות (1947-1949)\n\nשלבי המלחמה:\n1. מלחמת הדרכים\n2. פלישת צבאות הערב\n3. הפוגות והקרבות',
-              date: new Date().toLocaleDateString('he-IL')
-            }
-          ]
-        },
-        geography: {
-          title: 'גיאוגרפיה',
-          icon: '🌎',
-          color: '#16a085',
-          description: 'ארץ ישראל והעולם',
-          pageType: 'lined',
-          pages: [
-            {
-              title: 'אקלים ישראל',
-              content: 'אזורי אקלים בישראל:\n\n1. אקלים ים תיכוני\n2. אקלים מדברי\n3. אקלים הררי',
+              title: 'דף ציור',
+              content: '',
               date: new Date().toLocaleDateString('he-IL')
             }
           ]
