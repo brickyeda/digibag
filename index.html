@@ -12705,30 +12705,17 @@ insertImage() {
           // ניסיון לטעון מ-Supabase קודם
           const cloudData = await loadFromSupabase('notebook_data');
           
-          let dataToLoad = null;
-          
-          if (cloudData) {
-            // יש נתונים בענן - השתמש בהם
+          if (cloudData && Object.keys(cloudData).length > 0) {
+            // יש נתונים בענן - החלף את ברירות המחדל לגמרי
             console.log('✅ נטען מהענן - מחברות');
-            dataToLoad = cloudData;
+            this.subjects = cloudData;
             // שמור גם ב-localStorage כגיבוי
             localStorage.setItem('notebookData', JSON.stringify(cloudData));
           } else {
-            // אין נתונים בענן
-            console.log('⚠️ אין נתונים בענן - התחל ריק');
-            // אל תטען מ-localStorage - זה עשוי להיות של משתמש אחר!
-            dataToLoad = null;
-          }
-          
-          // טען את הנתונים
-          if (dataToLoad) {
-            Object.keys(dataToLoad).forEach(key => {
-              if (this.subjects[key]) {
-                this.subjects[key].pages = dataToLoad[key].pages || this.subjects[key].pages;
-              } else {
-                this.subjects[key] = dataToLoad[key];
-              }
-            });
+            // אין נתונים בענן - השתמש בברירות המחדל (כבר מוגדרות ב-subjects)
+            console.log('📓 משתמש חדש - טוען מחברות ברירת מחדל');
+            // שמור את ברירות המחדל בענן
+            await this.saveNotebookData();
           }
         } catch (error) {
           console.error('שגיאה בטעינת נתונים:', error);
