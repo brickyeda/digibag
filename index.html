@@ -7820,6 +7820,21 @@ height: 100%;
       }
     }
     
+    // מגבלות גרסה חינמית
+    const FREE_LIMITS = {
+      maxNotebooks: 3,
+      maxPages: {
+        lined: 20,
+        grid: 20,
+        blank: 1
+      },
+      maxPerType: {
+        lined: 2,
+        grid: 1,
+        blank: 1
+      }
+    };
+    
     // אפליקציה ראשית
     const app = {
 autoSaveInterval: null,
@@ -8129,6 +8144,57 @@ this.showPage('homepage');
       goToCheckout() {
         alert('🚧 מערכת התשלומים בבנייה!\n\nבקרוב תוכל לשדרג לפרימיום.');
         this.closeUpgradeModal();
+      },
+
+      // בדיקה אם אפשר ליצור מחברת חדשה
+      canCreateNotebook(type) {
+        if (this.isPro) return true;
+
+        const notebookCount = Object.keys(this.subjects).length;
+        
+        // בדיקת מגבלת מחברות כללית
+        if (notebookCount >= FREE_LIMITS.maxNotebooks) {
+          this.openUpgradeModal('יצירת יותר מ-3 מחברות');
+          return false;
+        }
+
+        // ספירת מחברות מאותו סוג
+        const countByType = Object.values(this.subjects).filter(n => n.pageType === type).length;
+        
+        if (countByType >= FREE_LIMITS.maxPerType[type]) {
+          const typeNames = {
+            lined: 'מחברות שורה',
+            grid: 'מחברות משובצות',
+            blank: 'מחברות חלקות'
+          };
+          this.openUpgradeModal(`יצירת ${typeNames[type] || 'מחברות'} נוספות`);
+          return false;
+        }
+
+        return true;
+      },
+
+      // בדיקה אם אפשר להוסיף דף למחברת
+      canAddPage(notebookKey) {
+        if (this.isPro) return true;
+
+        const notebook = this.subjects[notebookKey];
+        if (!notebook) return false;
+
+        const pageType = notebook.pageType || 'lined';
+        const maxPages = FREE_LIMITS.maxPages[pageType] || 20;
+        const currentPages = notebook.pages ? notebook.pages.length : 0;
+
+        if (currentPages >= maxPages) {
+          if (pageType === 'blank') {
+            this.openUpgradeModal('הוספת דפים נוספים למחברת חלקה');
+          } else {
+            this.openUpgradeModal(`הוספת יותר מ-${maxPages} דפים למחברת`);
+          }
+          return false;
+        }
+
+        return true;
       },
 
       // עדכון ממשק משתמש
@@ -9057,6 +9123,11 @@ if (pageData.formulas && pageData.formulas.length > 0) {
       // הוספת דף חדש למחברת
       addNotebookPage() {
         if (!this.currentNotebook || !this.subjects[this.currentNotebook]) return;
+        
+        // בדיקת מגבלות גרסה חינמית
+        if (!this.canAddPage(this.currentNotebook)) {
+          return;
+        }
         
         const pageTitle = prompt('שם הדף החדש:');
         if (!pageTitle || pageTitle.trim() === '') return;
@@ -10308,6 +10379,11 @@ savePageFormatting(index) {
         
         if (!name) {
           alert('אנא הכנס שם למחברת');
+          return;
+        }
+        
+        // בדיקת מגבלות גרסה חינמית
+        if (!this.canCreateNotebook(this.selectedPageType)) {
           return;
         }
         
