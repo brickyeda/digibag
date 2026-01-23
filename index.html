@@ -8094,7 +8094,7 @@ this.showPage('homepage');
       // טעינת סטטוס פרימיום של המשתמש
       async loadUserPlan(userId) {
         try {
-          const { data, error } = await supabase
+          const { data, error } = await supabaseClient
             .from('profiles')
             .select('plan, plan_until')
             .eq('id', userId)
@@ -8102,6 +8102,7 @@ this.showPage('homepage');
 
           if (error || !data) {
             this.isPro = false;
+            console.log('📊 סטטוס פרימיום: Free');
             return;
           }
 
