@@ -5895,6 +5895,7 @@ height: 100%;
             <div class="user-date" id="navDate">01.01.2025</div>
           </div>
         </div>
+        <button id="premiumInfoBtn" onclick="app.openPremiumInfo()" title="מה כלול בפרימיום?" class="premium-star-btn">⭐</button>
         <button class="logout-btn" id="logoutBtn" onclick="app.logout()" style="display: none;">התנתק</button>
         <div class="fullscreen-icon" id="fullscreenBtn" onclick="app.toggleFullscreen()" title="מסך מלא">⛶</div>
 
@@ -7963,6 +7964,7 @@ autoSaveInterval: null,
         
         this.loadUserData();
         await this.loadUserPlan(currentUser.id); // טעינת סטטוס פרימיום
+        this.updatePremiumInfoDisplay(); // עדכון כפתור הכוכב
         this.updateTime();
         setInterval(() => this.updateTime(), 1000);
         await this.loadNotebookData();
@@ -8116,6 +8118,46 @@ this.showPage('homepage');
       goToCheckout() {
         alert('🚧 מערכת התשלומים בבנייה!\n\nבקרוב תוכל לשדרג לפרימיום.');
         this.closeUpgradeModal();
+      },
+
+      // פתיחת מודאל מידע פרימיום
+      openPremiumInfo() {
+        document.getElementById('premiumInfoModal').classList.remove('hidden');
+        this.updatePremiumInfoDisplay();
+      },
+
+      // סגירת מודאל מידע פרימיום
+      closePremiumInfo() {
+        document.getElementById('premiumInfoModal').classList.add('hidden');
+      },
+
+      // עדכון תצוגת מודאל פרימיום לפי סטטוס
+      updatePremiumInfoDisplay() {
+        const proSection = document.getElementById('proSectionContent');
+        const starBtn = document.getElementById('premiumInfoBtn');
+        
+        if (this.isPro) {
+          // משתמש פרימיום
+          if (starBtn) {
+            starBtn.innerHTML = '✅';
+            starBtn.title = 'יש לך פרימיום!';
+          }
+          if (proSection) {
+            proSection.innerHTML = `
+              <div class="pro-active-message">
+                <div class="pro-active-icon">🎉</div>
+                <h4>יש לך פרימיום!</h4>
+                <p>כל התכונות פתוחות עבורך</p>
+              </div>
+            `;
+          }
+        } else {
+          // משתמש חינמי
+          if (starBtn) {
+            starBtn.innerHTML = '⭐';
+            starBtn.title = 'מה כלול בפרימיום?';
+          }
+        }
       },
 
       // בדיקה אם אפשר ליצור מחברת חדשה
@@ -17944,6 +17986,55 @@ document.addEventListener('keydown', function(e) {
 
   </script>
 
+<!-- מודאל מידע פרימיום (השוואה) -->
+<div id="premiumInfoModal" class="premium-info-modal hidden">
+  <div class="premium-info-overlay" onclick="app.closePremiumInfo()"></div>
+  <div class="premium-info-content">
+    <button class="premium-info-close" onclick="app.closePremiumInfo()">✕</button>
+    
+    <h2 class="premium-info-title">🌟 גרסה חינמית לעומת פרימיום</h2>
+    <p class="premium-info-subtitle">
+      אפשר ללמוד בחינם.<br>
+      בפרימיום מקבלים יותר חופש, סדר ונוחות.
+    </p>
+
+    <div class="premium-plans">
+      <!-- FREE -->
+      <div class="premium-plan free-plan">
+        <h3>🆓 גרסה חינמית</h3>
+        <ul>
+          <li>📘 2 מחברות שורה (עד 20 דפים כל אחת)</li>
+          <li>📗 מחברת משובצת אחת (עד 20 דפים)</li>
+          <li>🎨 מחברת ציור – דף אחד להתנסות</li>
+          <li>✏️ כתיבה חופשית ולמידה מלאה</li>
+          <li>📋 ניהול משימות ויומן</li>
+          <li>⏱️ שעון עצר ומחשבון</li>
+        </ul>
+      </div>
+
+      <!-- PRO -->
+      <div class="premium-plan pro-plan">
+        <h3>⭐ פרימיום</h3>
+        <div id="proSectionContent">
+          <ul>
+            <li>📚 מחברות ללא הגבלה</li>
+            <li>📄 כל סוגי המחברות (שורה, משובצת, חלקה, נקודות)</li>
+            <li>♾️ דפים ללא הגבלה</li>
+            <li>📤 ייצוא מחברות ל-PDF</li>
+            <li>🔄 שכפול וסידור מחברות</li>
+            <li>⚙️ התאמה אישית מתקדמת</li>
+          </ul>
+          <button class="premium-upgrade-btn" onclick="app.goToCheckout()">
+            שדרוג לפרימיום ⭐
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <button class="premium-info-close-btn" onclick="app.closePremiumInfo()">סגור</button>
+  </div>
+</div>
+
 <!-- מודאל שדרוג לפרימיום -->
 <div id="upgradeModal" class="upgrade-modal hidden">
   <div class="upgrade-modal-overlay" onclick="app.closeUpgradeModal()"></div>
@@ -18137,6 +18228,204 @@ document.addEventListener('keydown', function(e) {
 
 .upgrade-modal-btn-secondary:hover {
   color: #333;
+}
+
+/* כפתור כוכב פרימיום */
+.premium-star-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  opacity: 0.9;
+  transition: all 0.3s ease;
+  padding: 5px 10px;
+}
+
+.premium-star-btn:hover {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+/* מודאל מידע פרימיום */
+.premium-info-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.premium-info-modal.hidden {
+  display: none;
+}
+
+.premium-info-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.premium-info-content {
+  position: relative;
+  background: white;
+  border-radius: 20px;
+  padding: 35px;
+  max-width: 750px;
+  width: 95%;
+  max-height: 90vh;
+  overflow-y: auto;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.3s ease;
+}
+
+.premium-info-close {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #999;
+  transition: color 0.2s;
+}
+
+.premium-info-close:hover {
+  color: #333;
+}
+
+.premium-info-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.premium-info-subtitle {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 25px;
+  line-height: 1.6;
+}
+
+.premium-plans {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.premium-plan {
+  flex: 1;
+  padding: 20px;
+  border-radius: 16px;
+  text-align: right;
+}
+
+.premium-plan h3 {
+  margin: 0 0 15px 0;
+  font-size: 1.3rem;
+  text-align: center;
+}
+
+.premium-plan ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.premium-plan li {
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  font-size: 0.95rem;
+}
+
+.premium-plan li:last-child {
+  border-bottom: none;
+}
+
+.free-plan {
+  background: #f5f5f5;
+}
+
+.pro-plan {
+  background: linear-gradient(135deg, #fff8e1, #fff3cd);
+  border: 2px solid #ffc107;
+}
+
+.premium-upgrade-btn {
+  width: 100%;
+  margin-top: 20px;
+  padding: 14px 24px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  background: linear-gradient(135deg, #ffc107, #ffca28);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.premium-upgrade-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 193, 7, 0.4);
+}
+
+.premium-info-close-btn {
+  padding: 12px 40px;
+  font-size: 1rem;
+  color: #666;
+  background: #f0f0f0;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.premium-info-close-btn:hover {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.pro-active-message {
+  text-align: center;
+  padding: 30px 20px;
+}
+
+.pro-active-icon {
+  font-size: 3rem;
+  margin-bottom: 15px;
+}
+
+.pro-active-message h4 {
+  font-size: 1.4rem;
+  color: #27ae60;
+  margin: 0 0 10px 0;
+}
+
+.pro-active-message p {
+  color: #666;
+  margin: 0;
+}
+
+/* רספונסיבי */
+@media (max-width: 600px) {
+  .premium-plans {
+    flex-direction: column;
+  }
+  
+  .premium-info-content {
+    padding: 25px 20px;
+  }
 }
 </style>
 
