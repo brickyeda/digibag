@@ -1977,10 +1977,16 @@ padding: 0px 10px 10px 10px;
       color: var(--text-secondary);
     }
 
-    .notebook-delete-btn {
+    .notebook-actions {
       position: absolute;
       top: 10px;
       left: 10px;
+      display: flex;
+      gap: 5px;
+      z-index: 10;
+    }
+
+    .notebook-delete-btn {
       background: var(--danger-color);
       color: white;
       border: none;
@@ -1989,11 +1995,35 @@ padding: 0px 10px 10px 10px;
       cursor: pointer;
       font-size: 0.8rem;
       transition: all 0.3s ease;
-      z-index: 10;
     }
 
     .notebook-delete-btn:hover {
       background: #c0392b;
+    }
+
+    .notebook-duplicate-btn {
+      background: linear-gradient(135deg, #3498db, #2980b9);
+      color: white;
+      border: none;
+      padding: 5px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: all 0.3s ease;
+    }
+
+    .notebook-duplicate-btn:hover {
+      background: linear-gradient(135deg, #2980b9, #1f6aa5);
+      transform: scale(1.1);
+    }
+
+    .notebook-duplicate-btn.premium-locked {
+      background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+      cursor: pointer;
+    }
+
+    .notebook-duplicate-btn.premium-locked:hover {
+      background: linear-gradient(135deg, #f39c12, #e67e22);
     }
 
     /* Placeholder Pages */
@@ -2544,6 +2574,155 @@ padding: 0px 10px 10px 10px;
       color: var(--text-secondary);
       opacity: 0.6;
     }
+
+/* דף צ'קליסט */
+.checklist-page {
+  position: relative;
+  min-height: 800px;
+  background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+  padding: 30px;
+  box-shadow: 
+    inset 0 0 50px rgba(0,0,0,0.02),
+    0 10px 30px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  border: 1px solid #bbf7d0;
+}
+
+.checklist-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px;
+}
+
+.checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 15px;
+  background: white;
+  border-radius: 10px;
+  border: 2px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.checklist-item:hover {
+  border-color: #22c55e;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.15);
+}
+
+.checklist-item.completed {
+  background: #f0fdf4;
+  border-color: #86efac;
+}
+
+.checklist-item.completed .checklist-text {
+  text-decoration: line-through;
+  color: #9ca3af;
+}
+
+.checklist-checkbox {
+  width: 24px;
+  height: 24px;
+  border: 2px solid #d1d5db;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.checklist-checkbox:hover {
+  border-color: #22c55e;
+  background: #f0fdf4;
+}
+
+.checklist-checkbox.checked {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  border-color: #22c55e;
+  color: white;
+}
+
+.checklist-text {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  background: transparent;
+  color: #1f2937;
+  font-family: inherit;
+}
+
+.checklist-text::placeholder {
+  color: #9ca3af;
+}
+
+.checklist-delete {
+  opacity: 0;
+  background: none;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 5px;
+  transition: opacity 0.2s ease;
+}
+
+.checklist-item:hover .checklist-delete {
+  opacity: 1;
+}
+
+.checklist-add-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  margin-top: 10px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.checklist-add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.3);
+}
+
+.checklist-add-btn:disabled {
+  background: #d1d5db;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.checklist-limit-warning {
+  text-align: center;
+  padding: 15px;
+  background: #fef3c7;
+  border: 2px solid #fcd34d;
+  border-radius: 10px;
+  color: #92400e;
+  margin-top: 15px;
+}
+
+.checklist-limit-warning button {
+  margin-top: 10px;
+  padding: 8px 20px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
 
 .global-formatting-toolbar {
   background: linear-gradient(135deg, #f8f9fa, #e9ecef);
@@ -7575,14 +7754,20 @@ body:has(.mode-btn[data-mode="programmer"].active) .programmer-displays {
               <div class="page-type-desc">קווים אופקיים לכתיבה נעימה</div>
             </div>
             <div class="page-type-option" data-type="grid" onclick="app.selectPageType('grid')">
-              <span class="page-type-icon">⬜</span>
+              <span class="page-type-icon">📊</span>
               <div class="page-type-title">דף משובץ</div>
               <div class="page-type-desc">רשת ריבועים למתמטיקה</div>
             </div>
             <div class="page-type-option" data-type="blank" onclick="app.selectPageType('blank')">
-              <span class="page-type-icon">⬜</span>
+              <span class="page-type-icon">🎨</span>
               <div class="page-type-title">דף חלק</div>
               <div class="page-type-desc">דף ריק לציורים וחופש יצירה</div>
+            </div>
+            <div class="page-type-option" data-type="checklist" onclick="app.selectPageType('checklist')">
+              <span class="page-type-icon">✅</span>
+              <div class="page-type-title">צ'קליסט</div>
+              <div class="page-type-desc">רשימות קניות, ציוד וטיולים</div>
+              <span class="premium-badge-small">⭐</span>
             </div>
           </div>
         </div>
@@ -7969,14 +8154,17 @@ body:has(.mode-btn[data-mode="programmer"].active) .programmer-displays {
       maxPages: {
         lined: 20,
         grid: 20,
-        blank: 1
+        blank: 1,
+        checklist: 1
       },
       maxPerType: {
         lined: 2,
         grid: 1,
-        blank: 1
+        blank: 1,
+        checklist: 1
       },
-      maxActiveTasks: 20
+      maxActiveTasks: 20,
+      maxChecklistItems: 5  // מקסימום שורות בצ'קליסט למשתמש חינמי
     };
     
     // אפליקציה ראשית
@@ -8858,6 +9046,11 @@ createNotebookCard(subjectKey, subject) {
   // בדיקה אם pages קיים, אם לא - יצירת מערך ריק
   const pagesCount = subject.pages ? subject.pages.length : 0;
   
+  // כפתור שכפול (רק לפרימיום)
+  const duplicateBtn = this.isPro ? 
+    `<button class="notebook-duplicate-btn" onclick="event.stopPropagation(); app.duplicateNotebook('${subjectKey}')" title="שכפול מחברת">📋</button>` : 
+    `<button class="notebook-duplicate-btn premium-locked" onclick="event.stopPropagation(); app.openUpgradeModal('שכפול מחברות')" title="שכפול מחברת - פרימיום">📋⭐</button>`;
+  
   cardDiv.innerHTML = `
     <span class="subject-icon">${subject.icon}</span>
     <div class="subject-title">${subject.title}</div>
@@ -8866,7 +9059,10 @@ createNotebookCard(subjectKey, subject) {
       <span class="pages-count">${pagesCount} דפים</span>
       <span class="last-updated">עודכן היום</span>
     </div>
-    <button class="notebook-delete-btn" onclick="event.stopPropagation(); app.deleteNotebookWithConfirmation('${subjectKey}')">🗑️</button>
+    <div class="notebook-actions">
+      ${duplicateBtn}
+      <button class="notebook-delete-btn" onclick="event.stopPropagation(); app.deleteNotebookWithConfirmation('${subjectKey}')">🗑️</button>
+    </div>
   `;
   
   return cardDiv;
@@ -9031,6 +9227,13 @@ renderPagePreview(page, pageType) {
     html += `<div style="background-image: 
               radial-gradient(circle, #d3d3d3 1px, transparent 1px);
               background-size: 20px 20px; height: 100%; width: 100%;"></div>`;
+  } else if (pageType === 'checklist') {
+    for (let i = 0; i < 8; i++) {
+      html += `<div style="display: flex; align-items: center; height: 28px; border-bottom: 1px solid #e0e0e0;">
+                <div style="width: 14px; height: 14px; border: 2px solid #ccc; border-radius: 3px; margin-left: 8px;"></div>
+                <div style="flex: 1; height: 1px; background: #e8e8e8; margin: 0 8px;"></div>
+              </div>`;
+    }
   }
   
   // Render content preview (simplified)
@@ -9164,6 +9367,12 @@ style="position: sticky !important;"
         const textareaClass = `enhanced-textarea`;
         const placeholder = this.getPlaceholderForPageType(pageType);
         
+        // בדיקה אם זה דף צ'קליסט
+        if (pageType === 'checklist') {
+          pageDiv.innerHTML = this.createChecklistPageHTML(pageData, index);
+          return pageDiv;
+        }
+        
         pageDiv.innerHTML = `
 <div class="notebook-header">
             <div style="display: flex; gap: 20px; align-items: center; flex: 1;">
@@ -9286,7 +9495,8 @@ if (pageData.formulas && pageData.formulas.length > 0) {
         const placeholders = {
           'lined': 'כתוב כאן בגודל פונט 28 והטקסט יתיישר אוטומטית לשורות.',
           'grid': 'דף משובץ למתמטיקה וגרפים. הכתיבה רציפה ללא התחשבות במשבצות.',
-          'blank': 'דף חלק לציורים, רעיונות וכתיבה חופשית.'
+          'blank': 'דף חלק לציורים, רעיונות וכתיבה חופשית.',
+          'checklist': 'רשימת מטלות - לחץ על + להוספת פריט חדש'
         };
         return placeholders[pageType] || 'כתוב כאן...';
       },
@@ -9320,6 +9530,148 @@ if (pageData.formulas && pageData.formulas.length > 0) {
             notebookContent.scrollTop = notebookContent.scrollHeight;
           }
         }, 100);
+      },
+
+      // === פונקציות צ'קליסט ===
+      
+      // יצירת HTML לדף צ'קליסט
+      createChecklistPageHTML(pageData, index) {
+        const items = pageData.checklistItems || [];
+        const maxItems = this.isPro ? Infinity : FREE_LIMITS.maxChecklistItems;
+        const canAddMore = this.isPro || items.length < maxItems;
+        
+        let itemsHTML = items.map((item, itemIndex) => `
+          <div class="checklist-item ${item.checked ? 'completed' : ''}" data-index="${itemIndex}">
+            <div class="checklist-checkbox ${item.checked ? 'checked' : ''}" 
+                 onclick="app.toggleChecklistItem(${index}, ${itemIndex})">
+              ${item.checked ? '✓' : ''}
+            </div>
+            <input type="text" 
+                   class="checklist-text" 
+                   value="${this.escapeHtml(item.text || '')}"
+                   placeholder="הקלד פריט..."
+                   onchange="app.updateChecklistItem(${index}, ${itemIndex}, this.value)"
+                   onkeydown="app.handleChecklistKeydown(event, ${index}, ${itemIndex})">
+            <button class="checklist-delete" onclick="app.deleteChecklistItem(${index}, ${itemIndex})">🗑️</button>
+          </div>
+        `).join('');
+        
+        // הצגת אזהרה למשתמש חינמי
+        let limitWarning = '';
+        if (!this.isPro && items.length >= maxItems) {
+          limitWarning = `
+            <div class="checklist-limit-warning">
+              <div>⭐ הגעת למגבלת ${maxItems} פריטים בגרסה החינמית</div>
+              <button onclick="app.openUpgradeModal('פריטי צ\'קליסט ללא הגבלה')">שדרג לפרימיום</button>
+            </div>
+          `;
+        }
+        
+        return `
+          <div class="notebook-header">
+            <div style="display: flex; gap: 20px; align-items: center; flex: 1;">
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <label style="font-weight: 600; color: var(--text-primary);">שם הרשימה:</label>
+                <input 
+                  type="text" 
+                  class="header-input" 
+                  placeholder="רשימת קניות / ציוד לטיול..."
+                  value="${pageData.title || ''}"
+                  onblur="app.updatePageTitle(${index}, this.value)"
+                  style="border: 1px solid var(--border-color); padding: 6px 10px; border-radius: 6px; font-size: 0.95rem; min-width: 250px;"
+                />
+              </div>
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <label style="font-weight: 600; color: var(--text-primary);">תאריך:</label>
+                <span style="font-size: 0.9rem; color: var(--text-secondary); padding: 6px 10px; background: var(--background-main); border-radius: 6px;">${pageData.date}</span>
+              </div>
+            </div>
+            <button class="tool-btn delete-page-btn" onclick="app.deletePage(${index})" title="מחק רשימה זו">
+              🗑️ מחק רשימה
+            </button>
+          </div>
+          
+          <div class="checklist-page">
+            <div class="checklist-container" id="checklist-${index}">
+              ${itemsHTML}
+              ${limitWarning}
+              <button class="checklist-add-btn" 
+                      onclick="app.addChecklistItem(${index})"
+                      ${!canAddMore ? 'disabled' : ''}>
+                ➕ הוסף פריט
+              </button>
+            </div>
+          </div>
+        `;
+      },
+      
+      // הוספת פריט לצ'קליסט
+      addChecklistItem(pageIndex) {
+        if (!this.currentNotebook || !this.subjects[this.currentNotebook]) return;
+        
+        const page = this.subjects[this.currentNotebook].pages[pageIndex];
+        if (!page.checklistItems) page.checklistItems = [];
+        
+        // בדיקת מגבלה
+        if (!this.isPro && page.checklistItems.length >= FREE_LIMITS.maxChecklistItems) {
+          this.openUpgradeModal('פריטי צ\'קליסט ללא הגבלה');
+          return;
+        }
+        
+        page.checklistItems.push({ text: '', checked: false });
+        this.saveNotebookData();
+        this.renderNotebookContent();
+        
+        // פוקוס על השדה החדש
+        setTimeout(() => {
+          const inputs = document.querySelectorAll(`#checklist-${pageIndex} .checklist-text`);
+          if (inputs.length > 0) {
+            inputs[inputs.length - 1].focus();
+          }
+        }, 100);
+      },
+      
+      // עדכון פריט בצ'קליסט
+      updateChecklistItem(pageIndex, itemIndex, text) {
+        if (!this.currentNotebook || !this.subjects[this.currentNotebook]) return;
+        
+        const page = this.subjects[this.currentNotebook].pages[pageIndex];
+        if (page.checklistItems && page.checklistItems[itemIndex]) {
+          page.checklistItems[itemIndex].text = text;
+          this.saveNotebookData();
+        }
+      },
+      
+      // החלפת סטטוס צ'קבוקס
+      toggleChecklistItem(pageIndex, itemIndex) {
+        if (!this.currentNotebook || !this.subjects[this.currentNotebook]) return;
+        
+        const page = this.subjects[this.currentNotebook].pages[pageIndex];
+        if (page.checklistItems && page.checklistItems[itemIndex]) {
+          page.checklistItems[itemIndex].checked = !page.checklistItems[itemIndex].checked;
+          this.saveNotebookData();
+          this.renderNotebookContent();
+        }
+      },
+      
+      // מחיקת פריט מצ'קליסט
+      deleteChecklistItem(pageIndex, itemIndex) {
+        if (!this.currentNotebook || !this.subjects[this.currentNotebook]) return;
+        
+        const page = this.subjects[this.currentNotebook].pages[pageIndex];
+        if (page.checklistItems) {
+          page.checklistItems.splice(itemIndex, 1);
+          this.saveNotebookData();
+          this.renderNotebookContent();
+        }
+      },
+      
+      // טיפול במקש Enter בצ'קליסט
+      handleChecklistKeydown(event, pageIndex, itemIndex) {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          this.addChecklistItem(pageIndex);
+        }
       },
 
       // מחיקת דף
@@ -10634,6 +10986,37 @@ deleteNotebookWithConfirmation(notebookKey) {
       alert('הקוד שהוזן שגוי. המחיקה בוטלה.');
     }
   }
+},
+
+// שכפול מחברת (פרימיום בלבד)
+duplicateNotebook(notebookKey) {
+  // בדיקת פרימיום
+  if (!this.isPro) {
+    this.openUpgradeModal('שכפול מחברות');
+    return;
+  }
+  
+  const notebook = this.subjects[notebookKey];
+  if (!notebook) return;
+  
+  // יצירת שם חדש
+  const newTitle = prompt('הכנס שם למחברת המשוכפלת:', `${notebook.title} (עותק)`);
+  if (!newTitle || newTitle.trim() === '') return;
+  
+  // יצירת מפתח ייחודי חדש
+  const newKey = `notebook_${Date.now()}`;
+  
+  // העתקה עמוקה של המחברת
+  const duplicatedNotebook = JSON.parse(JSON.stringify(notebook));
+  duplicatedNotebook.title = newTitle.trim();
+  
+  // שמירת המחברת החדשה
+  this.subjects[newKey] = duplicatedNotebook;
+  this.saveNotebookData();
+  this.renderNotebooks();
+  this.loadWelcomeData();
+  
+  alert(`המחברת "${newTitle}" נוצרה בהצלחה! 📋`);
 },
 
 
@@ -18170,6 +18553,7 @@ document.addEventListener('keydown', function(e) {
           <li>🎨 מחברת ציור – דף אחד להתנסות</li>
           <li>✏️ כתיבה חופשית ולמידה מלאה</li>
           <li>📋 עד 20 משימות פעילות</li>
+          <li>✅ צ'קליסט - עד 5 פריטים</li>
           <li>📅 יומן ושעון עצר</li>
         </ul>
       </div>
@@ -18180,11 +18564,12 @@ document.addEventListener('keydown', function(e) {
         <div id="proSectionContent">
           <ul>
             <li>📚 מחברות ללא הגבלה</li>
-            <li>📄 כל סוגי המחברות (שורה, משובצת, חלקה, נקודות)</li>
+            <li>📄 כל סוגי המחברות (שורה, משובצת, חלקה, צ'קליסט)</li>
             <li>♾️ דפים ללא הגבלה</li>
-            <li>✅ משימות פעילות ללא הגבלה</li>
+            <li>✅ צ'קליסט ללא הגבלת פריטים</li>
+            <li>📋 משימות פעילות ללא הגבלה</li>
             <li>📤 ייצוא מחברות ל-PDF</li>
-            <li>🔄 שכפול וסידור מחברות</li>
+            <li>📋 שכפול מחברות</li>
           </ul>
           <button class="premium-upgrade-btn" onclick="app.goToCheckout()">
             שדרוג לפרימיום ⭐
