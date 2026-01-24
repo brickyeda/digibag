@@ -6203,6 +6203,10 @@ body:has(.mode-btn[data-mode="programmer"].active) .programmer-displays {
           <span class="icon">🔗</span>
           <span>קישורים</span>
         </li>
+        <li class="navbar-item" onclick="app.showPage('subscription')" data-page="subscription">
+          <span class="icon">⭐</span>
+          <span>מנוי</span>
+        </li>
       </ul>
 
       <div class="navbar-user">
@@ -7548,6 +7552,78 @@ body:has(.mode-btn[data-mode="programmer"].active) .programmer-displays {
     </div>
   </div>
 
+    <!-- Subscription Management Page -->
+    <div id="subscription" class="page">
+      <div class="page-header">
+        <h1 class="page-title">
+          <span>⭐</span>
+          ניהול מנוי
+        </h1>
+        <button class="back-btn" onclick="app.showPage('homepage')">
+          <span>←</span>
+          חזור לדף הבית
+        </button>
+      </div>
+
+      <div class="subscription-container">
+        <!-- Status Card -->
+        <div class="subscription-card status-card" id="subscriptionStatusCard">
+          <!-- Will be populated by JS -->
+        </div>
+
+        <!-- Trial Status (if applicable) -->
+        <div class="subscription-card trial-card" id="subscriptionTrialCard" style="display: none;">
+          <!-- Will be populated by JS -->
+        </div>
+
+        <!-- Premium Features -->
+        <div class="subscription-card features-card">
+          <h3>מה כלול בפרימיום:</h3>
+          <div class="subscription-features-grid">
+            <div class="sub-feature-item">📚 מחברות ללא הגבלה</div>
+            <div class="sub-feature-item">📄 כל סוגי המחברות והתבניות</div>
+            <div class="sub-feature-item">📤 ייצוא מחברות ל־PDF</div>
+            <div class="sub-feature-item">📋 משימות ללא הגבלה</div>
+            <div class="sub-feature-item">✅ צ'קליסט מלא</div>
+            <div class="sub-feature-item">📋 שכפול מחברות</div>
+            <div class="sub-feature-item">📆 חיבור ליומן גוגל</div>
+            <div class="sub-feature-item">🔔 התראות מתקדמות</div>
+          </div>
+        </div>
+
+        <!-- Action Buttons (for Pro users) -->
+        <div class="subscription-card actions-card" id="subscriptionActionsCard" style="display: none;">
+          <h3>פעולות</h3>
+          <div class="subscription-actions">
+            <button class="sub-action-btn primary" onclick="app.openPaymentManagement()">
+              💳 ניהול תשלום
+            </button>
+            <button class="sub-action-btn secondary" id="upgradeToYearlyBtn" onclick="app.upgradeToYearly()" style="display: none;">
+              🔁 שדרוג למנוי שנתי (חודש חינם)
+            </button>
+          </div>
+          <div class="subscription-cancel">
+            <button class="sub-cancel-btn" onclick="app.openCancelSubscriptionModal()">
+              🚫 ביטול מנוי
+            </button>
+          </div>
+        </div>
+
+        <!-- Upgrade CTA (for Free users) -->
+        <div class="subscription-card upgrade-cta-card" id="subscriptionUpgradeCard" style="display: none;">
+          <button class="sub-upgrade-btn" onclick="app.openUpgradeModal('שדרוג לפרימיום')">
+            ⭐ שדרוג לפרימיום
+          </button>
+        </div>
+
+        <!-- Trust Note -->
+        <div class="subscription-trust-note">
+          <span>🔒</span>
+          <span>התשלומים מנוהלים בצורה מאובטחת דרך Stripe. פרטי האשראי אינם נשמרים באפליקציה.</span>
+        </div>
+      </div>
+    </div>
+
 </div>
 <!-- End of Page Container -->
 
@@ -8477,6 +8553,119 @@ this.showPage('homepage');
         alert('🎁 ניסיון חינמי בבנייה!\n\nבקרוב תוכל לנסות פרימיום ל-7 ימים חינם.');
       },
 
+      // עדכון תצוגת דף ניהול מנוי
+      updateSubscriptionPage() {
+        const statusCard = document.getElementById('subscriptionStatusCard');
+        const trialCard = document.getElementById('subscriptionTrialCard');
+        const actionsCard = document.getElementById('subscriptionActionsCard');
+        const upgradeCard = document.getElementById('subscriptionUpgradeCard');
+        
+        if (this.isPro) {
+          // משתמש פרימיום
+          statusCard.className = 'subscription-card status-card pro';
+          statusCard.innerHTML = `
+            <div class="status-header">
+              <span class="status-icon">⭐</span>
+              <span class="status-title pro">גרסת פרימיום – מנוי ${this.subscriptionType === 'yearly' ? 'שנתי' : 'חודשי'}</span>
+            </div>
+            <div class="status-details">
+              <div class="status-detail">
+                <span class="status-detail-label">תוקף עד:</span>
+                <span class="status-detail-value">${this.planUntil || '---'}</span>
+              </div>
+              <div class="status-detail">
+                <span class="status-detail-label">החיוב הבא:</span>
+                <span class="status-detail-value">${this.nextBilling || '---'}</span>
+              </div>
+              <div class="status-detail">
+                <span class="status-detail-label">המחיר:</span>
+                <span class="status-detail-value">${this.subscriptionType === 'yearly' ? '₪119.90 לשנה' : '₪10.90 לחודש'}</span>
+              </div>
+            </div>
+            <p class="status-note">המנוי מתחדש אוטומטית. ניתן לבטל בכל עת.</p>
+          `;
+          
+          // הצג כפתורי פעולה
+          actionsCard.style.display = 'block';
+          upgradeCard.style.display = 'none';
+          
+          // אם מנוי חודשי, הצג אפשרות שדרוג לשנתי
+          if (this.subscriptionType === 'monthly') {
+            document.getElementById('upgradeToYearlyBtn').style.display = 'block';
+          }
+          
+        } else if (this.isTrialActive) {
+          // משתמש בניסיון
+          statusCard.className = 'subscription-card status-card free';
+          statusCard.innerHTML = `
+            <div class="status-header">
+              <span class="status-icon">🆓</span>
+              <span class="status-title">גרסה חינמית</span>
+            </div>
+            <p style="color: #6b7280;">הגרסה החינמית מאפשרת שימוש מלא עם מגבלות.</p>
+          `;
+          
+          // הצג כרטיס ניסיון
+          trialCard.style.display = 'block';
+          trialCard.innerHTML = `
+            <div class="trial-header">
+              <span>🎁</span>
+              <span class="trial-title">ניסיון פרימיום פעיל</span>
+            </div>
+            <p class="trial-days">נותרו ${this.trialDaysLeft || 7} ימים</p>
+            <p class="trial-info">אין צורך בכרטיס אשראי</p>
+          `;
+          
+          actionsCard.style.display = 'none';
+          upgradeCard.style.display = 'block';
+          
+        } else {
+          // משתמש חינמי
+          statusCard.className = 'subscription-card status-card free';
+          statusCard.innerHTML = `
+            <div class="status-header">
+              <span class="status-icon">🆓</span>
+              <span class="status-title">גרסה חינמית</span>
+            </div>
+            <p style="color: #6b7280;">הגרסה החינמית מאפשרת שימוש מלא עם מגבלות.</p>
+          `;
+          
+          trialCard.style.display = 'none';
+          actionsCard.style.display = 'none';
+          upgradeCard.style.display = 'block';
+        }
+      },
+
+      // פתיחת ניהול תשלום
+      openPaymentManagement() {
+        // כאן יהיה קישור ל-Stripe Customer Portal
+        alert('🚧 ניהול תשלומים בבנייה!\n\nבקרוב תוכל לנהל את התשלום שלך.');
+      },
+
+      // שדרוג למנוי שנתי
+      upgradeToYearly() {
+        if (confirm('האם לשדרג למנוי שנתי?\n\nתשלם ₪119.90 לשנה במקום ₪10.90 לחודש.\nחיסכון של חודש שלם!')) {
+          alert('🚧 שדרוג למנוי שנתי בבנייה!');
+        }
+      },
+
+      // פתיחת מודאל ביטול מנוי
+      openCancelSubscriptionModal() {
+        document.getElementById('cancelSubscriptionModal').classList.remove('hidden');
+      },
+
+      // סגירת מודאל ביטול מנוי
+      closeCancelSubscriptionModal() {
+        document.getElementById('cancelSubscriptionModal').classList.add('hidden');
+      },
+
+      // אישור ביטול מנוי
+      confirmCancelSubscription() {
+        // כאן יהיה קריאה לביטול ב-Stripe
+        alert('🚧 ביטול מנוי בבנייה!\n\nהמנוי יישאר פעיל עד סוף התקופה ששולמה.');
+        this.closeCancelSubscriptionModal();
+      },
+
       // פתיחת מודאל מידע פרימיום
       openPremiumInfo() {
         document.getElementById('premiumInfoModal').classList.remove('hidden');
@@ -9034,6 +9223,8 @@ if (this.currentNotebook && pageId !== 'notebookView') {
             linksApp.renderLinks();
             linksApp.updateStats();
           });
+        } else if (pageId === 'subscription') {
+          this.updateSubscriptionPage();
         } else if (pageId === 'notebookView') {
           this.renderNotebookContent();
 } else if (pageId === 'notebooks') {
@@ -19551,6 +19742,20 @@ document.addEventListener('keydown', function(e) {
   </div>
 </div>
 
+<!-- מודאל ביטול מנוי -->
+<div id="cancelSubscriptionModal" class="cancel-modal hidden">
+  <div class="cancel-modal-overlay" onclick="app.closeCancelSubscriptionModal()"></div>
+  <div class="cancel-modal-content">
+    <h3>🚫 ביטול מנוי</h3>
+    <p>המנוי יישאר פעיל עד סוף התקופה ששולמה.<br>לא יתבצע חיוב נוסף.</p>
+    <p style="font-weight: 600; color: #1f2937;">האם לבטל את המנוי?</p>
+    <div class="cancel-modal-buttons">
+      <button class="cancel-btn-back" onclick="app.closeCancelSubscriptionModal()">חזור</button>
+      <button class="cancel-btn-confirm" onclick="app.confirmCancelSubscription()">כן, לבטל</button>
+    </div>
+  </div>
+</div>
+
 <style>
 /* מודאל סטטוס פרימיום */
 .pro-status-modal {
@@ -19688,6 +19893,309 @@ document.addEventListener('keydown', function(e) {
 
 .premium-star-btn.pro-active:hover {
   box-shadow: 0 6px 20px rgba(34, 197, 94, 0.5);
+}
+
+/* ===== דף ניהול מנוי ===== */
+.subscription-container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.subscription-card {
+  background: white;
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+/* Status Card - Pro */
+.subscription-card.status-card.pro {
+  background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+  border: 2px solid #86efac;
+}
+
+.subscription-card.status-card.free {
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  border: 2px solid #e2e8f0;
+}
+
+.status-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.status-icon {
+  font-size: 2rem;
+}
+
+.status-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.status-title.pro {
+  color: #166534;
+}
+
+.status-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.status-detail {
+  display: flex;
+  justify-content: space-between;
+  color: #4b5563;
+  font-size: 0.95rem;
+}
+
+.status-detail-label {
+  color: #6b7280;
+}
+
+.status-detail-value {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.status-note {
+  font-size: 0.85rem;
+  color: #6b7280;
+  padding-top: 10px;
+  border-top: 1px solid rgba(0,0,0,0.1);
+}
+
+/* Trial Card */
+.subscription-card.trial-card {
+  background: linear-gradient(135deg, #fefce8, #fef9c3);
+  border: 2px dashed #fbbf24;
+}
+
+.trial-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.trial-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #92400e;
+}
+
+.trial-days {
+  font-size: 1rem;
+  color: #a16207;
+  margin-bottom: 5px;
+}
+
+.trial-info {
+  font-size: 0.85rem;
+  color: #a16207;
+}
+
+/* Features Card */
+.subscription-card.features-card h3 {
+  font-size: 1.1rem;
+  color: #374151;
+  margin-bottom: 15px;
+}
+
+.subscription-features-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.sub-feature-item {
+  padding: 10px 12px;
+  background: #f9fafb;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+/* Actions Card */
+.subscription-card.actions-card h3 {
+  font-size: 1rem;
+  color: #6b7280;
+  margin-bottom: 15px;
+}
+
+.subscription-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.sub-action-btn {
+  padding: 14px 20px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.sub-action-btn.primary {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+}
+
+.sub-action-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.sub-action-btn.secondary {
+  background: #f3f4f6;
+  color: #374151;
+  border: 2px solid #e5e7eb;
+}
+
+.sub-action-btn.secondary:hover {
+  background: #e5e7eb;
+}
+
+.subscription-cancel {
+  padding-top: 15px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.sub-cancel-btn {
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 10px;
+  transition: color 0.2s ease;
+}
+
+.sub-cancel-btn:hover {
+  color: #ef4444;
+}
+
+/* Upgrade CTA */
+.sub-upgrade-btn {
+  width: 100%;
+  padding: 18px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sub-upgrade-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(251, 191, 36, 0.4);
+}
+
+/* Trust Note */
+.subscription-trust-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #9ca3af;
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 10px;
+}
+
+/* Cancel Modal */
+.cancel-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cancel-modal.hidden {
+  display: none;
+}
+
+.cancel-modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.cancel-modal-content {
+  position: relative;
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+}
+
+.cancel-modal-content h3 {
+  color: #1f2937;
+  margin-bottom: 15px;
+}
+
+.cancel-modal-content p {
+  color: #6b7280;
+  margin-bottom: 25px;
+  line-height: 1.6;
+}
+
+.cancel-modal-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.cancel-btn-back {
+  padding: 12px 25px;
+  background: #f3f4f6;
+  border: none;
+  border-radius: 8px;
+  color: #374151;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cancel-btn-confirm {
+  padding: 12px 25px;
+  background: #ef4444;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .subscription-features-grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
 
