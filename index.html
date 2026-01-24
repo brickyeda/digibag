@@ -8150,7 +8150,7 @@ body:has(.mode-btn[data-mode="programmer"].active) .programmer-displays {
     
     // מגבלות גרסה חינמית
     const FREE_LIMITS = {
-      maxNotebooks: 4,
+      maxNotebooks: 5,
       maxPages: {
         lined: 20,
         grid: 20,
@@ -8194,7 +8194,7 @@ autoSaveInterval: null,
       searchQuery: '',
       filteredEvents: [],
       
-      // מחברות ברירת מחדל (4 מחברות לגרסה חינמית)
+      // מחברות ברירת מחדל (5 מחברות לגרסה חינמית - כולל טעימה לצ'קליסט)
       subjects: {
         math: {
           title: 'מתמטיקה',
@@ -8248,6 +8248,24 @@ autoSaveInterval: null,
             {
               title: 'דף ציור',
               content: '',
+              date: new Date().toLocaleDateString('he-IL')
+            }
+          ]
+        },
+        checklist: {
+          title: 'רשימות',
+          icon: '✅',
+          color: '#22c55e',
+          description: 'רשימות קניות, ציוד וטיולים',
+          pageType: 'checklist',
+          pages: [
+            {
+              title: 'רשימה לדוגמה',
+              checklistItems: [
+                { text: 'פריט ראשון - לחץ כדי לסמן ✓', checked: false },
+                { text: 'פריט שני', checked: false },
+                { text: 'פריט שלישי', checked: true }
+              ],
               date: new Date().toLocaleDateString('he-IL')
             }
           ]
@@ -10940,8 +10958,9 @@ savePageFormatting(index) {
       getIconForPageType(type) {
         const icons = {
           'lined': '📝',
-          'grid': '⬜', 
-          'blank': '⬜'
+          'grid': '📊', 
+          'blank': '🎨',
+          'checklist': '✅'
         };
         return icons[type] || '📝';
       },
@@ -18548,12 +18567,11 @@ document.addEventListener('keydown', function(e) {
       <div class="premium-plan free-plan">
         <h3>🆓 גרסה חינמית</h3>
         <ul>
-          <li>📘 2 מחברות שורה (עד 20 דפים כל אחת)</li>
-          <li>📗 מחברת משובצת אחת (עד 20 דפים)</li>
-          <li>🎨 מחברת ציור – דף אחד להתנסות</li>
-          <li>✏️ כתיבה חופשית ולמידה מלאה</li>
+          <li>📘 2 מחברות שורה (עד 20 דפים)</li>
+          <li>📊 מחברת משובצת (עד 20 דפים)</li>
+          <li>🎨 מחברת ציור – דף אחד</li>
+          <li>✅ מחברת צ'קליסט – דף אחד, עד 5 פריטים</li>
           <li>📋 עד 20 משימות פעילות</li>
-          <li>✅ צ'קליסט - עד 5 פריטים</li>
           <li>📅 יומן ושעון עצר</li>
         </ul>
       </div>
@@ -18564,9 +18582,9 @@ document.addEventListener('keydown', function(e) {
         <div id="proSectionContent">
           <ul>
             <li>📚 מחברות ללא הגבלה</li>
-            <li>📄 כל סוגי המחברות (שורה, משובצת, חלקה, צ'קליסט)</li>
+            <li>📄 כל סוגי המחברות</li>
             <li>♾️ דפים ללא הגבלה</li>
-            <li>✅ צ'קליסט ללא הגבלת פריטים</li>
+            <li>✅ צ'קליסט - דפים ופריטים ללא הגבלה</li>
             <li>📋 משימות פעילות ללא הגבלה</li>
             <li>📤 ייצוא מחברות ל-PDF</li>
             <li>📋 שכפול מחברות</li>
