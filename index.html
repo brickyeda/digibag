@@ -1977,10 +1977,16 @@ padding: 0px 10px 10px 10px;
       color: var(--text-secondary);
     }
 
-    .notebook-delete-btn {
+    .notebook-actions {
       position: absolute;
       top: 10px;
       left: 10px;
+      display: flex;
+      gap: 5px;
+      z-index: 10;
+    }
+
+    .notebook-delete-btn {
       background: var(--danger-color);
       color: white;
       border: none;
@@ -1989,11 +1995,35 @@ padding: 0px 10px 10px 10px;
       cursor: pointer;
       font-size: 0.8rem;
       transition: all 0.3s ease;
-      z-index: 10;
     }
 
     .notebook-delete-btn:hover {
       background: #c0392b;
+    }
+
+    .notebook-duplicate-btn {
+      background: linear-gradient(135deg, #3498db, #2980b9);
+      color: white;
+      border: none;
+      padding: 5px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: all 0.3s ease;
+    }
+
+    .notebook-duplicate-btn:hover {
+      background: linear-gradient(135deg, #2980b9, #1f6aa5);
+      transform: scale(1.1);
+    }
+
+    .notebook-duplicate-btn.premium-locked {
+      background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+      cursor: pointer;
+    }
+
+    .notebook-duplicate-btn.premium-locked:hover {
+      background: linear-gradient(135deg, #f39c12, #e67e22);
     }
 
     /* Placeholder Pages */
@@ -2544,6 +2574,155 @@ padding: 0px 10px 10px 10px;
       color: var(--text-secondary);
       opacity: 0.6;
     }
+
+/* דף צ'קליסט */
+.checklist-page {
+  position: relative;
+  min-height: 800px;
+  background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+  padding: 30px;
+  box-shadow: 
+    inset 0 0 50px rgba(0,0,0,0.02),
+    0 10px 30px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  border: 1px solid #bbf7d0;
+}
+
+.checklist-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px;
+}
+
+.checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 15px;
+  background: white;
+  border-radius: 10px;
+  border: 2px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.checklist-item:hover {
+  border-color: #22c55e;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.15);
+}
+
+.checklist-item.completed {
+  background: #f0fdf4;
+  border-color: #86efac;
+}
+
+.checklist-item.completed .checklist-text {
+  text-decoration: line-through;
+  color: #9ca3af;
+}
+
+.checklist-checkbox {
+  width: 24px;
+  height: 24px;
+  border: 2px solid #d1d5db;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.checklist-checkbox:hover {
+  border-color: #22c55e;
+  background: #f0fdf4;
+}
+
+.checklist-checkbox.checked {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  border-color: #22c55e;
+  color: white;
+}
+
+.checklist-text {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  background: transparent;
+  color: #1f2937;
+  font-family: inherit;
+}
+
+.checklist-text::placeholder {
+  color: #9ca3af;
+}
+
+.checklist-delete {
+  opacity: 0;
+  background: none;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 5px;
+  transition: opacity 0.2s ease;
+}
+
+.checklist-item:hover .checklist-delete {
+  opacity: 1;
+}
+
+.checklist-add-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  margin-top: 10px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.checklist-add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.3);
+}
+
+.checklist-add-btn:disabled {
+  background: #d1d5db;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.checklist-limit-warning {
+  text-align: center;
+  padding: 15px;
+  background: #fef3c7;
+  border: 2px solid #fcd34d;
+  border-radius: 10px;
+  color: #92400e;
+  margin-top: 15px;
+}
+
+.checklist-limit-warning button {
+  margin-top: 10px;
+  padding: 8px 20px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
 
 .global-formatting-toolbar {
   background: linear-gradient(135deg, #f8f9fa, #e9ecef);
@@ -4198,12 +4377,12 @@ body:has(.mode-btn[data-mode="programmer"].active) .programmer-displays {
 .timer-container {
   width: 100%;
   max-width: 1400px;
-height: 100%;
-  max-height: 900px;
+  height: auto;
+  max-height: none;
   background: white;
   border-radius: 30px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-  overflow: hidden;
+  overflow: visible;
   animation: slideIn 0.6s ease-out;
   display: flex;
   flex-direction: column;
@@ -4291,7 +4470,7 @@ height: 100%;
 .timer-content {
   padding: 20px 30px;
   flex: 1;
-  overflow-y: auto;
+  overflow: visible;
   display: flex;
   flex-direction: column;
 }
@@ -4300,14 +4479,14 @@ height: 100%;
   display: none;
   animation: fadeIn 0.4s ease;
   flex: 1;
-  overflow-y: auto;
+  overflow: visible;
 }
 
 .timer-tab-content.active {
   display: flex;
   flex-direction: row;
   gap: 30px;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .timer-display {
@@ -4315,13 +4494,13 @@ height: 100%;
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  gap: 15px;
+  gap: 10px;
 }
 
 .timer-time {
-  font-size: 4.5rem;
+  font-size: 3.5rem;
   font-weight: 700;
   font-family: 'Courier New', monospace;
   background: linear-gradient(135deg, #6366f1, #ec4899);
@@ -4342,8 +4521,8 @@ height: 100%;
 }
 
 .timer-visual-indicator {
-  width: 160px;
-  height: 160px;
+  width: 120px;
+  height: 120px;
   position: relative;
 }
 
@@ -4467,13 +4646,13 @@ height: 100%;
 
 .timer-input-section {
   display: flex;
-  gap: 20px;
+  gap: 15px;
   justify-content: center;
   align-items: center;
-  margin-bottom: 30px;
-  padding: 25px;
+  margin-bottom: 15px;
+  padding: 15px 20px;
   background: linear-gradient(145deg, #f8fafc, #f1f5f9);
-  border-radius: 20px;
+  border-radius: 16px;
   border: 2px solid #e2e8f0;
 }
 
@@ -4481,13 +4660,13 @@ height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
   position: relative;
 }
 
 .timer-input-icon {
-  font-size: 1.5rem;
-  margin-bottom: 5px;
+  font-size: 1.2rem;
+  margin-bottom: 2px;
   filter: grayscale(0.3);
   transition: all 0.3s ease;
 }
@@ -4498,24 +4677,24 @@ height: 100%;
 }
 
 .timer-input-group input {
-  width: 80px;
-  padding: 15px 10px;
-  font-size: 1.8rem;
+  width: 60px;
+  padding: 10px 8px;
+  font-size: 1.4rem;
   text-align: center;
-  border: 3px solid #e2e8f0;
-  border-radius: 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
   font-weight: 700;
   color: #667eea;
   background: white;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-family: 'Segoe UI', system-ui, sans-serif;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 .timer-input-group input:focus {
   outline: none;
   border-color: #667eea;
-  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15), 0 8px 25px rgba(102, 126, 234, 0.15);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15), 0 4px 15px rgba(102, 126, 234, 0.15);
   transform: scale(1.05);
 }
 
@@ -4524,7 +4703,7 @@ height: 100%;
 }
 
 .timer-input-group label {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   font-weight: 600;
   color: #64748b;
   text-transform: uppercase;
@@ -4532,10 +4711,10 @@ height: 100%;
 }
 
 .timer-input-separator {
-  font-size: 2.5rem;
+  font-size: 1.8rem;
   font-weight: 700;
   color: #94a3b8;
-  margin-top: -15px;
+  margin-top: -10px;
 }
 
 .timer-input-label {
@@ -4583,16 +4762,16 @@ height: 100%;
 .timer-presets {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  margin-top: 20px;
-  margin-bottom: 25px;
+  gap: 10px;
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 .timer-preset {
-  padding: 15px 10px;
+  padding: 10px 8px;
   background: linear-gradient(145deg, #ffffff, #f8fafc);
   border: 2px solid #e2e8f0;
-  border-radius: 16px;
+  border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-align: center;
@@ -4606,7 +4785,7 @@ height: 100%;
   top: 0;
   left: 0;
   right: 0;
-  height: 4px;
+  height: 3px;
   background: linear-gradient(90deg, #667eea, #764ba2);
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -4619,12 +4798,12 @@ height: 100%;
 .timer-preset:hover {
   background: linear-gradient(145deg, #ffffff, #f0f4ff);
   border-color: #667eea;
-  transform: translateY(-5px);
-  box-shadow: 0 12px 30px rgba(102, 126, 234, 0.2);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
 }
 
 .timer-preset:active {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 /* צבעים שונים לכפתורים */
@@ -4637,14 +4816,14 @@ height: 100%;
 .timer-preset[data-color="orange"]::before { background: linear-gradient(90deg, #f97316, #fb923c); }
 .timer-preset[data-color="pink"]::before { background: linear-gradient(90deg, #ec4899, #f472b6); }
 
-.timer-preset[data-color="blue"]:hover { border-color: #3b82f6; box-shadow: 0 12px 30px rgba(59, 130, 246, 0.2); }
-.timer-preset[data-color="cyan"]:hover { border-color: #06b6d4; box-shadow: 0 12px 30px rgba(6, 182, 212, 0.2); }
-.timer-preset[data-color="green"]:hover { border-color: #10b981; box-shadow: 0 12px 30px rgba(16, 185, 129, 0.2); }
-.timer-preset[data-color="teal"]:hover { border-color: #14b8a6; box-shadow: 0 12px 30px rgba(20, 184, 166, 0.2); }
-.timer-preset[data-color="red"]:hover { border-color: #ef4444; box-shadow: 0 12px 30px rgba(239, 68, 68, 0.2); }
-.timer-preset[data-color="purple"]:hover { border-color: #8b5cf6; box-shadow: 0 12px 30px rgba(139, 92, 246, 0.2); }
-.timer-preset[data-color="orange"]:hover { border-color: #f97316; box-shadow: 0 12px 30px rgba(249, 115, 22, 0.2); }
-.timer-preset[data-color="pink"]:hover { border-color: #ec4899; box-shadow: 0 12px 30px rgba(236, 72, 153, 0.2); }
+.timer-preset[data-color="blue"]:hover { border-color: #3b82f6; box-shadow: 0 8px 20px rgba(59, 130, 246, 0.2); }
+.timer-preset[data-color="cyan"]:hover { border-color: #06b6d4; box-shadow: 0 8px 20px rgba(6, 182, 212, 0.2); }
+.timer-preset[data-color="green"]:hover { border-color: #10b981; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.2); }
+.timer-preset[data-color="teal"]:hover { border-color: #14b8a6; box-shadow: 0 8px 20px rgba(20, 184, 166, 0.2); }
+.timer-preset[data-color="red"]:hover { border-color: #ef4444; box-shadow: 0 8px 20px rgba(239, 68, 68, 0.2); }
+.timer-preset[data-color="purple"]:hover { border-color: #8b5cf6; box-shadow: 0 8px 20px rgba(139, 92, 246, 0.2); }
+.timer-preset[data-color="orange"]:hover { border-color: #f97316; box-shadow: 0 8px 20px rgba(249, 115, 22, 0.2); }
+.timer-preset[data-color="pink"]:hover { border-color: #ec4899; box-shadow: 0 8px 20px rgba(236, 72, 153, 0.2); }
 
 /* פומודורו - עיצוב מיוחד */
 .timer-preset.pomodoro {
@@ -4669,20 +4848,20 @@ height: 100%;
 }
 
 .timer-preset-icon {
-  font-size: 2.2rem;
-  margin-bottom: 8px;
+  font-size: 1.6rem;
+  margin-bottom: 4px;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
 }
 
 .timer-preset-name {
   font-weight: 700;
   color: #1e293b;
-  margin-bottom: 4px;
-  font-size: 0.95rem;
+  margin-bottom: 2px;
+  font-size: 0.85rem;
 }
 
 .timer-preset-time {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   color: #64748b;
   font-weight: 500;
 }
@@ -7575,14 +7754,20 @@ height: 100%;
               <div class="page-type-desc">קווים אופקיים לכתיבה נעימה</div>
             </div>
             <div class="page-type-option" data-type="grid" onclick="app.selectPageType('grid')">
-              <span class="page-type-icon">⬜</span>
+              <span class="page-type-icon">📊</span>
               <div class="page-type-title">דף משובץ</div>
               <div class="page-type-desc">רשת ריבועים למתמטיקה</div>
             </div>
             <div class="page-type-option" data-type="blank" onclick="app.selectPageType('blank')">
-              <span class="page-type-icon">⬜</span>
+              <span class="page-type-icon">🎨</span>
               <div class="page-type-title">דף חלק</div>
               <div class="page-type-desc">דף ריק לציורים וחופש יצירה</div>
+            </div>
+            <div class="page-type-option" data-type="checklist" onclick="app.selectPageType('checklist')">
+              <span class="page-type-icon">✅</span>
+              <div class="page-type-title">צ'קליסט</div>
+              <div class="page-type-desc">רשימות קניות, ציוד וטיולים</div>
+              <span class="premium-badge-small">⭐</span>
             </div>
           </div>
         </div>
@@ -7965,17 +8150,21 @@ height: 100%;
     
     // מגבלות גרסה חינמית
     const FREE_LIMITS = {
-      maxNotebooks: 4,
+      maxNotebooks: 5,
       maxPages: {
         lined: 20,
         grid: 20,
-        blank: 1
+        blank: 1,
+        checklist: 1
       },
       maxPerType: {
         lined: 2,
         grid: 1,
-        blank: 1
-      }
+        blank: 1,
+        checklist: 1
+      },
+      maxActiveTasks: 20,
+      maxChecklistItems: 5  // מקסימום שורות בצ'קליסט למשתמש חינמי
     };
     
     // אפליקציה ראשית
@@ -8005,7 +8194,7 @@ autoSaveInterval: null,
       searchQuery: '',
       filteredEvents: [],
       
-      // מחברות ברירת מחדל (4 מחברות לגרסה חינמית)
+      // מחברות ברירת מחדל (5 מחברות לגרסה חינמית - כולל טעימה לצ'קליסט)
       subjects: {
         math: {
           title: 'מתמטיקה',
@@ -8059,6 +8248,24 @@ autoSaveInterval: null,
             {
               title: 'דף ציור',
               content: '',
+              date: new Date().toLocaleDateString('he-IL')
+            }
+          ]
+        },
+        checklist: {
+          title: 'רשימות',
+          icon: '✅',
+          color: '#22c55e',
+          description: 'רשימות קניות, ציוד וטיולים',
+          pageType: 'checklist',
+          pages: [
+            {
+              title: 'רשימה לדוגמה',
+              checklistItems: [
+                { text: 'פריט ראשון - לחץ כדי לסמן ✓', checked: false },
+                { text: 'פריט שני', checked: false },
+                { text: 'פריט שלישי', checked: true }
+              ],
               date: new Date().toLocaleDateString('he-IL')
             }
           ]
@@ -8245,21 +8452,29 @@ this.showPage('homepage');
         }
       },
 
-      // פתיחת מודאל שדרוג
+      // פתיחת עמוד שדרוג
       openUpgradeModal(featureName) {
-        document.getElementById('upgradeFeatureName').innerText = featureName;
+        // שומר את שם הפיצ'ר שגרם לפתיחה (אופציונלי לשימוש עתידי)
+        this.upgradeFeature = featureName;
         document.getElementById('upgradeModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
       },
 
-      // סגירת מודאל שדרוג
+      // סגירת עמוד שדרוג
       closeUpgradeModal() {
         document.getElementById('upgradeModal').classList.add('hidden');
+        document.body.style.overflow = '';
       },
 
       // מעבר לתשלום (בינתיים placeholder)
       goToCheckout() {
+        // כאן יהיה קישור ל-Stripe Checkout
         alert('🚧 מערכת התשלומים בבנייה!\n\nבקרוב תוכל לשדרג לפרימיום.');
-        this.closeUpgradeModal();
+      },
+
+      startFreeTrial() {
+        // כאן יהיה הפעלת ניסיון חינמי
+        alert('🎁 ניסיון חינמי בבנייה!\n\nבקרוב תוכל לנסות פרימיום ל-7 ימים חינם.');
       },
 
       // פתיחת מודאל מידע פרימיום
@@ -8347,6 +8562,20 @@ this.showPage('homepage');
           } else {
             this.openUpgradeModal(`הוספת יותר מ-${maxPages} דפים למחברת`);
           }
+          return false;
+        }
+
+        return true;
+      },
+
+      // בדיקה אם אפשר להוסיף משימה חדשה
+      canAddTask() {
+        if (this.isPro) return true;
+
+        const activeTasks = this.tasks.filter(t => !t.completed);
+        
+        if (activeTasks.length >= FREE_LIMITS.maxActiveTasks) {
+          this.openUpgradeModal('ניהול יותר מ-20 משימות פעילות');
           return false;
         }
 
@@ -8843,6 +9072,11 @@ createNotebookCard(subjectKey, subject) {
   // בדיקה אם pages קיים, אם לא - יצירת מערך ריק
   const pagesCount = subject.pages ? subject.pages.length : 0;
   
+  // כפתור שכפול (רק לפרימיום)
+  const duplicateBtn = this.isPro ? 
+    `<button class="notebook-duplicate-btn" onclick="event.stopPropagation(); app.duplicateNotebook('${subjectKey}')" title="שכפול מחברת">📋</button>` : 
+    `<button class="notebook-duplicate-btn premium-locked" onclick="event.stopPropagation(); app.openUpgradeModal('שכפול מחברות')" title="שכפול מחברת - פרימיום">📋⭐</button>`;
+  
   cardDiv.innerHTML = `
     <span class="subject-icon">${subject.icon}</span>
     <div class="subject-title">${subject.title}</div>
@@ -8851,7 +9085,10 @@ createNotebookCard(subjectKey, subject) {
       <span class="pages-count">${pagesCount} דפים</span>
       <span class="last-updated">עודכן היום</span>
     </div>
-    <button class="notebook-delete-btn" onclick="event.stopPropagation(); app.deleteNotebookWithConfirmation('${subjectKey}')">🗑️</button>
+    <div class="notebook-actions">
+      ${duplicateBtn}
+      <button class="notebook-delete-btn" onclick="event.stopPropagation(); app.deleteNotebookWithConfirmation('${subjectKey}')">🗑️</button>
+    </div>
   `;
   
   return cardDiv;
@@ -9016,6 +9253,13 @@ renderPagePreview(page, pageType) {
     html += `<div style="background-image: 
               radial-gradient(circle, #d3d3d3 1px, transparent 1px);
               background-size: 20px 20px; height: 100%; width: 100%;"></div>`;
+  } else if (pageType === 'checklist') {
+    for (let i = 0; i < 8; i++) {
+      html += `<div style="display: flex; align-items: center; height: 28px; border-bottom: 1px solid #e0e0e0;">
+                <div style="width: 14px; height: 14px; border: 2px solid #ccc; border-radius: 3px; margin-left: 8px;"></div>
+                <div style="flex: 1; height: 1px; background: #e8e8e8; margin: 0 8px;"></div>
+              </div>`;
+    }
   }
   
   // Render content preview (simplified)
@@ -9149,6 +9393,12 @@ style="position: sticky !important;"
         const textareaClass = `enhanced-textarea`;
         const placeholder = this.getPlaceholderForPageType(pageType);
         
+        // בדיקה אם זה דף צ'קליסט
+        if (pageType === 'checklist') {
+          pageDiv.innerHTML = this.createChecklistPageHTML(pageData, index);
+          return pageDiv;
+        }
+        
         pageDiv.innerHTML = `
 <div class="notebook-header">
             <div style="display: flex; gap: 20px; align-items: center; flex: 1;">
@@ -9271,7 +9521,8 @@ if (pageData.formulas && pageData.formulas.length > 0) {
         const placeholders = {
           'lined': 'כתוב כאן בגודל פונט 28 והטקסט יתיישר אוטומטית לשורות.',
           'grid': 'דף משובץ למתמטיקה וגרפים. הכתיבה רציפה ללא התחשבות במשבצות.',
-          'blank': 'דף חלק לציורים, רעיונות וכתיבה חופשית.'
+          'blank': 'דף חלק לציורים, רעיונות וכתיבה חופשית.',
+          'checklist': 'רשימת מטלות - לחץ על + להוספת פריט חדש'
         };
         return placeholders[pageType] || 'כתוב כאן...';
       },
@@ -9305,6 +9556,148 @@ if (pageData.formulas && pageData.formulas.length > 0) {
             notebookContent.scrollTop = notebookContent.scrollHeight;
           }
         }, 100);
+      },
+
+      // === פונקציות צ'קליסט ===
+      
+      // יצירת HTML לדף צ'קליסט
+      createChecklistPageHTML(pageData, index) {
+        const items = pageData.checklistItems || [];
+        const maxItems = this.isPro ? Infinity : FREE_LIMITS.maxChecklistItems;
+        const canAddMore = this.isPro || items.length < maxItems;
+        
+        let itemsHTML = items.map((item, itemIndex) => `
+          <div class="checklist-item ${item.checked ? 'completed' : ''}" data-index="${itemIndex}">
+            <div class="checklist-checkbox ${item.checked ? 'checked' : ''}" 
+                 onclick="app.toggleChecklistItem(${index}, ${itemIndex})">
+              ${item.checked ? '✓' : ''}
+            </div>
+            <input type="text" 
+                   class="checklist-text" 
+                   value="${this.escapeHtml(item.text || '')}"
+                   placeholder="הקלד פריט..."
+                   onchange="app.updateChecklistItem(${index}, ${itemIndex}, this.value)"
+                   onkeydown="app.handleChecklistKeydown(event, ${index}, ${itemIndex})">
+            <button class="checklist-delete" onclick="app.deleteChecklistItem(${index}, ${itemIndex})">🗑️</button>
+          </div>
+        `).join('');
+        
+        // הצגת אזהרה למשתמש חינמי
+        let limitWarning = '';
+        if (!this.isPro && items.length >= maxItems) {
+          limitWarning = `
+            <div class="checklist-limit-warning">
+              <div>⭐ הגעת למגבלת ${maxItems} פריטים בגרסה החינמית</div>
+              <button onclick="app.openUpgradeModal('פריטי צ\'קליסט ללא הגבלה')">שדרג לפרימיום</button>
+            </div>
+          `;
+        }
+        
+        return `
+          <div class="notebook-header">
+            <div style="display: flex; gap: 20px; align-items: center; flex: 1;">
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <label style="font-weight: 600; color: var(--text-primary);">שם הרשימה:</label>
+                <input 
+                  type="text" 
+                  class="header-input" 
+                  placeholder="רשימת קניות / ציוד לטיול..."
+                  value="${pageData.title || ''}"
+                  onblur="app.updatePageTitle(${index}, this.value)"
+                  style="border: 1px solid var(--border-color); padding: 6px 10px; border-radius: 6px; font-size: 0.95rem; min-width: 250px;"
+                />
+              </div>
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <label style="font-weight: 600; color: var(--text-primary);">תאריך:</label>
+                <span style="font-size: 0.9rem; color: var(--text-secondary); padding: 6px 10px; background: var(--background-main); border-radius: 6px;">${pageData.date}</span>
+              </div>
+            </div>
+            <button class="tool-btn delete-page-btn" onclick="app.deletePage(${index})" title="מחק רשימה זו">
+              🗑️ מחק רשימה
+            </button>
+          </div>
+          
+          <div class="checklist-page">
+            <div class="checklist-container" id="checklist-${index}">
+              ${itemsHTML}
+              ${limitWarning}
+              <button class="checklist-add-btn" 
+                      onclick="app.addChecklistItem(${index})"
+                      ${!canAddMore ? 'disabled' : ''}>
+                ➕ הוסף פריט
+              </button>
+            </div>
+          </div>
+        `;
+      },
+      
+      // הוספת פריט לצ'קליסט
+      addChecklistItem(pageIndex) {
+        if (!this.currentNotebook || !this.subjects[this.currentNotebook]) return;
+        
+        const page = this.subjects[this.currentNotebook].pages[pageIndex];
+        if (!page.checklistItems) page.checklistItems = [];
+        
+        // בדיקת מגבלה
+        if (!this.isPro && page.checklistItems.length >= FREE_LIMITS.maxChecklistItems) {
+          this.openUpgradeModal('פריטי צ\'קליסט ללא הגבלה');
+          return;
+        }
+        
+        page.checklistItems.push({ text: '', checked: false });
+        this.saveNotebookData();
+        this.renderNotebookContent();
+        
+        // פוקוס על השדה החדש
+        setTimeout(() => {
+          const inputs = document.querySelectorAll(`#checklist-${pageIndex} .checklist-text`);
+          if (inputs.length > 0) {
+            inputs[inputs.length - 1].focus();
+          }
+        }, 100);
+      },
+      
+      // עדכון פריט בצ'קליסט
+      updateChecklistItem(pageIndex, itemIndex, text) {
+        if (!this.currentNotebook || !this.subjects[this.currentNotebook]) return;
+        
+        const page = this.subjects[this.currentNotebook].pages[pageIndex];
+        if (page.checklistItems && page.checklistItems[itemIndex]) {
+          page.checklistItems[itemIndex].text = text;
+          this.saveNotebookData();
+        }
+      },
+      
+      // החלפת סטטוס צ'קבוקס
+      toggleChecklistItem(pageIndex, itemIndex) {
+        if (!this.currentNotebook || !this.subjects[this.currentNotebook]) return;
+        
+        const page = this.subjects[this.currentNotebook].pages[pageIndex];
+        if (page.checklistItems && page.checklistItems[itemIndex]) {
+          page.checklistItems[itemIndex].checked = !page.checklistItems[itemIndex].checked;
+          this.saveNotebookData();
+          this.renderNotebookContent();
+        }
+      },
+      
+      // מחיקת פריט מצ'קליסט
+      deleteChecklistItem(pageIndex, itemIndex) {
+        if (!this.currentNotebook || !this.subjects[this.currentNotebook]) return;
+        
+        const page = this.subjects[this.currentNotebook].pages[pageIndex];
+        if (page.checklistItems) {
+          page.checklistItems.splice(itemIndex, 1);
+          this.saveNotebookData();
+          this.renderNotebookContent();
+        }
+      },
+      
+      // טיפול במקש Enter בצ'קליסט
+      handleChecklistKeydown(event, pageIndex, itemIndex) {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          this.addChecklistItem(pageIndex);
+        }
       },
 
       // מחיקת דף
@@ -10573,8 +10966,9 @@ savePageFormatting(index) {
       getIconForPageType(type) {
         const icons = {
           'lined': '📝',
-          'grid': '⬜', 
-          'blank': '⬜'
+          'grid': '📊', 
+          'blank': '🎨',
+          'checklist': '✅'
         };
         return icons[type] || '📝';
       },
@@ -10619,6 +11013,37 @@ deleteNotebookWithConfirmation(notebookKey) {
       alert('הקוד שהוזן שגוי. המחיקה בוטלה.');
     }
   }
+},
+
+// שכפול מחברת (פרימיום בלבד)
+duplicateNotebook(notebookKey) {
+  // בדיקת פרימיום
+  if (!this.isPro) {
+    this.openUpgradeModal('שכפול מחברות');
+    return;
+  }
+  
+  const notebook = this.subjects[notebookKey];
+  if (!notebook) return;
+  
+  // יצירת שם חדש
+  const newTitle = prompt('הכנס שם למחברת המשוכפלת:', `${notebook.title} (עותק)`);
+  if (!newTitle || newTitle.trim() === '') return;
+  
+  // יצירת מפתח ייחודי חדש
+  const newKey = `notebook_${Date.now()}`;
+  
+  // העתקה עמוקה של המחברת
+  const duplicatedNotebook = JSON.parse(JSON.stringify(notebook));
+  duplicatedNotebook.title = newTitle.trim();
+  
+  // שמירת המחברת החדשה
+  this.subjects[newKey] = duplicatedNotebook;
+  this.saveNotebookData();
+  this.renderNotebooks();
+  this.loadWelcomeData();
+  
+  alert(`המחברת "${newTitle}" נוצרה בהצלחה! 📋`);
 },
 
 
@@ -13174,6 +13599,11 @@ insertImage() {
 
       // יצירת משימה חדשה
       createTask() {
+        // בדיקת מגבלת משימות פעילות
+        if (!this.canAddTask()) {
+          return;
+        }
+        
         const title = document.getElementById('taskTitle').value.trim();
         const description = document.getElementById('taskDescription').value.trim();
         const category = document.getElementById('taskCategory').value;
@@ -18145,12 +18575,12 @@ document.addEventListener('keydown', function(e) {
       <div class="premium-plan free-plan">
         <h3>🆓 גרסה חינמית</h3>
         <ul>
-          <li>📘 2 מחברות שורה (עד 20 דפים כל אחת)</li>
-          <li>📗 מחברת משובצת אחת (עד 20 דפים)</li>
-          <li>🎨 מחברת ציור – דף אחד להתנסות</li>
-          <li>✏️ כתיבה חופשית ולמידה מלאה</li>
-          <li>📋 ניהול משימות ויומן</li>
-          <li>⏱️ שעון עצר ומחשבון</li>
+          <li>📘 2 מחברות שורה (עד 20 דפים)</li>
+          <li>📊 מחברת משובצת (עד 20 דפים)</li>
+          <li>🎨 מחברת ציור – דף אחד</li>
+          <li>✅ מחברת צ'קליסט – דף אחד, עד 5 פריטים</li>
+          <li>📋 עד 20 משימות פעילות</li>
+          <li>📅 יומן ושעון עצר</li>
         </ul>
       </div>
 
@@ -18160,11 +18590,12 @@ document.addEventListener('keydown', function(e) {
         <div id="proSectionContent">
           <ul>
             <li>📚 מחברות ללא הגבלה</li>
-            <li>📄 כל סוגי המחברות (שורה, משובצת, חלקה, נקודות)</li>
+            <li>📄 כל סוגי המחברות</li>
             <li>♾️ דפים ללא הגבלה</li>
+            <li>✅ צ'קליסט - דפים ופריטים ללא הגבלה</li>
+            <li>📋 משימות פעילות ללא הגבלה</li>
             <li>📤 ייצוא מחברות ל-PDF</li>
-            <li>🔄 שכפול וסידור מחברות</li>
-            <li>⚙️ התאמה אישית מתקדמת</li>
+            <li>📋 שכפול מחברות</li>
           </ul>
           <button class="premium-upgrade-btn" onclick="app.goToCheckout()">
             שדרוג לפרימיום ⭐
@@ -18177,44 +18608,492 @@ document.addEventListener('keydown', function(e) {
   </div>
 </div>
 
-<!-- מודאל שדרוג לפרימיום -->
-<div id="upgradeModal" class="upgrade-modal hidden">
-  <div class="upgrade-modal-overlay" onclick="app.closeUpgradeModal()"></div>
-  <div class="upgrade-modal-content">
-    <button class="upgrade-modal-close" onclick="app.closeUpgradeModal()">✕</button>
-    <div class="upgrade-modal-icon">⭐</div>
-    <h2 class="upgrade-modal-title">פיצ'ר פרימיום</h2>
-    <p class="upgrade-modal-text">
-      <span id="upgradeFeatureName">ייצוא ל-PDF</span> זמין למשתמשי פרימיום בלבד
-    </p>
-    <div class="upgrade-modal-features">
-      <div class="upgrade-feature">✓ ייצוא ל-PDF ללא הגבלה</div>
-      <div class="upgrade-feature">✓ גיבוי אוטומטי לענן</div>
-      <div class="upgrade-feature">✓ תמיכה בעדיפות גבוהה</div>
-      <div class="upgrade-feature">✓ תכונות נוספות בקרוב...</div>
+<!-- עמוד שדרוג לפרימיום -->
+<div id="upgradeModal" class="upgrade-page hidden">
+  <div class="upgrade-page-content">
+    <button class="upgrade-close-btn" onclick="app.closeUpgradeModal()">✕</button>
+    
+    <div class="upgrade-header">
+      <h1>🌟 שדרוג לפרימיום</h1>
+      <p class="upgrade-subtitle">הגרסה החינמית מאפשרת ללמוד ולהתקדם. גרסת הפרימיום נותנת יותר חופש, סדר ונוחות – לילד ולהורה.</p>
     </div>
-    <button class="upgrade-modal-btn" onclick="app.goToCheckout()">
-      🚀 שדרג לפרימיום
-    </button>
-    <button class="upgrade-modal-btn-secondary" onclick="app.closeUpgradeModal()">
-      אולי אחר כך
+
+    <div class="upgrade-plans-container">
+      <!-- גרסה חינמית -->
+      <div class="upgrade-plan free">
+        <div class="plan-header">
+          <span class="plan-icon">🆓</span>
+          <h2>גרסה חינמית</h2>
+        </div>
+        <p class="plan-desc">מתאימה להתנסות ולשימוש יומיומי:</p>
+        <ul class="plan-features">
+          <li>📚 עד 5 מחברות פעילות<br><span class="feature-sub">(2 שורה, 1 משובצת, התנסות בחלקה ובצ'קליסט)</span></li>
+          <li>📄 עד 20 דפים למחברת</li>
+          <li>📋 עד 20 משימות פעילות</li>
+          <li>📅 יומן ולוח שנה</li>
+          <li>🔢 מחשבון מדעי</li>
+          <li>✏️ כתיבה חופשית ולמידה מלאה</li>
+        </ul>
+        <div class="plan-price free-price">
+          <span class="price-amount">חינם</span>
+          <span class="price-period">לתמיד</span>
+        </div>
+      </div>
+
+      <!-- גרסת פרימיום -->
+      <div class="upgrade-plan premium">
+        <div class="plan-badge">מומלץ</div>
+        <div class="plan-header">
+          <span class="plan-icon">⭐</span>
+          <h2>גרסת פרימיום</h2>
+        </div>
+        <p class="plan-desc">למי שרוצה חוויית למידה מלאה ובלי מגבלות:</p>
+        <ul class="plan-features">
+          <li>📚 מחברות ללא הגבלה</li>
+          <li>📄 כל סוגי המחברות והתבניות</li>
+          <li>♾️ דפים ללא הגבלה</li>
+          <li>📤 ייצוא מחברות ל־PDF ולהדפסה</li>
+          <li>🔔 ניהול משימות מתקדם עם התראות</li>
+          <li>📆 חיבור עם יומן גוגל שלך</li>
+          <li>⚙️ התאמה אישית ונגישות מתקדמת</li>
+        </ul>
+        <div class="plan-pricing">
+          <label class="price-option" for="monthlyPlan">
+            <input type="radio" name="planChoice" id="monthlyPlan" value="monthly">
+            <div class="price-option-content">
+              <span class="price-type">חודשי</span>
+              <span class="price-amount">₪10.90</span>
+              <span class="price-period">לחודש</span>
+            </div>
+          </label>
+          <label class="price-option recommended" for="yearlyPlan">
+            <div class="save-badge">חודש חינם!</div>
+            <input type="radio" name="planChoice" id="yearlyPlan" value="yearly" checked>
+            <div class="price-option-content">
+              <span class="price-type">שנתי</span>
+              <span class="price-amount">₪119.90</span>
+              <span class="price-period">לשנה (₪10 לחודש)</span>
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ניסיון חינם -->
+    <div class="trial-section">
+      <div class="trial-icon">🎁</div>
+      <h3>ניסיון פרימיום חינמי</h3>
+      <p>אפשר לנסות את כל פיצ'רי הפרימיום ל־<strong>7 ימים</strong> ללא כרטיס אשראי.</p>
+      <p class="trial-note">בסיום הניסיון חוזרים אוטומטית לגרסה החינמית – בלי התחייבות.</p>
+    </div>
+
+    <!-- כפתורי פעולה -->
+    <div class="upgrade-actions">
+      <button class="upgrade-btn primary" onclick="app.startFreeTrial()">
+        ⭐ התחלת ניסיון פרימיום (7 ימים חינם)
+      </button>
+      <button class="upgrade-btn secondary" onclick="app.goToCheckout()">
+        💳 שדרוג מיידי לפרימיום
+      </button>
+    </div>
+
+    <!-- אבטחה -->
+    <div class="security-note">
+      <span class="security-icon">🔒</span>
+      <span>תשלום בטוח דרך Stripe. פרטי האשראי אינם נשמרים אצלנו.</span>
+    </div>
+
+    <!-- שורת הרגעה -->
+    <p class="reassurance-note">אפשר להמשיך להשתמש בגרסה החינמית גם בלי לשדרג ✨</p>
+    
+    <!-- כפתור סגירה בתחתית -->
+    <button class="upgrade-close-bottom" onclick="app.closeUpgradeModal()">
+      ← חזרה לאפליקציה
     </button>
   </div>
 </div>
 
 <style>
-/* מודאל שדרוג לפרימיום */
-.upgrade-modal {
+/* עמוד שדרוג לפרימיום */
+.upgrade-page {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   z-index: 10000;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.upgrade-page-content {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.upgrade-close-btn {
+  position: fixed;
+  top: 30px;
+  left: 30px;
+  background: rgba(255,255,255,0.3);
+  border: none;
+  color: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 1.8rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10001;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
+
+.upgrade-close-btn:hover {
+  background: rgba(255,255,255,0.5);
+  transform: scale(1.1);
+}
+
+.upgrade-header {
+  text-align: center;
+  color: white;
+  margin-bottom: 30px;
+  padding-top: 20px;
+}
+
+.upgrade-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.upgrade-subtitle {
+  font-size: 1.1rem;
+  opacity: 0.95;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.upgrade-plans-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+  margin-bottom: 30px;
+}
+
+.upgrade-plan {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  position: relative;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+}
+
+.upgrade-plan.premium {
+  border: 3px solid #fbbf24;
+  transform: scale(1.02);
+}
+
+.plan-badge {
+  position: absolute;
+  top: -12px;
+  right: 20px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: white;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.plan-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.plan-icon {
+  font-size: 2rem;
+}
+
+.plan-header h2 {
+  font-size: 1.5rem;
+  color: #1f2937;
+  margin: 0;
+}
+
+.plan-desc {
+  color: #6b7280;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+}
+
+.plan-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 25px 0;
+}
+
+.plan-features li {
+  padding: 10px 0;
+  border-bottom: 1px solid #f3f4f6;
+  color: #374151;
+  font-size: 0.95rem;
+}
+
+.plan-features li:last-child {
+  border-bottom: none;
+}
+
+.feature-sub {
+  display: block;
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin-top: 4px;
+  padding-right: 24px;
+}
+
+.plan-price {
+  text-align: center;
+  padding: 20px;
+  background: #f9fafb;
+  border-radius: 12px;
+}
+
+.plan-price .price-amount {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.plan-price .price-period {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.plan-pricing {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.price-option {
+  position: relative;
+  padding: 15px 20px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: block;
+}
+
+.price-option:hover {
+  border-color: #667eea;
+  background: #f8f9ff;
+}
+
+.price-option.recommended {
+  border-color: #fbbf24;
+  background: #fffbeb;
+}
+
+.price-option.recommended:hover {
+  background: #fef3c7;
+}
+
+.price-option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.price-option input[type="radio"]:checked + .price-option-content {
+  color: #667eea;
+}
+
+.price-option:has(input:checked) {
+  border-color: #667eea;
+  background: #f0f4ff;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+.price-option.recommended:has(input:checked) {
+  border-color: #f59e0b;
+  background: #fef3c7;
+  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.3);
+}
+
+.price-option-content {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+}
+
+.price-option .price-type {
+  font-weight: 600;
+  color: #374151;
+  min-width: 50px;
+}
+
+.price-option .price-amount {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #667eea;
+}
+
+.price-option .price-period {
+  color: #6b7280;
+  font-size: 0.85rem;
+  margin-right: auto;
+}
+
+.save-badge {
+  position: absolute;
+  top: -10px;
+  left: 15px;
+  background: #22c55e;
+  color: white;
+  padding: 3px 10px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.trial-section {
+  background: rgba(255,255,255,0.95);
+  border-radius: 16px;
+  padding: 25px;
+  text-align: center;
+  margin-bottom: 25px;
+  border: 2px dashed #fbbf24;
+}
+
+.trial-icon {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.trial-section h3 {
+  color: #1f2937;
+  margin-bottom: 10px;
+  font-size: 1.3rem;
+}
+
+.trial-section p {
+  color: #4b5563;
+  margin-bottom: 8px;
+}
+
+.trial-note {
+  font-size: 0.9rem;
+  color: #6b7280 !important;
+}
+
+.upgrade-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.upgrade-btn {
+  padding: 18px 30px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.upgrade-btn.primary {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: white;
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+}
+
+.upgrade-btn.primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(251, 191, 36, 0.5);
+}
+
+.upgrade-btn.secondary {
+  background: white;
+  color: #667eea;
+  border: 2px solid white;
+}
+
+.upgrade-btn.secondary:hover {
+  background: rgba(255,255,255,0.9);
+}
+
+.security-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: rgba(255,255,255,0.9);
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+}
+
+.reassurance-note {
+  text-align: center;
+  color: rgba(255,255,255,0.85);
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+}
+
+.upgrade-close-bottom {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto 30px;
+  padding: 12px 25px;
+  background: transparent;
+  border: 2px solid rgba(255,255,255,0.5);
+  color: white;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.upgrade-close-bottom:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .upgrade-plans-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .upgrade-plan.premium {
+    transform: none;
+    order: -1;
+  }
+  
+  .upgrade-header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .upgrade-btn {
+    padding: 15px 20px;
+    font-size: 1rem;
+  }
+}
+</style>
 
 /* סימוני פרימיום */
 .premium-feature-btn {
@@ -18236,6 +19115,10 @@ document.addEventListener('keydown', function(e) {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.upgrade-page.hidden {
+  display: none !important;
 }
 
 .upgrade-modal.hidden {
