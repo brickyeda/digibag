@@ -18615,7 +18615,8 @@ document.addEventListener('keydown', function(e) {
     
     <div class="upgrade-header">
       <h1>🌟 שדרוג לפרימיום</h1>
-      <p class="upgrade-subtitle">הגרסה החינמית מאפשרת ללמוד ולהתקדם. גרסת הפרימיום נותנת יותר חופש, סדר ונוחות – לילד ולהורה.</p>
+      <p class="upgrade-subtitle">הגרסה החינמית מאפשרת ללמוד ולהתקדם.</p>
+      <p class="upgrade-subtitle">גרסת הפרימיום נותנת לך יותר חופש, סדר ונוחות.</p>
     </div>
 
     <div class="upgrade-plans-container">
@@ -18630,7 +18631,8 @@ document.addEventListener('keydown', function(e) {
           <li>📚 עד 5 מחברות פעילות<br><span class="feature-sub">(2 שורה, 1 משובצת, התנסות בחלקה ובצ'קליסט)</span></li>
           <li>📄 עד 20 דפים למחברת</li>
           <li>📋 עד 20 משימות פעילות</li>
-          <li>📅 יומן ולוח שנה</li>
+          <li>📅 לוח שנה, יומן ומערכת שבועית</li>
+          <li>📝 דפי ממו</li>
           <li>🔢 מחשבון מדעי</li>
           <li>✏️ כתיבה חופשית ולמידה מלאה</li>
         </ul>
@@ -18655,6 +18657,7 @@ document.addEventListener('keydown', function(e) {
           <li>📤 ייצוא מחברות ל־PDF ולהדפסה</li>
           <li>🔔 ניהול משימות מתקדם עם התראות</li>
           <li>📆 חיבור עם יומן גוגל שלך</li>
+          <li>🔢 מחשבון מדעי</li>
           <li>⚙️ התאמה אישית ונגישות מתקדמת</li>
         </ul>
         <div class="plan-pricing">
@@ -18663,7 +18666,7 @@ document.addEventListener('keydown', function(e) {
             <div class="price-option-content">
               <span class="price-type">חודשי</span>
               <span class="price-amount">₪10.90</span>
-              <span class="price-period">לחודש</span>
+              <span class="price-period">לחודש<br><span class="auto-renew">מתחדש אוטומטית</span></span>
             </div>
           </label>
           <label class="price-option recommended" for="yearlyPlan">
@@ -18680,17 +18683,16 @@ document.addEventListener('keydown', function(e) {
     </div>
 
     <!-- ניסיון חינם -->
-    <div class="trial-section">
+    <div class="trial-section compact">
       <div class="trial-icon">🎁</div>
-      <h3>ניסיון פרימיום חינמי</h3>
-      <p>אפשר לנסות את כל פיצ'רי הפרימיום ל־<strong>7 ימים</strong> ללא כרטיס אשראי.</p>
+      <p class="trial-main">אפשר לנסות את כל פיצ'רי הפרימיום ל־<strong>7 ימים</strong> ללא כרטיס אשראי.</p>
       <p class="trial-note">בסיום הניסיון חוזרים אוטומטית לגרסה החינמית – בלי התחייבות.</p>
     </div>
 
     <!-- כפתורי פעולה -->
     <div class="upgrade-actions">
       <button class="upgrade-btn primary" onclick="app.startFreeTrial()">
-        ⭐ התחלת ניסיון פרימיום (7 ימים חינם)
+        🎁 נסו עכשיו את גרסת הפרימיום ל-7 ימים בחינם
       </button>
       <button class="upgrade-btn secondary" onclick="app.goToCheckout()">
         💳 שדרוג מיידי לפרימיום
@@ -18970,11 +18972,32 @@ document.addEventListener('keydown', function(e) {
 
 .trial-section {
   background: rgba(255,255,255,0.95);
-  border-radius: 16px;
-  padding: 25px;
+  border-radius: 12px;
+  padding: 15px 20px;
   text-align: center;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   border: 2px dashed #fbbf24;
+}
+
+.trial-section.compact {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  text-align: right;
+}
+
+.trial-section.compact .trial-icon {
+  font-size: 2rem;
+  margin-bottom: 0;
+}
+
+.trial-section.compact .trial-main {
+  font-size: 1.05rem;
+  margin-bottom: 3px;
+}
+
+.trial-section.compact .trial-note {
+  font-size: 0.85rem;
 }
 
 .trial-icon {
@@ -18990,12 +19013,23 @@ document.addEventListener('keydown', function(e) {
 
 .trial-section p {
   color: #4b5563;
-  margin-bottom: 8px;
+  margin-bottom: 5px;
+}
+
+.trial-main {
+  font-size: 1.05rem;
 }
 
 .trial-note {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: #6b7280 !important;
+}
+
+.auto-renew {
+  font-size: 0.7rem;
+  color: #9ca3af;
+  display: block;
+  margin-top: 2px;
 }
 
 .upgrade-actions {
