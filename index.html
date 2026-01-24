@@ -8477,12 +8477,6 @@ this.showPage('homepage');
         alert('🎁 ניסיון חינמי בבנייה!\n\nבקרוב תוכל לנסות פרימיום ל-7 ימים חינם.');
       },
 
-      selectPlan(planType) {
-        // עדכון בחירת תוכנית
-        document.getElementById('monthly').checked = (planType === 'monthly');
-        document.getElementById('yearly').checked = (planType === 'yearly');
-      },
-
       // פתיחת מודאל מידע פרימיום
       openPremiumInfo() {
         document.getElementById('premiumInfoModal').classList.remove('hidden');
@@ -18633,9 +18627,11 @@ document.addEventListener('keydown', function(e) {
         </div>
         <p class="plan-desc">מתאימה להתנסות ולשימוש יומיומי:</p>
         <ul class="plan-features">
-          <li>📚 עד 5 מחברות (2 שורה, 1 משובצת, התנסות בחלקה ובצ'קליסט)</li>
+          <li>📚 עד 5 מחברות פעילות<br><span class="feature-sub">(2 שורה, 1 משובצת, התנסות בחלקה ובצ'קליסט)</span></li>
           <li>📄 עד 20 דפים למחברת</li>
           <li>📋 עד 20 משימות פעילות</li>
+          <li>📅 יומן ולוח שנה</li>
+          <li>🔢 מחשבון מדעי</li>
           <li>✏️ כתיבה חופשית ולמידה מלאה</li>
         </ul>
         <div class="plan-price free-price">
@@ -18658,26 +18654,27 @@ document.addEventListener('keydown', function(e) {
           <li>♾️ דפים ללא הגבלה</li>
           <li>📤 ייצוא מחברות ל־PDF ולהדפסה</li>
           <li>🔔 ניהול משימות מתקדם עם התראות</li>
+          <li>📆 חיבור עם יומן גוגל שלך</li>
           <li>⚙️ התאמה אישית ונגישות מתקדמת</li>
         </ul>
         <div class="plan-pricing">
-          <div class="price-option" onclick="app.selectPlan('monthly')">
-            <input type="radio" name="plan" id="monthly" value="monthly">
-            <label for="monthly">
+          <label class="price-option" for="monthlyPlan">
+            <input type="radio" name="planChoice" id="monthlyPlan" value="monthly">
+            <div class="price-option-content">
               <span class="price-type">חודשי</span>
               <span class="price-amount">₪10.90</span>
               <span class="price-period">לחודש</span>
-            </label>
-          </div>
-          <div class="price-option recommended" onclick="app.selectPlan('yearly')">
+            </div>
+          </label>
+          <label class="price-option recommended" for="yearlyPlan">
             <div class="save-badge">חודש חינם!</div>
-            <input type="radio" name="plan" id="yearly" value="yearly" checked>
-            <label for="yearly">
+            <input type="radio" name="planChoice" id="yearlyPlan" value="yearly" checked>
+            <div class="price-option-content">
               <span class="price-type">שנתי</span>
               <span class="price-amount">₪119.90</span>
               <span class="price-period">לשנה (₪10 לחודש)</span>
-            </label>
-          </div>
+            </div>
+          </label>
         </div>
       </div>
     </div>
@@ -18844,6 +18841,14 @@ document.addEventListener('keydown', function(e) {
   border-bottom: none;
 }
 
+.feature-sub {
+  display: block;
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin-top: 4px;
+  padding-right: 24px;
+}
+
 .plan-price {
   text-align: center;
   padding: 20px;
@@ -18876,10 +18881,12 @@ document.addEventListener('keydown', function(e) {
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
+  display: block;
 }
 
 .price-option:hover {
   border-color: #667eea;
+  background: #f8f9ff;
 }
 
 .price-option.recommended {
@@ -18887,16 +18894,37 @@ document.addEventListener('keydown', function(e) {
   background: #fffbeb;
 }
 
-.price-option input {
-  position: absolute;
-  opacity: 0;
+.price-option.recommended:hover {
+  background: #fef3c7;
 }
 
-.price-option label {
+.price-option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.price-option input[type="radio"]:checked + .price-option-content {
+  color: #667eea;
+}
+
+.price-option:has(input:checked) {
+  border-color: #667eea;
+  background: #f0f4ff;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+.price-option.recommended:has(input:checked) {
+  border-color: #f59e0b;
+  background: #fef3c7;
+  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.3);
+}
+
+.price-option-content {
   display: flex;
   align-items: center;
   gap: 15px;
-  cursor: pointer;
   width: 100%;
 }
 
@@ -19056,6 +19084,10 @@ document.addEventListener('keydown', function(e) {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.upgrade-page.hidden {
+  display: none !important;
 }
 
 .upgrade-modal.hidden {
