@@ -8560,6 +8560,9 @@ this.showPage('homepage');
         const actionsCard = document.getElementById('subscriptionActionsCard');
         const upgradeCard = document.getElementById('subscriptionUpgradeCard');
         
+        // קבלת המייל של המשתמש
+        const userEmail = currentUser ? currentUser.email : '---';
+        
         if (this.isPro) {
           // משתמש פרימיום
           statusCard.className = 'subscription-card status-card pro';
@@ -8567,6 +8570,10 @@ this.showPage('homepage');
             <div class="status-header">
               <span class="status-icon">⭐</span>
               <span class="status-title pro">גרסת פרימיום – מנוי ${this.subscriptionType === 'yearly' ? 'שנתי' : 'חודשי'}</span>
+            </div>
+            <div class="status-user-email">
+              <span>📧</span>
+              <span>${userEmail}</span>
             </div>
             <div class="status-details">
               <div class="status-detail">
@@ -8602,7 +8609,11 @@ this.showPage('homepage');
               <span class="status-icon">🆓</span>
               <span class="status-title">גרסה חינמית</span>
             </div>
-            <p style="color: #6b7280;">הגרסה החינמית מאפשרת שימוש מלא עם מגבלות.</p>
+            <div class="status-user-email">
+              <span>📧</span>
+              <span>${userEmail}</span>
+            </div>
+            <p style="color: #6b7280; margin-top: 10px;">הגרסה החינמית מאפשרת שימוש מלא עם מגבלות.</p>
           `;
           
           // הצג כרטיס ניסיון
@@ -8627,7 +8638,11 @@ this.showPage('homepage');
               <span class="status-icon">🆓</span>
               <span class="status-title">גרסה חינמית</span>
             </div>
-            <p style="color: #6b7280;">הגרסה החינמית מאפשרת שימוש מלא עם מגבלות.</p>
+            <div class="status-user-email">
+              <span>📧</span>
+              <span>${userEmail}</span>
+            </div>
+            <p style="color: #6b7280; margin-top: 10px;">הגרסה החינמית מאפשרת שימוש מלא עם מגבלות.</p>
           `;
           
           trialCard.style.display = 'none';
@@ -19965,6 +19980,22 @@ document.addEventListener('keydown', function(e) {
 .status-detail-value {
   font-weight: 600;
   color: #1f2937;
+}
+
+.status-user-email {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 15px;
+  background: rgba(255,255,255,0.6);
+  border-radius: 8px;
+  margin: 10px 0 15px 0;
+  font-size: 0.95rem;
+  color: #4b5563;
+}
+
+.status-user-email span:first-child {
+  font-size: 1.1rem;
 }
 
 .status-note {
