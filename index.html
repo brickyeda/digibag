@@ -18683,10 +18683,13 @@ document.addEventListener('keydown', function(e) {
     </div>
 
     <!-- ניסיון חינם -->
-    <div class="trial-section compact">
+    <div class="trial-section">
       <div class="trial-icon">🎁</div>
-      <p class="trial-main">אפשר לנסות את כל פיצ'רי הפרימיום ל־<strong>7 ימים</strong> ללא כרטיס אשראי.</p>
-      <p class="trial-note">בסיום הניסיון חוזרים אוטומטית לגרסה החינמית – בלי התחייבות.</p>
+      <div class="trial-text">
+        <p class="trial-main">אפשר לנסות את גרסת הפרימיום המלאה ל־7 ימים ללא כרטיס אשראי.</p>
+        <p class="trial-note">בסיום תקופת הניסיון חוזרים אוטומטית לגרסה החינמית – בלי התחייבות.</p>
+      </div>
+      <div class="trial-icon">🎁</div>
     </div>
 
     <!-- כפתורי פעולה -->
@@ -18973,10 +18976,19 @@ document.addEventListener('keydown', function(e) {
 .trial-section {
   background: rgba(255,255,255,0.95);
   border-radius: 12px;
-  padding: 15px 20px;
+  padding: 18px 25px;
   text-align: center;
   margin-bottom: 20px;
   border: 2px dashed #fbbf24;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.trial-text {
+  flex: 1;
+  text-align: center;
 }
 
 .trial-section.compact {
@@ -19001,8 +19013,8 @@ document.addEventListener('keydown', function(e) {
 }
 
 .trial-icon {
-  font-size: 2.5rem;
-  margin-bottom: 10px;
+  font-size: 2.2rem;
+  flex-shrink: 0;
 }
 
 .trial-section h3 {
@@ -19017,12 +19029,16 @@ document.addEventListener('keydown', function(e) {
 }
 
 .trial-main {
-  font-size: 1.05rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #1f2937 !important;
+  margin-bottom: 5px !important;
 }
 
 .trial-note {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: #6b7280 !important;
+  margin-bottom: 0 !important;
 }
 
 .auto-renew {
