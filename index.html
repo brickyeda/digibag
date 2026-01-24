@@ -7975,7 +7975,8 @@ body:has(.mode-btn[data-mode="programmer"].active) .programmer-displays {
         lined: 2,
         grid: 1,
         blank: 1
-      }
+      },
+      maxActiveTasks: 20
     };
     
     // אפליקציה ראשית
@@ -8347,6 +8348,20 @@ this.showPage('homepage');
           } else {
             this.openUpgradeModal(`הוספת יותר מ-${maxPages} דפים למחברת`);
           }
+          return false;
+        }
+
+        return true;
+      },
+
+      // בדיקה אם אפשר להוסיף משימה חדשה
+      canAddTask() {
+        if (this.isPro) return true;
+
+        const activeTasks = this.tasks.filter(t => !t.completed);
+        
+        if (activeTasks.length >= FREE_LIMITS.maxActiveTasks) {
+          this.openUpgradeModal('ניהול יותר מ-20 משימות פעילות');
           return false;
         }
 
@@ -13174,6 +13189,11 @@ insertImage() {
 
       // יצירת משימה חדשה
       createTask() {
+        // בדיקת מגבלת משימות פעילות
+        if (!this.canAddTask()) {
+          return;
+        }
+        
         const title = document.getElementById('taskTitle').value.trim();
         const description = document.getElementById('taskDescription').value.trim();
         const category = document.getElementById('taskCategory').value;
@@ -18149,8 +18169,8 @@ document.addEventListener('keydown', function(e) {
           <li>📗 מחברת משובצת אחת (עד 20 דפים)</li>
           <li>🎨 מחברת ציור – דף אחד להתנסות</li>
           <li>✏️ כתיבה חופשית ולמידה מלאה</li>
-          <li>📋 ניהול משימות ויומן</li>
-          <li>⏱️ שעון עצר ומחשבון</li>
+          <li>📋 עד 20 משימות פעילות</li>
+          <li>📅 יומן ושעון עצר</li>
         </ul>
       </div>
 
@@ -18162,9 +18182,9 @@ document.addEventListener('keydown', function(e) {
             <li>📚 מחברות ללא הגבלה</li>
             <li>📄 כל סוגי המחברות (שורה, משובצת, חלקה, נקודות)</li>
             <li>♾️ דפים ללא הגבלה</li>
+            <li>✅ משימות פעילות ללא הגבלה</li>
             <li>📤 ייצוא מחברות ל-PDF</li>
             <li>🔄 שכפול וסידור מחברות</li>
-            <li>⚙️ התאמה אישית מתקדמת</li>
           </ul>
           <button class="premium-upgrade-btn" onclick="app.goToCheckout()">
             שדרוג לפרימיום ⭐
