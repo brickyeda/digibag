@@ -4467,17 +4467,75 @@ height: 100%;
 
 .timer-input-section {
   display: flex;
-  gap: 15px;
+  gap: 20px;
   justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  padding: 25px;
+  background: linear-gradient(145deg, #f8fafc, #f1f5f9);
+  border-radius: 20px;
+  border: 2px solid #e2e8f0;
 }
 
 .timer-input-group {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  position: relative;
+}
+
+.timer-input-icon {
+  font-size: 1.5rem;
+  margin-bottom: 5px;
+  filter: grayscale(0.3);
+  transition: all 0.3s ease;
+}
+
+.timer-input-group:focus-within .timer-input-icon {
+  filter: grayscale(0);
+  transform: scale(1.1);
+}
+
+.timer-input-group input {
+  width: 80px;
+  padding: 15px 10px;
+  font-size: 1.8rem;
+  text-align: center;
+  border: 3px solid #e2e8f0;
+  border-radius: 16px;
+  font-weight: 700;
+  color: #667eea;
+  background: white;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.timer-input-group input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15), 0 8px 25px rgba(102, 126, 234, 0.15);
+  transform: scale(1.05);
+}
+
+.timer-input-group input::placeholder {
+  color: #cbd5e1;
+}
+
+.timer-input-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.timer-input-separator {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #94a3b8;
+  margin-top: -15px;
 }
 
 .timer-input-label {
@@ -4524,54 +4582,109 @@ height: 100%;
 
 .timer-presets {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 2px;
-  margin-top: 20px;        /* ← הוסף שורה זו! */
-  margin-bottom: 1px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 20px;
+  margin-bottom: 25px;
 }
+
 .timer-preset {
-  padding: 0px;
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.08));
+  padding: 15px 10px;
+  background: linear-gradient(145deg, #ffffff, #f8fafc);
   border: 2px solid #e2e8f0;
-  border-radius: 15px;
+  border-radius: 16px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.timer-preset::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.timer-preset:hover::before {
+  opacity: 1;
 }
 
 .timer-preset:hover {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.15));
-  border-color: #6366f1;
+  background: linear-gradient(145deg, #ffffff, #f0f4ff);
+  border-color: #667eea;
   transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  box-shadow: 0 12px 30px rgba(102, 126, 234, 0.2);
+}
+
+.timer-preset:active {
+  transform: translateY(-2px);
+}
+
+/* צבעים שונים לכפתורים */
+.timer-preset[data-color="blue"]::before { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+.timer-preset[data-color="cyan"]::before { background: linear-gradient(90deg, #06b6d4, #22d3ee); }
+.timer-preset[data-color="green"]::before { background: linear-gradient(90deg, #10b981, #34d399); }
+.timer-preset[data-color="teal"]::before { background: linear-gradient(90deg, #14b8a6, #2dd4bf); }
+.timer-preset[data-color="red"]::before { background: linear-gradient(90deg, #ef4444, #f87171); }
+.timer-preset[data-color="purple"]::before { background: linear-gradient(90deg, #8b5cf6, #a78bfa); }
+.timer-preset[data-color="orange"]::before { background: linear-gradient(90deg, #f97316, #fb923c); }
+.timer-preset[data-color="pink"]::before { background: linear-gradient(90deg, #ec4899, #f472b6); }
+
+.timer-preset[data-color="blue"]:hover { border-color: #3b82f6; box-shadow: 0 12px 30px rgba(59, 130, 246, 0.2); }
+.timer-preset[data-color="cyan"]:hover { border-color: #06b6d4; box-shadow: 0 12px 30px rgba(6, 182, 212, 0.2); }
+.timer-preset[data-color="green"]:hover { border-color: #10b981; box-shadow: 0 12px 30px rgba(16, 185, 129, 0.2); }
+.timer-preset[data-color="teal"]:hover { border-color: #14b8a6; box-shadow: 0 12px 30px rgba(20, 184, 166, 0.2); }
+.timer-preset[data-color="red"]:hover { border-color: #ef4444; box-shadow: 0 12px 30px rgba(239, 68, 68, 0.2); }
+.timer-preset[data-color="purple"]:hover { border-color: #8b5cf6; box-shadow: 0 12px 30px rgba(139, 92, 246, 0.2); }
+.timer-preset[data-color="orange"]:hover { border-color: #f97316; box-shadow: 0 12px 30px rgba(249, 115, 22, 0.2); }
+.timer-preset[data-color="pink"]:hover { border-color: #ec4899; box-shadow: 0 12px 30px rgba(236, 72, 153, 0.2); }
+
+/* פומודורו - עיצוב מיוחד */
+.timer-preset.pomodoro {
+  background: linear-gradient(145deg, #fef2f2, #fee2e2);
+  border-color: #fca5a5;
+}
+
+.timer-preset.pomodoro:hover {
+  background: linear-gradient(145deg, #fee2e2, #fecaca);
+  border-color: #ef4444;
 }
 
 .timer-preset.custom {
-  background: linear-gradient(135deg, rgba(236, 72, 153, 0.08), rgba(139, 92, 246, 0.08));
-  border: 2px dashed #e2e8f0;
+  background: linear-gradient(145deg, #fdf4ff, #fae8ff);
+  border: 2px dashed #d8b4fe;
 }
 
 .timer-preset.custom:hover {
-  background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(139, 92, 246, 0.15));
-  border-color: #ec4899;
+  background: linear-gradient(145deg, #fae8ff, #f5d0fe);
+  border-color: #c084fc;
   border-style: solid;
 }
 
 .timer-preset-icon {
-  font-size: 2rem;
-  margin-bottom: 2px;
+  font-size: 2.2rem;
+  margin-bottom: 8px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
 }
 
 .timer-preset-name {
-  font-weight: 600;
+  font-weight: 700;
   color: #1e293b;
-  margin-bottom: 5px;
-  font-size: 0.9rem;
+  margin-bottom: 4px;
+  font-size: 0.95rem;
 }
 
 .timer-preset-time {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   color: #64748b;
+  font-weight: 500;
 }
 
 .timer-laps {
@@ -4758,6 +4871,30 @@ height: 100%;
 
   .timer-presets {
     grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .timer-preset {
+    padding: 12px 8px;
+  }
+
+  .timer-preset-icon {
+    font-size: 1.8rem;
+  }
+
+  .timer-input-section {
+    flex-wrap: wrap;
+    padding: 20px 15px;
+  }
+
+  .timer-input-group input {
+    width: 65px;
+    font-size: 1.5rem;
+    padding: 12px 8px;
+  }
+
+  .timer-input-separator {
+    font-size: 2rem;
   }
 
   .timer-controls {
@@ -6953,43 +7090,43 @@ height: 100%;
             <div class="timer-display">
               <!-- Timer Presets -->
               <div class="timer-presets">
-                <button class="timer-preset" onclick="timerApp.setPreset(1, 0)">
-                  <div class="timer-preset-icon">⏱️</div>
+                <button class="timer-preset" onclick="timerApp.setPreset(1, 0)" data-color="blue">
+                  <div class="timer-preset-icon">⚡</div>
                   <div class="timer-preset-name">דקה</div>
                   <div class="timer-preset-time">1:00</div>
                 </button>
-                <button class="timer-preset" onclick="timerApp.setPreset(5, 0)">
-                  <div class="timer-preset-icon">⏱️</div>
+                <button class="timer-preset" onclick="timerApp.setPreset(5, 0)" data-color="cyan">
+                  <div class="timer-preset-icon">☕</div>
                   <div class="timer-preset-name">5 דקות</div>
                   <div class="timer-preset-time">5:00</div>
                 </button>
-                <button class="timer-preset" onclick="timerApp.setPreset(10, 0)">
-                  <div class="timer-preset-icon">⏱️</div>
+                <button class="timer-preset" onclick="timerApp.setPreset(10, 0)" data-color="green">
+                  <div class="timer-preset-icon">📖</div>
                   <div class="timer-preset-name">10 דקות</div>
                   <div class="timer-preset-time">10:00</div>
                 </button>
-                <button class="timer-preset" onclick="timerApp.setPreset(15, 0)">
-                  <div class="timer-preset-icon">⏱️</div>
+                <button class="timer-preset" onclick="timerApp.setPreset(15, 0)" data-color="teal">
+                  <div class="timer-preset-icon">✏️</div>
                   <div class="timer-preset-name">15 דקות</div>
                   <div class="timer-preset-time">15:00</div>
                 </button>
-                <button class="timer-preset" onclick="timerApp.setPreset(25, 0)">
+                <button class="timer-preset pomodoro" onclick="timerApp.setPreset(25, 0)" data-color="red">
                   <div class="timer-preset-icon">🍅</div>
                   <div class="timer-preset-name">פומודורו</div>
                   <div class="timer-preset-time">25:00</div>
                 </button>
-                <button class="timer-preset" onclick="timerApp.setPreset(30, 0)">
-                  <div class="timer-preset-icon">⏱️</div>
+                <button class="timer-preset" onclick="timerApp.setPreset(30, 0)" data-color="purple">
+                  <div class="timer-preset-icon">🎯</div>
                   <div class="timer-preset-name">30 דקות</div>
                   <div class="timer-preset-time">30:00</div>
                 </button>
-                <button class="timer-preset" onclick="timerApp.setPreset(45, 0)">
-                  <div class="timer-preset-icon">⏱️</div>
+                <button class="timer-preset" onclick="timerApp.setPreset(45, 0)" data-color="orange">
+                  <div class="timer-preset-icon">📚</div>
                   <div class="timer-preset-name">45 דקות</div>
                   <div class="timer-preset-time">45:00</div>
                 </button>
-                <button class="timer-preset custom" onclick="timerApp.focusOnInput()">
-                  <div class="timer-preset-icon">⌨️</div>
+                <button class="timer-preset custom" onclick="timerApp.focusOnInput()" data-color="pink">
+                  <div class="timer-preset-icon">⚙️</div>
                   <div class="timer-preset-name">הזנה ידנית</div>
                   <div class="timer-preset-time">בחר</div>
                 </button>
@@ -6998,17 +7135,20 @@ height: 100%;
               <!-- Timer Input -->
               <div class="timer-input-section">
                 <div class="timer-input-group">
-                  <input type="number" id="timerHours" value="0" min="0" max="23">
+                  <div class="timer-input-icon">🕐</div>
+                  <input type="number" id="timerHours" value="0" min="0" max="23" placeholder="0">
                   <label>שעות</label>
                 </div>
                 <span class="timer-input-separator">:</span>
                 <div class="timer-input-group">
-                  <input type="number" id="timerMinutes" value="0" min="0" max="59">
+                  <div class="timer-input-icon">⏱️</div>
+                  <input type="number" id="timerMinutes" value="0" min="0" max="59" placeholder="0">
                   <label>דקות</label>
                 </div>
                 <span class="timer-input-separator">:</span>
                 <div class="timer-input-group">
-                  <input type="number" id="timerSeconds" value="0" min="0" max="59">
+                  <div class="timer-input-icon">⚡</div>
+                  <input type="number" id="timerSeconds" value="0" min="0" max="59" placeholder="0">
                   <label>שניות</label>
                 </div>
               </div>
