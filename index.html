@@ -109,6 +109,8 @@
       font-size: 1.5rem;
       font-weight: 700;
       cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .navbar-brand .logo {
@@ -7505,7 +7507,7 @@ height: 100%;
       <div class="about-contact">
         <div class="about-contact-label">📧 לשאלות, הצעות ומשוב</div>
         <div class="about-contact-email">
-          <a href="/cdn-cgi/l/email-protection#2f6d7d666c64766a6b6e6f68626e6663016c6062"><span class="__cf_email__" data-cfemail="397b6b707a72607c7d78797e74787075177a7674">[brickyeda@gmail.com]</span></a>
+          <a href="mailto:brickyeda@gmail.com">brickyeda@gmail.com</a>
         </div>
       </div>
       
@@ -18435,4 +18437,10 @@ document.addEventListener('keydown', function(e) {
     <span>🔔 התראות קרובות</span>
     <button onclick="app.closeNotificationsPanel();">✕</button>
   </div>
-  <div id="notificationPermiss
+  <div class="notifications-list" id="notificationsList">
+    <!-- ההתראות יוספו כאן דינמית -->
+  </div>
+</div>
+
+</body>
+</html>
