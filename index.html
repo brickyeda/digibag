@@ -8497,7 +8497,9 @@ this.showPage('homepage');
           // משתמש פרימיום
           if (starBtn) {
             starBtn.innerHTML = '✅';
-            starBtn.title = 'יש לך פרימיום!';
+            starBtn.title = 'יש לך מנוי פרימיום!';
+            starBtn.onclick = () => this.showProStatusModal();
+            starBtn.classList.add('pro-active');
           }
           if (proSection) {
             proSection.innerHTML = `
@@ -8512,9 +8514,21 @@ this.showPage('homepage');
           // משתמש חינמי
           if (starBtn) {
             starBtn.innerHTML = '⭐';
-            starBtn.title = 'מה כלול בפרימיום?';
+            starBtn.title = 'שדרוג לפרימיום';
+            starBtn.onclick = () => this.openUpgradeModal('שדרוג לפרימיום');
+            starBtn.classList.remove('pro-active');
           }
         }
+      },
+
+      // הצגת מודאל סטטוס פרימיום
+      showProStatusModal() {
+        document.getElementById('proStatusModal').classList.remove('hidden');
+      },
+
+      // סגירת מודאל סטטוס פרימיום
+      closeProStatusModal() {
+        document.getElementById('proStatusModal').classList.add('hidden');
       },
 
       // בדיקה אם אפשר ליצור מחברת חדשה
@@ -19515,6 +19529,167 @@ document.addEventListener('keydown', function(e) {
     <!-- ההתראות יוספו כאן דינמית -->
   </div>
 </div>
+
+<!-- מודאל סטטוס פרימיום -->
+<div id="proStatusModal" class="pro-status-modal hidden">
+  <div class="pro-status-overlay" onclick="app.closeProStatusModal()"></div>
+  <div class="pro-status-content">
+    <button class="pro-status-close" onclick="app.closeProStatusModal()">✕</button>
+    <div class="pro-status-icon">🎉</div>
+    <h2>נהדר, יש לך מנוי פרימיום!</h2>
+    <p class="pro-status-subtitle">כל התכונות המתקדמות פתוחות עבורך</p>
+    <div class="pro-status-features">
+      <div class="pro-feature-item">✅ מחברות ללא הגבלה</div>
+      <div class="pro-feature-item">✅ ייצוא ל-PDF</div>
+      <div class="pro-feature-item">✅ משימות ללא הגבלה</div>
+      <div class="pro-feature-item">✅ צ'קליסט מלא</div>
+      <div class="pro-feature-item">✅ שכפול מחברות</div>
+      <div class="pro-feature-item">✅ חיבור ליומן גוגל</div>
+    </div>
+    <p class="pro-status-thanks">תודה שבחרת בנו! 💜</p>
+    <button class="pro-status-btn" onclick="app.closeProStatusModal()">המשך ללמוד</button>
+  </div>
+</div>
+
+<style>
+/* מודאל סטטוס פרימיום */
+.pro-status-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pro-status-modal.hidden {
+  display: none;
+}
+
+.pro-status-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+}
+
+.pro-status-content {
+  position: relative;
+  background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+  border-radius: 24px;
+  padding: 40px;
+  max-width: 420px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(34, 197, 94, 0.3);
+  border: 3px solid #22c55e;
+  animation: proModalPop 0.3s ease-out;
+}
+
+@keyframes proModalPop {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.pro-status-close {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: #f3f4f6;
+  border: none;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #6b7280;
+  transition: all 0.2s ease;
+}
+
+.pro-status-close:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.pro-status-icon {
+  font-size: 4rem;
+  margin-bottom: 15px;
+}
+
+.pro-status-content h2 {
+  color: #166534;
+  font-size: 1.6rem;
+  margin-bottom: 10px;
+}
+
+.pro-status-subtitle {
+  color: #4ade80;
+  font-size: 1.1rem;
+  margin-bottom: 25px;
+}
+
+.pro-status-features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 25px;
+  text-align: right;
+}
+
+.pro-feature-item {
+  background: white;
+  padding: 10px 15px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  color: #166534;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.pro-status-thanks {
+  color: #6b7280;
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+.pro-status-btn {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  border: none;
+  padding: 15px 40px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pro-status-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4);
+}
+
+/* עיצוב כפתור V ירוק */
+.premium-star-btn.pro-active {
+  background: linear-gradient(135deg, #22c55e, #16a34a) !important;
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
+}
+
+.premium-star-btn.pro-active:hover {
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.5);
+}
+</style>
 
 </body>
 </html>
