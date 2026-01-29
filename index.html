@@ -13,6 +13,9 @@
   <!-- Supabase SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Campus - ילקוט דיגיטלי חכם</title>
@@ -44,6 +47,7 @@
       box-sizing: border-box;
     }
     :root {
+      /* Colors */
       --primary-color: #667eea;
       --secondary-color: #764ba2;
       --accent-color: #4ecdc4;
@@ -64,6 +68,29 @@
       --task-medium: #f39c12;
       --task-low: #27ae60;
       --completed-task: #95a5a6;
+      
+      /* Z-Index Scale */
+      --z-base: 1;
+      --z-dropdown: 100;
+      --z-sticky: 200;
+      --z-fixed: 300;
+      --z-modal-backdrop: 400;
+      --z-modal: 500;
+      --z-popover: 600;
+      --z-tooltip: 700;
+      --z-toast: 800;
+      --z-max: 9999;
+      
+      /* Transitions */
+      --transition-fast: 0.15s ease;
+      --transition-normal: 0.25s ease;
+      --transition-slow: 0.4s ease;
+      
+      /* Button Sizes */
+      --btn-padding-sm: 8px 16px;
+      --btn-padding-md: 12px 24px;
+      --btn-padding-lg: 16px 32px;
+      --btn-radius: 10px;
     }
 
     body {
@@ -72,11 +99,163 @@
       color: var(--text-primary);
       line-height: 1.6;
       direction: rtl;
-      
-      /* הגדלת מסך ברירת מחדל ל-75% */
-      zoom: 0.85;
-      -moz-transform: scale(0.75);
-      -moz-transform-origin: 0 0;
+    }
+
+    /* ===== Unified Button System ===== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: var(--btn-padding-md);
+      border: none;
+      border-radius: var(--btn-radius);
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: var(--transition-normal);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Button Variants */
+    .btn--primary {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn--primary:hover {
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn--secondary {
+      background: var(--background-card);
+      color: var(--text-primary);
+      border: 2px solid var(--border-color);
+    }
+
+    .btn--secondary:hover {
+      border-color: var(--primary-color);
+      background: var(--background-main);
+    }
+
+    .btn--success {
+      background: linear-gradient(135deg, var(--success-color), #219a52);
+      color: white;
+      box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+    }
+
+    .btn--success:hover {
+      box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+    }
+
+    .btn--danger {
+      background: linear-gradient(135deg, var(--danger-color), #c0392b);
+      color: white;
+      box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+    }
+
+    .btn--danger:hover {
+      box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+    }
+
+    .btn--warning {
+      background: linear-gradient(135deg, var(--warning-color), #e67e22);
+      color: white;
+      box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+    }
+
+    .btn--accent {
+      background: linear-gradient(135deg, var(--accent-color), #45b7aa);
+      color: white;
+      box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
+    }
+
+    .btn--ghost {
+      background: transparent;
+      color: var(--text-primary);
+    }
+
+    .btn--ghost:hover {
+      background: var(--background-main);
+    }
+
+    /* Button Sizes */
+    .btn--sm {
+      padding: var(--btn-padding-sm);
+      font-size: 0.875rem;
+    }
+
+    .btn--lg {
+      padding: var(--btn-padding-lg);
+      font-size: 1.125rem;
+    }
+
+    /* Icon Button */
+    .btn--icon {
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      border-radius: 50%;
+    }
+
+    .btn--icon.btn--sm {
+      width: 32px;
+      height: 32px;
+    }
+
+    .btn--icon.btn--lg {
+      width: 48px;
+      height: 48px;
+    }
+
+    /* Button with Icon */
+    .btn .icon {
+      font-size: 1.2em;
+      line-height: 1;
+    }
+
+    /* ===== Lucide Icons System ===== */
+    .lucide-icon {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      flex-shrink: 0;
+    }
+
+    .lucide-icon--sm {
+      width: 16px;
+      height: 16px;
+    }
+
+    .lucide-icon--lg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .lucide-icon--xl {
+      width: 32px;
+      height: 32px;
     }
 
     /* Navigation Bar */
@@ -89,7 +268,7 @@
       top: 0;
       left: 0;
       right: 0;
-      z-index: 1000;
+      z-index: var(--z-fixed);
       height: 70px;
     }
 
@@ -469,7 +648,7 @@
   box-shadow: 0 8px 25px rgba(0,0,0,0.2);
   padding: 10px;
   min-width: 220px;
-  z-index: 1001;
+  z-index: var(--z-dropdown);
   display: none;
   border: 2px solid var(--primary-color);
 }
@@ -619,7 +798,7 @@
       box-shadow: 0 10px 40px rgba(0,0,0,0.3);
       min-width: 320px;
       max-width: 400px;
-      z-index: 99999;
+      z-index: var(--z-popover);
       color: var(--text-primary);
       text-align: right;
     }
@@ -1936,11 +2115,6 @@ padding: 0px 10px 10px 10px;
   border-right-width: 8px;
 }
 
-    .subject-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 15px 35px var(--shadow-medium);
-    }
-
     .subject-icon {
       font-size: 3.5rem;
       margin-bottom: 20px;
@@ -2276,14 +2450,6 @@ padding: 0px 10px 10px 10px;
   letter-spacing: -0.5px;
 }
 
-
-    .notebook-title {
-      font-size: 1.8rem;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin: 0;
-    }
-
     /* Page Type Styles */
     /* דף שורות */
 .lined-page {
@@ -2321,36 +2487,14 @@ padding: 0px 10px 10px 10px;
     repeating-linear-gradient(
       to bottom,
       transparent 0px,
-      transparent 44px,  /* שינוי */
-      #d4e2f0 44px,      /* שינוי */
-      #d4e2f0 45px       /* שינוי */
-    );
-  background-size: 100% 50px;  /* שינוי מ-30px ל-45px */
-  pointer-events: none;
-  z-index: 0;
-}
-
-.lined-page::before {
-  content: '';
-  position: absolute;
-  top: 30px;
-  left: 30px;
-  right: 80px;
-  bottom: 30px;
-  background-image: 
-    repeating-linear-gradient(
-      to bottom,
-      transparent 0px,
-      transparent 36px,    /* line-height פחות 9px */
-      #d4e2f0 40px,
-      #d4e2f0 37px,
-      transparent 37px,
-      transparent 45px     /* זה ה-line-height */
+      transparent 36px,
+      #d4e2f0 36px,
+      #d4e2f0 37px
     );
   background-size: 100% 45px;
-  background-position: 0 20px;  /* <-- זה החדש! מזיז את הקווים למטה */
+  background-position: 0 20px;
   pointer-events: none;
-  z-index: 0;
+  z-index: var(--z-base);
 }
 
     .lined-textarea::placeholder {
@@ -3159,7 +3303,7 @@ scrollbar-gutter: stable;
 
 /* Scrollbar for formulas toolbar */
 .math-formulas-toolbar::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
 
 .math-formulas-toolbar::-webkit-scrollbar-track {
@@ -3168,12 +3312,12 @@ scrollbar-gutter: stable;
 
 .math-formulas-toolbar::-webkit-scrollbar-thumb {
   background: rgba(255,255,255,0.4);
-  border-radius: 2px;
+  border-radius: 4px;
 }
 
 .math-formulas-toolbar::-webkit-scrollbar-thumb:hover {
   background: rgba(255,255,255,0.6);
-}/* Math Formulas Toolbar - Vertical Sidebar */
+}
 
 .math-formulas-toolbar:hover {
   width: 220px;
@@ -3227,7 +3371,7 @@ scrollbar-gutter: stable;
   font-family: 'Times New Roman', serif;
   font-size: 14px;
   color: var(--text-primary);
-  transition: all 0.2s ease;
+  transition: var(--transition-normal);
   user-select: none;
   text-align: center;
   position: relative;
@@ -3240,7 +3384,7 @@ scrollbar-gutter: stable;
   transform: translateX(-5px);
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   background: #f8f9fa;
-  z-index: 10;
+  z-index: var(--z-base);
 }
 
 .formula-item:active {
@@ -3265,9 +3409,9 @@ scrollbar-gutter: stable;
   font-size: 11px;
   white-space: nowrap;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity var(--transition-normal);
   pointer-events: none;
-  z-index: 1000;
+  z-index: var(--z-tooltip);
   margin-left: 10px;
 }
 
@@ -3275,25 +3419,7 @@ scrollbar-gutter: stable;
   opacity: 1;
 }
 
-/* Scrollbar for formulas toolbar */
-.math-formulas-toolbar::-webkit-scrollbar {
-  width: 20px;
-}
 
-.math-formulas-toolbar::-webkit-scrollbar-track {
-background: rgba(24, 9, 236, 0.7);}
-
-.math-formulas-toolbar::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.4);
-  border-radius: 2px;
-}
-
-.math-formulas-toolbar::-webkit-scrollbar-thumb:hover {
-background: rgba(24, 9, 236, 0.9);
-}
-
-
-/* Shape Options Dropdown - Adjusted for sidebar */
 /* Shape Options Dropdown */
 .shape-dropdown {
   position: relative;
@@ -4189,9 +4315,9 @@ body:has(.mode-btn[data-mode="programmer"].active) .programmer-displays {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 9999;
+  z-index: var(--z-toast);
   font-size: 1.8rem;
-  transition: all 0.3s ease;
+  transition: var(--transition-normal);
   border: 3px solid #f0c800;
 }
 
@@ -4211,7 +4337,7 @@ body:has(.mode-btn[data-mode="programmer"].active) .programmer-displays {
   background: #ffd700;
   border-radius: 8px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-  z-index: 9000;
+  z-index: var(--z-tooltip);
   display: flex;
   flex-direction: column;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -4298,7 +4424,7 @@ body:has(.mode-btn[data-mode="programmer"].active) .programmer-displays {
   border-radius: 12px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
   padding: 15px;
-  z-index: 10000;
+  z-index: var(--z-toast);
   display: none;
   min-width: 220px;
 }
@@ -6172,39 +6298,39 @@ body:has(.mode-btn[data-mode="programmer"].active) .programmer-displays {
       
       <ul class="navbar-menu">
         <li class="navbar-item active" onclick="app.showPage('homepage')" data-page="homepage">
-          <span class="icon">🏠</span>
+          <i data-lucide="home" class="lucide-icon"></i>
           <span>בית</span>
         </li>
         <li class="navbar-item" onclick="app.showPage('notebooks')" data-page="notebooks">
-          <span class="icon">📚</span>
+          <i data-lucide="book-open" class="lucide-icon"></i>
           <span>מחברות</span>
         </li>
         <li class="navbar-item" onclick="app.showPage('tasks')" data-page="tasks">
-          <span class="icon">✅</span>
+          <i data-lucide="check-square" class="lucide-icon"></i>
           <span>משימות</span>
         </li>
         <li class="navbar-item" onclick="app.showPage('calendar')" data-page="calendar">
-          <span class="icon">📅</span>
+          <i data-lucide="calendar" class="lucide-icon"></i>
           <span>יומן</span>
         </li>
         <li class="navbar-item" onclick="app.showPage('calculator')" data-page="calculator">
-          <span class="icon">🧮</span>
+          <i data-lucide="calculator" class="lucide-icon"></i>
           <span>מחשבון</span>
         </li>
         <li class="navbar-item" onclick="app.showPage('timer')" data-page="timer">
-          <span class="icon">⏱️</span>
+          <i data-lucide="timer" class="lucide-icon"></i>
           <span>שעון עצר</span>
         </li>
         <li class="navbar-item" onclick="app.showPage('schedule')" data-page="schedule">
-          <span class="icon">🗓️</span>
+          <i data-lucide="layout-grid" class="lucide-icon"></i>
           <span>מערכת</span>
         </li>
         <li class="navbar-item" onclick="app.showPage('mylinks')" data-page="mylinks">
-          <span class="icon">🔗</span>
+          <i data-lucide="link" class="lucide-icon"></i>
           <span>קישורים</span>
         </li>
         <li class="navbar-item" onclick="app.showPage('subscription')" data-page="subscription">
-          <span class="icon">⭐</span>
+          <i data-lucide="crown" class="lucide-icon"></i>
           <span>מנוי</span>
         </li>
       </ul>
@@ -7908,7 +8034,7 @@ body:has(.mode-btn[data-mode="programmer"].active) .programmer-displays {
       <div class="about-contact">
         <div class="about-contact-label">📧 לשאלות, הצעות ומשוב</div>
         <div class="about-contact-email">
-          <a href="mailto:brickyeda@gmail.com">brickyeda@gmail.com</a>
+          <a href="/cdn-cgi/l/email-protection#5c3e2e353f372539383d1c3b313d3530723f3331"><span class="__cf_email__" data-cfemail="781a0a111b13011d1c19381f15191114561b1715">[email&#160;protected]</span></a>
         </div>
       </div>
       
@@ -7955,7 +8081,7 @@ body:has(.mode-btn[data-mode="programmer"].active) .programmer-displays {
     </div>
   </div>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     // ========== About Modal Functions ==========
     function openAboutModal() {
       document.getElementById('aboutModal').classList.add('active');
@@ -18776,6 +18902,13 @@ document.addEventListener('keydown', function(e) {
   }
 });
 
+// Initialize Lucide Icons
+document.addEventListener('DOMContentLoaded', function() {
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+});
+
   </script>
 
 <!-- מודאל מידע פרימיום (השוואה) -->
@@ -20215,20 +20348,3 @@ document.addEventListener('keydown', function(e) {
 
 .cancel-btn-confirm {
   padding: 12px 25px;
-  background: #ef4444;
-  border: none;
-  border-radius: 8px;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-@media (max-width: 600px) {
-  .subscription-features-grid {
-    grid-template-columns: 1fr;
-  }
-}
-</style>
-
-</body>
-</html>
