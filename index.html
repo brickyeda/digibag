@@ -8637,17 +8637,34 @@ this.showPage('homepage');
         try {
           const { data, error } = await supabaseClient
             .from('profiles')
-            .select('plan, plan_until')
+            .select('plan, plan_until, subscription_type, display_name')
             .eq('id', userId)
             .single();
 
           if (error || !data) {
             this.isPro = false;
+            this.planUntil = null;
+            this.nextBilling = null;
+            this.subscriptionType = null;
+            this.displayName = '';
             console.log('📊 סטטוס פרימיום: Free');
             return;
           }
 
           this.isPro = data.plan === 'pro' && new Date(data.plan_until) > new Date();
+          this.subscriptionType = data.subscription_type || 'monthly';
+          this.displayName = data.display_name || '';
+          
+          // עיצוב התאריכים
+          if (data.plan_until) {
+            const planDate = new Date(data.plan_until);
+            this.planUntil = planDate.toLocaleDateString('he-IL');
+            this.nextBilling = planDate.toLocaleDateString('he-IL');
+          } else {
+            this.planUntil = null;
+            this.nextBilling = null;
+          }
+          
           console.log('📊 סטטוס פרימיום:', this.isPro ? 'Pro ✨' : 'Free');
         } catch (e) {
           console.log('שגיאה בטעינת סטטוס פרימיום:', e);
@@ -8667,6 +8684,51 @@ this.showPage('homepage');
       closeUpgradeModal() {
         document.getElementById('upgradeModal').classList.add('hidden');
         document.body.style.overflow = '';
+      },
+
+      // שמירת שם תצוגה
+      async saveDisplayName() {
+        const nameInput = document.getElementById('userDisplayName');
+        const newName = nameInput ? nameInput.value.trim() : '';
+        
+        if (!currentUser) {
+          alert('יש להתחבר כדי לשמור את השם');
+          return;
+        }
+        
+        try {
+          const { error } = await supabaseClient
+            .from('profiles')
+            .update({ display_name: newName })
+            .eq('id', currentUser.id);
+          
+          if (error) throw error;
+          
+          this.displayName = newName;
+          
+          // עדכון שם בברכה בעמוד הבית
+          const welcomeGreeting = document.getElementById('welcomeGreeting');
+          if (welcomeGreeting && newName) {
+            welcomeGreeting.textContent = `שלום ${newName}!`;
+          }
+          
+          // הודעה קצרה
+          const btn = document.querySelector('.save-name-btn');
+          if (btn) {
+            const originalText = btn.textContent;
+            btn.textContent = '✓';
+            btn.style.background = '#27ae60';
+            setTimeout(() => {
+              btn.textContent = originalText;
+              btn.style.background = '';
+            }, 1500);
+          }
+          
+          console.log('✅ שם המשתמש נשמר:', newName);
+        } catch (e) {
+          console.error('שגיאה בשמירת שם:', e);
+          alert('שגיאה בשמירת השם');
+        }
       },
 
       // מעבר לתשלום (בינתיים placeholder)
@@ -8689,6 +8751,7 @@ this.showPage('homepage');
         
         // קבלת המייל של המשתמש
         const userEmail = currentUser ? currentUser.email : '---';
+        const displayName = this.displayName || '';
         
         if (this.isPro) {
           // משתמש פרימיום
@@ -8698,9 +8761,16 @@ this.showPage('homepage');
               <span class="status-icon">⭐</span>
               <span class="status-title pro">גרסת פרימיום – מנוי ${this.subscriptionType === 'yearly' ? 'שנתי' : 'חודשי'}</span>
             </div>
-            <div class="status-user-email">
-              <span>📧</span>
-              <span>${userEmail}</span>
+            <div class="status-user-info">
+              <div class="status-user-name">
+                <span>👤</span>
+                <input type="text" id="userDisplayName" value="${displayName}" placeholder="הכנס את שמך" class="user-name-input">
+                <button onclick="app.saveDisplayName()" class="save-name-btn" title="שמור שם">✓</button>
+              </div>
+              <div class="status-user-email">
+                <span>📧</span>
+                <span>${userEmail}</span>
+              </div>
             </div>
             <div class="status-details">
               <div class="status-detail">
@@ -8736,9 +8806,16 @@ this.showPage('homepage');
               <span class="status-icon">🆓</span>
               <span class="status-title">גרסה חינמית</span>
             </div>
-            <div class="status-user-email">
-              <span>📧</span>
-              <span>${userEmail}</span>
+            <div class="status-user-info">
+              <div class="status-user-name">
+                <span>👤</span>
+                <input type="text" id="userDisplayName" value="${displayName}" placeholder="הכנס את שמך" class="user-name-input">
+                <button onclick="app.saveDisplayName()" class="save-name-btn" title="שמור שם">✓</button>
+              </div>
+              <div class="status-user-email">
+                <span>📧</span>
+                <span>${userEmail}</span>
+              </div>
             </div>
             <p style="color: #6b7280; margin-top: 10px;">הגרסה החינמית מאפשרת שימוש מלא עם מגבלות.</p>
           `;
@@ -8765,9 +8842,16 @@ this.showPage('homepage');
               <span class="status-icon">🆓</span>
               <span class="status-title">גרסה חינמית</span>
             </div>
-            <div class="status-user-email">
-              <span>📧</span>
-              <span>${userEmail}</span>
+            <div class="status-user-info">
+              <div class="status-user-name">
+                <span>👤</span>
+                <input type="text" id="userDisplayName" value="${displayName}" placeholder="הכנס את שמך" class="user-name-input">
+                <button onclick="app.saveDisplayName()" class="save-name-btn" title="שמור שם">✓</button>
+              </div>
+              <div class="status-user-email">
+                <span>📧</span>
+                <span>${userEmail}</span>
+              </div>
             </div>
             <p style="color: #6b7280; margin-top: 10px;">הגרסה החינמית מאפשרת שימוש מלא עם מגבלות.</p>
           `;
@@ -20132,6 +20216,75 @@ document.addEventListener('DOMContentLoaded', function() {
 
 .status-user-email span:first-child {
   font-size: 1.1rem;
+}
+
+/* User Info Section */
+.status-user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 10px 0 15px 0;
+}
+
+.status-user-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 15px;
+  background: rgba(255,255,255,0.8);
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.status-user-name span:first-child {
+  font-size: 1.1rem;
+}
+
+.user-name-input {
+  flex: 1;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  background: white;
+  color: #1f2937;
+  transition: all 0.2s ease;
+}
+
+.user-name-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.user-name-input::placeholder {
+  color: #9ca3af;
+}
+
+.save-name-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  background: var(--primary-color);
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.save-name-btn:hover {
+  background: var(--secondary-color);
+  transform: scale(1.05);
+}
+
+.status-user-info .status-user-email {
+  margin: 0;
+  padding: 8px 15px;
 }
 
 .status-note {
