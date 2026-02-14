@@ -18,28 +18,28 @@
   
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Campus - ילקוט דיגיטלי חכם</title>
+  <title>TIKit - הכלי החכם שלך</title>
   
   <!-- Meta Tags לשיתוף ברשתות חברתיות -->
-  <meta name="description" content="My Campus - הילקוט הדיגיטלי החכם שלך. מחברות, משימות, יומן ועוד - הכל במקום אחד!">
+  <meta name="description" content="TIKit - הכלי החכם שלך לניהול הלמידה. מחברות, משימות, יומן ועוד - הכל במקום אחד!">
   
   <!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
-  <meta property="og:title" content="My Campus - ילקוט דיגיטלי חכם">
-  <meta property="og:description" content="הילקוט הדיגיטלי החכם שלך. מחברות, משימות, יומן ועוד - הכל במקום אחד!">
-  <meta property="og:image" content="https://brickyeda.github.io/digitalbag/logo.png">
-  <meta property="og:url" content="https://brickyeda.github.io/digitalbag/">
+  <meta property="og:title" content="TIKit - הכלי החכם שלך">
+  <meta property="og:description" content="הכלי החכם שלך לניהול הלמידה. מחברות, משימות, יומן ועוד - הכל במקום אחד!">
+  <meta property="og:image" content="https://brickyeda.github.io/TIKit/logo.png">
+  <meta property="og:url" content="https://brickyeda.github.io/TIKit/">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="My Campus">
+  <meta property="og:site_name" content="TIKit">
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="My Campus - ילקוט דיגיטלי חכם">
-  <meta name="twitter:description" content="הילקוט הדיגיטלי החכם שלך. מחברות, משימות, יומן ועוד - הכל במקום אחד!">
-  <meta name="twitter:image" content="https://brickyeda.github.io/digitalbag/logo.png">
+  <meta name="twitter:title" content="TIKit - הכלי החכם שלך">
+  <meta name="twitter:description" content="הכלי החכם שלך לניהול הלמידה. מחברות, משימות, יומן ועוד - הכל במקום אחד!">
+  <meta name="twitter:image" content="https://brickyeda.github.io/TIKit/logo.png">
   
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="https://brickyeda.github.io/digitalbag/logo.png">
-  <link rel="apple-touch-icon" href="https://brickyeda.github.io/digitalbag/logo.png">
+  <link rel="icon" type="image/png" href="https://brickyeda.github.io/TIKit/logo.png">
+  <link rel="apple-touch-icon" href="https://brickyeda.github.io/TIKit/logo.png">
   <style>
     * {
       margin: 0;
@@ -6292,8 +6292,8 @@ body:has(.mode-btn[data-mode="programmer"].active) .programmer-displays {
   <nav class="navbar">
     <div class="navbar-content">
       <div class="navbar-brand" onclick="app.showPage('homepage')">
-        <img src="https://brickyeda.github.io/digitalbag/logo.png" alt="Logo" class="logo">
-        <span>My Campus</span>
+        <img src="https://brickyeda.github.io/TIKit/logo.png" alt="Logo" class="logo">
+        <span>TIKit</span>
       </div>
       
       <ul class="navbar-menu">
@@ -6349,6 +6349,37 @@ body:has(.mode-btn[data-mode="programmer"].active) .programmer-displays {
 
 <div class="settings-icon" style="display: none;" onclick="app.openSettings()">⚙️</div>
       </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="mobile-bottom-nav" id="mobileBottomNav">
+    <div class="mobile-nav-item active" onclick="app.showPage('homepage')" data-page="homepage">
+      <i data-lucide="home" class="lucide-icon"></i>
+      <span>בית</span>
+    </div>
+    <div class="mobile-nav-item" onclick="app.showPage('notebooks')" data-page="notebooks">
+      <i data-lucide="book-open" class="lucide-icon"></i>
+      <span>מחברות</span>
+    </div>
+    <div class="mobile-nav-item" onclick="app.showPage('tasks')" data-page="tasks">
+      <i data-lucide="check-square" class="lucide-icon"></i>
+      <span>משימות</span>
+    </div>
+    <div class="mobile-nav-item" onclick="app.showPage('calendar')" data-page="calendar">
+      <i data-lucide="calendar" class="lucide-icon"></i>
+      <span>יומן</span>
+    </div>
+    <div class="mobile-nav-more" onclick="toggleMobileMore(event)">
+      <i data-lucide="more-horizontal" class="lucide-icon"></i>
+      <span>עוד</span>
+    </div>
+    <div class="mobile-more-menu" id="mobileMoreMenu">
+      <div class="mobile-more-item" onclick="app.showPage('calculator')">🧮 מחשבון</div>
+      <div class="mobile-more-item" onclick="app.showPage('timer')">⏱️ שעון עצר</div>
+      <div class="mobile-more-item" onclick="app.showPage('schedule')">📅 מערכת</div>
+      <div class="mobile-more-item" onclick="app.showPage('mylinks')">🔗 קישורים</div>
+      <div class="mobile-more-item" onclick="app.showPage('subscription')">⭐ מנוי</div>
     </div>
   </nav>
 
@@ -6454,7 +6485,7 @@ body:has(.mode-btn[data-mode="programmer"].active) .programmer-displays {
       <!-- Footer -->
       <footer class="app-footer">
         <div class="footer-content">
-          <span class="footer-copyright">© 2026 My Campus | פותח ע"י שחר ברגיג</span>
+          <span class="footer-copyright">© 2026 TIKit | פותח ע"י שחר ברגיג</span>
           <button class="footer-about-btn" onclick="openAboutModal()">
             <span>ℹ️</span>
             אודות
@@ -7746,7 +7777,7 @@ body:has(.mode-btn[data-mode="programmer"].active) .programmer-displays {
         <!-- Trust Note -->
         <div class="subscription-trust-note">
           <span>🔒</span>
-          <span>התשלומים מנוהלים בצורה מאובטחת דרך Stripe. פרטי האשראי אינם נשמרים באפליקציה.</span>
+          <span>התשלומים מנוהלים בצורה מאובטחת דרך סאמיט. פרטי האשראי אינם נשמרים באפליקציה.</span>
         </div>
       </div>
     </div>
@@ -8020,9 +8051,9 @@ body:has(.mode-btn[data-mode="programmer"].active) .programmer-displays {
   <!-- About Modal -->
   <div class="about-modal-overlay" id="aboutModal" onclick="closeAboutModal(event)">
     <div class="about-modal" onclick="event.stopPropagation()">
-      <img src="https://brickyeda.github.io/digitalbag/logo.png" alt="My Campus Logo" class="about-logo">
-      <h2 class="about-title">My Campus</h2>
-      <p class="about-subtitle">הילקוט הדיגיטלי החכם שלך</p>
+      <img src="https://brickyeda.github.io/TIKit/logo.png" alt="TIKit Logo" class="about-logo">
+      <h2 class="about-title">TIKit</h2>
+      <p class="about-subtitle">הכלי החכם שלך לניהול הלמידה</p>
       <span class="about-version">גרסה 1.0</span>
       
       <div class="about-divider"></div>
@@ -8213,10 +8244,10 @@ body:has(.mode-btn[data-mode="programmer"].active) .programmer-displays {
             localStorage.setItem(item.key, item.value);
           });
           
-          window.location.replace('login_FIXED_NOW.html?t=' + Date.now() + '&reason=timeout');
+          window.location.replace('login.html?t=' + Date.now() + '&reason=timeout');
         } catch (error) {
           console.error('שגיאה בהתנתקות אוטומטית:', error);
-          window.location.replace('login_FIXED_NOW.html?t=' + Date.now());
+          window.location.replace('login.html?t=' + Date.now());
         }
       },
 
@@ -8291,7 +8322,7 @@ body:has(.mode-btn[data-mode="programmer"].active) .programmer-displays {
           console.log('✅ התנתקות הצליחה - נתונים מקומיים נוקו (מצב טוטוריאל נשמר)');
           
           // הוסף cache busting - מונע בעיות cache
-          window.location.replace('login_FIXED_NOW.html?t=' + Date.now());
+          window.location.replace('login.html?t=' + Date.now());
         } catch (error) {
           console.error('שגיאה בהתנתקות:', error);
           alert('שגיאה בהתנתקות');
@@ -8488,7 +8519,7 @@ autoSaveInterval: null,
         const isAuthenticated = await checkAuth();
         if (!isAuthenticated) {
           console.log('❌ משתמש לא מחובר - מעביר למסך התחברות');
-          window.location.href = 'login_FIXED_NOW.html';
+          window.location.href = 'login.html';
           return;
         }
         
@@ -8635,37 +8666,75 @@ this.showPage('homepage');
       // טעינת סטטוס פרימיום של המשתמש
       async loadUserPlan(userId) {
         try {
-          const { data, error } = await supabaseClient
-            .from('profiles')
-            .select('plan, plan_until, subscription_type, display_name')
-            .eq('id', userId)
+          // קודם בודק בטבלת subscriptions החדשה
+          const { data: subData, error: subError } = await supabaseClient
+            .from('subscriptions')
+            .select('*')
+            .eq('user_id', userId)
+            .eq('status', 'active')
+            .order('created_at', { ascending: false })
+            .limit(1)
             .single();
 
-          if (error || !data) {
-            this.isPro = false;
-            this.planUntil = null;
-            this.nextBilling = null;
-            this.subscriptionType = null;
-            this.displayName = '';
-            console.log('📊 סטטוס פרימיום: Free');
-            return;
+          if (subData && !subError) {
+            // יש מנוי פעיל בטבלת subscriptions
+            const isActive = new Date(subData.expires_at) > new Date();
+            this.isPro = isActive;
+            this.subscriptionType = subData.plan_type || 'monthly';
+            
+            if (subData.expires_at) {
+              const planDate = new Date(subData.expires_at);
+              this.planUntil = planDate.toLocaleDateString('he-IL');
+              this.nextBilling = planDate.toLocaleDateString('he-IL');
+            }
+            
+            console.log('📊 סטטוס פרימיום (מ-subscriptions):', this.isPro ? 'Pro ✨' : 'Free');
+          } else {
+            // fallback לטבלת profiles הישנה
+            const { data, error } = await supabaseClient
+              .from('profiles')
+              .select('plan, plan_until, subscription_type, display_name')
+              .eq('id', userId)
+              .single();
+
+            if (error || !data) {
+              this.isPro = false;
+              this.planUntil = null;
+              this.nextBilling = null;
+              this.subscriptionType = null;
+              this.displayName = '';
+              console.log('📊 סטטוס פרימיום: Free');
+              return;
+            }
+
+            this.isPro = data.plan === 'pro' && new Date(data.plan_until) > new Date();
+            this.subscriptionType = data.subscription_type || 'monthly';
+            this.displayName = data.display_name || '';
+            
+            // עיצוב התאריכים
+            if (data.plan_until) {
+              const planDate = new Date(data.plan_until);
+              this.planUntil = planDate.toLocaleDateString('he-IL');
+              this.nextBilling = planDate.toLocaleDateString('he-IL');
+            } else {
+              this.planUntil = null;
+              this.nextBilling = null;
+            }
+            
+            console.log('📊 סטטוס פרימיום (מ-profiles):', this.isPro ? 'Pro ✨' : 'Free');
           }
 
-          this.isPro = data.plan === 'pro' && new Date(data.plan_until) > new Date();
-          this.subscriptionType = data.subscription_type || 'monthly';
-          this.displayName = data.display_name || '';
+          // טעינת display_name מ-profiles בכל מקרה
+          const { data: profileData } = await supabaseClient
+            .from('profiles')
+            .select('display_name')
+            .eq('id', userId)
+            .single();
           
-          // עיצוב התאריכים
-          if (data.plan_until) {
-            const planDate = new Date(data.plan_until);
-            this.planUntil = planDate.toLocaleDateString('he-IL');
-            this.nextBilling = planDate.toLocaleDateString('he-IL');
-          } else {
-            this.planUntil = null;
-            this.nextBilling = null;
+          if (profileData) {
+            this.displayName = profileData.display_name || '';
           }
-          
-          console.log('📊 סטטוס פרימיום:', this.isPro ? 'Pro ✨' : 'Free');
+
         } catch (e) {
           console.log('שגיאה בטעינת סטטוס פרימיום:', e);
           this.isPro = false;
@@ -8731,10 +8800,29 @@ this.showPage('homepage');
         }
       },
 
-      // מעבר לתשלום (בינתיים placeholder)
+      // מעבר לתשלום בסאמיט
       goToCheckout() {
-        // כאן יהיה קישור ל-Stripe Checkout
-        alert('🚧 מערכת התשלומים בבנייה!\n\nבקרוב תוכל לשדרג לפרימיום.');
+        if (!currentUser) {
+          alert('יש להתחבר כדי לשדרג לפרימיום');
+          window.location.href = 'login.html';
+          return;
+        }
+
+        // בדיקה איזו תוכנית נבחרה
+        const yearlySelected = document.getElementById('yearlyPlan')?.checked;
+        const planType = yearlySelected ? 'yearly' : 'monthly';
+
+        // כתובות דפי התשלום בסאמיט
+        const sumitUrls = {
+          monthly: 'https://pay.sumit.co.il/nwzr5p/o8lv3a/o8lv42/payment/',
+          yearly: 'https://pay.sumit.co.il/nwzr5p/o8lv3a/o8lvam/payment/'
+        };
+
+        // הוספת מזהה המשתמש כפרמטר
+        const paymentUrl = `${sumitUrls[planType]}?externalidentifier=${currentUser.id}`;
+        
+        console.log('🔗 מעבר לתשלום:', paymentUrl);
+        window.location.href = paymentUrl;
       },
 
       startFreeTrial() {
@@ -8864,14 +8952,19 @@ this.showPage('homepage');
 
       // פתיחת ניהול תשלום
       openPaymentManagement() {
-        // כאן יהיה קישור ל-Stripe Customer Portal
+        // כאן יהיה קישור ל-סאמיט Customer Portal
         alert('🚧 ניהול תשלומים בבנייה!\n\nבקרוב תוכל לנהל את התשלום שלך.');
       },
 
       // שדרוג למנוי שנתי
       upgradeToYearly() {
         if (confirm('האם לשדרג למנוי שנתי?\n\nתשלם ₪119.90 לשנה במקום ₪10.90 לחודש.\nחיסכון של חודש שלם!')) {
-          alert('🚧 שדרוג למנוי שנתי בבנייה!');
+          if (!currentUser) {
+            alert('יש להתחבר כדי לשדרג');
+            return;
+          }
+          const paymentUrl = `https://pay.sumit.co.il/nwzr5p/o8lv3a/o8lvam/payment/?externalidentifier=${currentUser.id}`;
+          window.location.href = paymentUrl;
         }
       },
 
@@ -8887,7 +8980,7 @@ this.showPage('homepage');
 
       // אישור ביטול מנוי
       confirmCancelSubscription() {
-        // כאן יהיה קריאה לביטול ב-Stripe
+        // כאן יהיה קריאה לביטול ב-סאמיט
         alert('🚧 ביטול מנוי בבנייה!\n\nהמנוי יישאר פעיל עד סוף התקופה ששולמה.');
         this.closeCancelSubscriptionModal();
       },
@@ -9284,8 +9377,8 @@ this.showPage('homepage');
 
         const notification = new Notification(title, {
           body: body,
-          icon: 'https://brickyeda.github.io/digitalbag/logo.png',
-          badge: 'https://brickyeda.github.io/digitalbag/logo.png',
+          icon: 'https://brickyeda.github.io/TIKit/logo.png',
+          badge: 'https://brickyeda.github.io/TIKit/logo.png',
           tag: title, // מונע כפילויות
           requireInteraction: true
         });
@@ -9475,6 +9568,16 @@ if (this.currentNotebook && pageId !== 'notebookView') {
             item.classList.add('active');
           }
         });
+        // Sync mobile bottom nav
+        document.querySelectorAll('.mobile-nav-item').forEach(item => {
+          item.classList.remove('active');
+          if (item.dataset.page === activePageId) {
+            item.classList.add('active');
+          }
+        });
+        // Close mobile more menu
+        const moreMenu = document.getElementById('mobileMoreMenu');
+        if (moreMenu) moreMenu.classList.remove('show');
       },
 
       // רינדור מחברות
@@ -18668,7 +18771,7 @@ calculateBitwise(first, second, operation) {
       TutorialSystem.init();
     });
 
-// ========== מערכת טוטוריאל - My Campus ==========
+// ========== מערכת טוטוריאל - TIKit ==========
 const TutorialSystem = {
   tutorials: {
     homepage: [
@@ -18994,7 +19097,1198 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
+// Mobile bottom nav - more menu toggle
+function toggleMobileMore(e) {
+  e.stopPropagation();
+  const menu = document.getElementById('mobileMoreMenu');
+  menu.classList.toggle('show');
+}
+document.addEventListener('click', function(e) {
+  const menu = document.getElementById('mobileMoreMenu');
+  if (menu && !e.target.closest('.mobile-nav-more')) {
+    menu.classList.remove('show');
+  }
+});
+
+// Re-initialize lucide icons for mobile nav
+document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(function() {
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  }, 100);
+});
+
   </script>
+
+<!-- מודאל מידע פרימיום - responsive styles injected above -->
+<style>
+/* ======================================================= */
+/* ============ COMPREHENSIVE RESPONSIVE DESIGN ========== */
+/* ======================================================= */
+
+/* --- Mobile Bottom Navigation --- */
+.mobile-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  z-index: 1000;
+  padding: 6px 0 max(6px, env(safe-area-inset-bottom));
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+  justify-content: space-around;
+  align-items: center;
+}
+
+.mobile-nav-item, .mobile-nav-more {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  color: rgba(255,255,255,0.7);
+  font-size: 0.65rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+}
+
+.mobile-nav-item svg, .mobile-nav-more svg {
+  width: 22px;
+  height: 22px;
+}
+
+.mobile-nav-item.active {
+  color: white;
+  background: rgba(255,255,255,0.2);
+}
+
+.mobile-nav-more {
+  position: relative;
+}
+
+.mobile-more-menu {
+  display: none;
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+  min-width: 180px;
+  overflow: hidden;
+  z-index: 1001;
+}
+
+.mobile-more-menu.show {
+  display: block;
+  animation: slideUpFade 0.2s ease;
+}
+
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.mobile-more-item {
+  padding: 14px 20px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background 0.15s;
+  border-bottom: 1px solid #f0f0f0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-more-item:last-child {
+  border-bottom: none;
+}
+
+.mobile-more-item:active {
+  background: #f0f2ff;
+}
+
+/* ===== TOUCH-FRIENDLY GLOBAL ENHANCEMENTS ===== */
+@media (max-width: 768px) {
+
+  /* Show mobile nav, hide desktop nav menu */
+  .mobile-bottom-nav {
+    display: flex;
+  }
+
+  .navbar-menu {
+    display: none !important;
+  }
+
+  /* Navbar compact */
+  .navbar {
+    height: 56px;
+    padding: 0 12px;
+  }
+
+  .navbar-brand {
+    font-size: 1.2rem;
+    gap: 8px;
+  }
+
+  .navbar-brand .logo {
+    width: 32px;
+    height: 32px;
+  }
+
+  .navbar-user {
+    gap: 8px;
+  }
+
+  .user-time {
+    font-size: 1rem;
+  }
+
+  .user-date {
+    font-size: 0.75rem;
+  }
+
+  .datetime-display {
+    gap: 8px;
+  }
+
+  .logout-btn {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+
+  .fullscreen-icon {
+    font-size: 1.2rem;
+  }
+
+  .premium-star-btn {
+    font-size: 1rem;
+  }
+
+  /* Page container - account for fixed navbar + bottom nav */
+  .page-container {
+    margin-top: 56px;
+    min-height: calc(100vh - 56px);
+    padding-bottom: 80px; /* Space for mobile bottom nav */
+  }
+
+  .page {
+    padding: 15px 12px;
+    min-height: auto;
+  }
+
+  /* ===== HOMEPAGE ===== */
+  .welcome-section {
+    padding: 15px 0;
+  }
+
+  .welcome-content {
+    grid-template-columns: 1fr !important;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .welcome-text h1 {
+    font-size: 1.5rem;
+  }
+
+  .welcome-text .subtitle {
+    font-size: 0.95rem;
+  }
+
+  .welcome-text .institution {
+    font-size: 0.85rem;
+  }
+
+  .welcome-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    width: 100%;
+  }
+
+  .stat-item {
+    padding: 12px 8px;
+    min-width: auto;
+  }
+
+  .stat-number {
+    font-size: 1.3rem;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+  }
+
+  .tools-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px;
+  }
+
+  .tool-card {
+    padding: 15px 10px;
+    min-height: auto;
+  }
+
+  .tool-card .icon {
+    font-size: 1.8rem;
+  }
+
+  .tool-card h3 {
+    font-size: 0.9rem;
+  }
+
+  .tool-status {
+    font-size: 0.75rem;
+  }
+
+  /* ===== PAGE HEADERS ===== */
+  .page-header {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  .page-title {
+    font-size: 1.3rem;
+  }
+
+  .page-header div[style*="display: flex"] {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px !important;
+  }
+
+  .add-page-btn, .back-btn {
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    min-height: 44px; /* Touch target */
+  }
+
+  /* ===== NOTEBOOKS ===== */
+  .subjects-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px;
+  }
+
+  .subject-card {
+    padding: 15px 12px;
+    min-height: auto;
+  }
+
+  .subject-card .icon {
+    font-size: 2rem;
+  }
+
+  .subject-card h3 {
+    font-size: 0.9rem;
+  }
+
+  /* Notebook View - Toolbar */
+  .global-formatting-toolbar {
+    padding: 6px 8px !important;
+    gap: 4px !important;
+    flex-wrap: wrap;
+    top: 56px !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .toolbar-group {
+    padding: 0 3px;
+    gap: 2px;
+    flex-wrap: nowrap;
+    flex-shrink: 0;
+  }
+
+  .toolbar-btn {
+    min-width: 36px !important;
+    height: 36px !important;
+    padding: 4px 6px !important;
+    font-size: 0.85rem !important;
+  }
+
+  .toolbar-select {
+    min-width: 60px !important;
+    height: 36px !important;
+    font-size: 0.75rem !important;
+    padding: 4px !important;
+  }
+
+  /* Notebook pages */
+  .lined-page, .grid-page, .blank-page {
+    padding: 12px !important;
+  }
+
+  .lined-textarea, .grid-textarea, .blank-textarea {
+    min-height: 250px;
+    font-size: 1rem !important;
+    padding: 12px !important;
+  }
+
+  .enhanced-textarea,
+  [contenteditable="true"] {
+    font-size: 1rem !important;
+    min-height: 200px;
+    -webkit-user-select: text;
+    user-select: text;
+    touch-action: manipulation;
+  }
+
+  /* Math formulas toolbar */
+  .math-formulas-toolbar {
+    padding: 10px !important;
+  }
+
+  .formulas-container {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .formula-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .formula-item {
+    font-size: 0.8rem;
+    padding: 8px 10px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .nuschon-link-btn {
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    min-height: 44px;
+  }
+
+  /* Notebook page navigation */
+  .page-nav-btn {
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 0.9rem;
+  }
+
+  .notebook-pages-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    flex-wrap: nowrap;
+    padding-bottom: 4px;
+  }
+
+  .notebook-pages-tabs .tab-btn {
+    min-height: 40px;
+    white-space: nowrap;
+    padding: 8px 14px;
+    font-size: 0.8rem;
+  }
+
+  /* ===== TASKS ===== */
+  .tasks-grid {
+    grid-template-columns: 1fr !important;
+    gap: 15px;
+  }
+
+  .tasks-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .tasks-stats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .task-creator {
+    position: static !important;
+    order: -1;
+    margin-bottom: 15px;
+  }
+
+  .task-creator input,
+  .task-creator select,
+  .task-creator textarea {
+    min-height: 44px;
+    font-size: 1rem;
+    padding: 10px 12px;
+  }
+
+  .task-card {
+    padding: 15px;
+  }
+
+  .task-actions button {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 8px;
+  }
+
+  /* ===== CALENDAR ===== */
+  .calendar-nav {
+    flex-direction: column;
+    gap: 12px;
+    padding: 15px;
+  }
+
+  .calendar-nav-left {
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .calendar-nav-right {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .current-month {
+    font-size: 1.3rem;
+  }
+
+  .nav-btn {
+    width: 44px;
+    height: 44px;
+  }
+
+  .today-btn {
+    min-height: 44px;
+    padding: 10px 16px;
+  }
+
+  .view-btn {
+    padding: 10px 12px;
+    font-size: 0.85rem;
+    min-height: 44px;
+  }
+
+  .calendar-stats {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px;
+  }
+
+  .calendar-stat {
+    padding: 12px;
+  }
+
+  /* Calendar grid + sidebar - stack on mobile */
+  div[style*="grid-template-columns: 350px 1fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 15px !important;
+  }
+
+  .calendar-sidebar {
+    order: 2;
+    margin-bottom: 15px;
+  }
+
+  .calendar-container {
+    padding: 10px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .calendar-header {
+    gap: 0;
+  }
+
+  .calendar-day-header {
+    padding: 8px 2px;
+    font-size: 0.7rem;
+  }
+
+  .calendar-grid {
+    gap: 0;
+  }
+
+  .calendar-day {
+    min-height: 60px;
+    padding: 4px;
+    font-size: 0.8rem;
+  }
+
+  .day-number {
+    font-size: 0.75rem;
+    margin-bottom: 2px;
+  }
+
+  .event-item {
+    font-size: 0.6rem;
+    padding: 1px 3px;
+    border-radius: 3px;
+  }
+
+  .event-more {
+    font-size: 0.6rem;
+  }
+
+  /* Quick events */
+  .quick-events {
+    padding: 15px;
+  }
+
+  .quick-event-buttons {
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .quick-btn {
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    min-height: 44px;
+  }
+
+  /* Events sidebar on mobile */
+  .events-search {
+    padding: 12px;
+  }
+
+  .events-list-sidebar {
+    max-height: 250px;
+    padding: 12px;
+  }
+
+  .search-form input,
+  .search-form select {
+    min-height: 44px;
+    font-size: 1rem;
+  }
+
+  /* ===== CALCULATOR ===== */
+  /* Calculator layout - stack on mobile */
+  div[style*="grid-template-columns: 1fr 300px"] {
+    grid-template-columns: 1fr !important;
+    gap: 15px !important;
+  }
+
+  /* Calculator display */
+  #displayCurrent {
+    font-size: 2rem !important;
+    min-height: 45px !important;
+  }
+
+  #displayHistory {
+    font-size: 0.85rem !important;
+  }
+
+  /* Calculator buttons */
+  .button-grid.basic-mode {
+    gap: 6px !important;
+  }
+
+  .button-grid.basic-mode button,
+  .button-grid.scientific-mode button,
+  .button-grid.programmer-mode button {
+    padding: 16px 8px !important;
+    font-size: 1.1rem !important;
+    min-height: 52px;
+    border-radius: 10px !important;
+  }
+
+  .button-grid.scientific-mode {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 5px !important;
+  }
+
+  .button-grid.scientific-mode button {
+    padding: 12px 6px !important;
+    font-size: 0.8rem !important;
+    min-height: 46px;
+  }
+
+  .button-grid.programmer-mode {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 5px !important;
+  }
+
+  .mode-btn {
+    padding: 10px 8px !important;
+    font-size: 0.85rem !important;
+    min-height: 44px;
+  }
+
+  /* Calculator history sidebar on mobile */
+  .calculator-history {
+    max-height: 200px;
+  }
+
+  /* ===== TIMER ===== */
+  #timer.page {
+    padding: 8px;
+  }
+
+  .timer-container {
+    border-radius: 16px;
+    padding: 15px;
+  }
+
+  .timer-header h1 {
+    font-size: 1.3rem;
+  }
+
+  .timer-time {
+    font-size: 2.5rem !important;
+  }
+
+  .timer-tabs {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .timer-tab {
+    min-height: 44px;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+  }
+
+  .timer-presets {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px;
+  }
+
+  .timer-preset {
+    padding: 12px 8px;
+    min-height: 44px;
+  }
+
+  .timer-input-group input {
+    width: 55px !important;
+    font-size: 1.2rem !important;
+    padding: 10px 6px !important;
+    min-height: 44px;
+  }
+
+  .timer-controls button {
+    min-height: 48px;
+    font-size: 1rem;
+    padding: 12px 16px;
+  }
+
+  .timer-main {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .timer-laps {
+    max-height: 200px;
+  }
+
+  .timer-lap-item {
+    padding: 10px;
+    font-size: 0.85rem;
+  }
+
+  /* ===== SCHEDULE TABLE ===== */
+  .schedule-container {
+    padding: 12px;
+    border-radius: 12px;
+  }
+
+  .schedule-table {
+    min-width: 600px;
+  }
+
+  .schedule-table th,
+  .schedule-table td {
+    min-width: 75px;
+    padding: 6px 3px;
+    font-size: 0.7rem;
+    height: 55px;
+  }
+
+  .schedule-stats {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .schedule-stat {
+    padding: 10px 15px;
+    min-width: 100px;
+  }
+
+  .schedule-actions {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .schedule-action-btn {
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    min-height: 44px;
+  }
+
+  .schedule-modal {
+    padding: 18px;
+    margin: 10px;
+    border-radius: 16px;
+  }
+
+  .schedule-modal input,
+  .schedule-modal select {
+    min-height: 44px;
+    font-size: 1rem;
+  }
+
+  .schedule-modal-buttons button {
+    min-height: 44px;
+    font-size: 0.9rem;
+  }
+
+  /* ===== LINKS PAGE ===== */
+  .links-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px;
+  }
+
+  .links-stats {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .links-stat {
+    padding: 10px 15px;
+  }
+
+  .links-actions {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .links-action-btn {
+    padding: 10px 16px;
+    font-size: 0.9rem;
+    min-height: 44px;
+  }
+
+  .links-search input {
+    min-height: 44px;
+    font-size: 1rem;
+  }
+
+  .link-card {
+    padding: 12px;
+  }
+
+  .link-card-actions button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* ===== MODALS ===== */
+  .modal-content,
+  .link-modal,
+  .about-modal,
+  .upgrade-modal-content,
+  .cancel-modal-content,
+  .premium-info-content {
+    width: 95% !important;
+    max-width: 95vw !important;
+    margin: 8px !important;
+    padding: 20px 15px !important;
+    border-radius: 16px !important;
+    max-height: 85vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .modal-footer {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .modal-footer .btn,
+  .link-modal-buttons button,
+  .schedule-modal-buttons button {
+    width: 100%;
+    min-height: 48px;
+    justify-content: center;
+    font-size: 1rem;
+  }
+
+  /* Event modal */
+  .event-type-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px;
+  }
+
+  .event-type-option {
+    min-height: 44px;
+    padding: 10px;
+  }
+
+  .time-inputs {
+    grid-template-columns: 1fr !important;
+    gap: 8px;
+  }
+
+  .time-inputs input {
+    min-height: 44px;
+    font-size: 1rem;
+  }
+
+  /* Page type grid (notebook creation) */
+  .page-type-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px;
+  }
+
+  .page-type-option {
+    padding: 12px;
+    min-height: 44px;
+  }
+
+  .color-grid {
+    grid-template-columns: repeat(5, 1fr) !important;
+    gap: 8px;
+  }
+
+  .color-option {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+  }
+
+  /* ===== SUBSCRIPTION PAGE ===== */
+  .subscription-container {
+    gap: 15px;
+  }
+
+  .subscription-card {
+    padding: 20px 15px;
+  }
+
+  .upgrade-plans-container {
+    grid-template-columns: 1fr !important;
+    gap: 15px;
+  }
+
+  .upgrade-plan {
+    padding: 20px 15px;
+  }
+
+  .upgrade-plan.premium {
+    transform: none;
+  }
+
+  .upgrade-btn {
+    min-height: 48px;
+    padding: 14px 20px;
+    font-size: 1rem;
+  }
+
+  /* ===== FOOTER ===== */
+  .app-footer {
+    padding: 15px 12px;
+    margin-bottom: 70px; /* Space for mobile bottom nav */
+  }
+
+  .footer-content {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .footer-about-btn {
+    min-height: 44px;
+  }
+
+  /* ===== GENERAL TOUCH IMPROVEMENTS ===== */
+  button, a, .clickable, [onclick] {
+    -webkit-tap-highlight-color: rgba(102, 126, 234, 0.1);
+  }
+
+  input, select, textarea {
+    font-size: 16px !important; /* Prevent iOS zoom */
+    -webkit-appearance: none;
+    border-radius: 10px;
+  }
+
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: left 10px center;
+    padding-left: 30px !important;
+  }
+
+  /* Scrollbar styling for mobile */
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(102, 126, 234, 0.3);
+    border-radius: 4px;
+  }
+
+  /* Drawing canvas on mobile */
+  .drawing-canvas-container,
+  .drawing-canvas {
+    touch-action: none;
+  }
+
+  .drawing-tools button {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 8px;
+  }
+
+  /* Interactive shapes on mobile */
+  .interactive-shape {
+    touch-action: none;
+  }
+
+  .shape-resize-handle {
+    width: 16px;
+    height: 16px;
+  }
+
+  .shape-rotate-handle {
+    width: 28px;
+    height: 28px;
+  }
+
+  /* Notifications panel */
+  .notifications-panel {
+    width: 90vw !important;
+    max-width: 350px;
+    right: 5vw !important;
+    left: auto !important;
+  }
+
+  /* Settings modal */
+  .settings-content {
+    width: 95% !important;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  /* Tutorial tooltips */
+  .tutorial-tooltip {
+    max-width: 85vw !important;
+    font-size: 0.9rem;
+  }
+
+  /* Upgrade modal */
+  .upgrade-page {
+    padding: 15px !important;
+  }
+
+  .upgrade-header h1 {
+    font-size: 1.5rem !important;
+  }
+
+  /* Auto-logout warning */
+  .auto-logout-warning {
+    width: 90% !important;
+    max-width: 350px;
+    padding: 20px !important;
+  }
+
+} /* End 768px */
+
+/* ===== EXTRA SMALL SCREENS (< 480px) ===== */
+@media (max-width: 480px) {
+
+  .navbar {
+    height: 50px;
+    padding: 0 8px;
+  }
+
+  .navbar-brand {
+    font-size: 1rem;
+    gap: 6px;
+  }
+
+  .navbar-brand .logo {
+    width: 28px;
+    height: 28px;
+  }
+
+  .page-container {
+    margin-top: 50px;
+  }
+
+  .page {
+    padding: 10px 8px;
+  }
+
+  .welcome-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+
+  .tools-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px;
+  }
+
+  .subjects-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px;
+  }
+
+  .calendar-day {
+    min-height: 50px;
+    padding: 3px;
+  }
+
+  .calendar-day-header {
+    font-size: 0.6rem;
+    padding: 6px 1px;
+  }
+
+  .day-number {
+    font-size: 0.65rem;
+  }
+
+  .event-item {
+    font-size: 0.55rem;
+    padding: 1px 2px;
+  }
+
+  /* Calculator - bigger buttons for small screens */
+  .button-grid.basic-mode button {
+    padding: 14px 6px !important;
+    font-size: 1rem !important;
+    min-height: 48px;
+  }
+
+  #displayCurrent {
+    font-size: 1.8rem !important;
+  }
+
+  /* Schedule table even smaller */
+  .schedule-table {
+    min-width: 500px;
+  }
+
+  .schedule-table th,
+  .schedule-table td {
+    min-width: 65px;
+    font-size: 0.65rem;
+    height: 45px;
+  }
+
+  /* Timer compact */
+  .timer-time {
+    font-size: 2rem !important;
+  }
+
+  .timer-presets {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 6px;
+  }
+
+  /* Mobile nav items tighter */
+  .mobile-nav-item, .mobile-nav-more {
+    padding: 4px 8px;
+    font-size: 0.6rem;
+  }
+
+  .mobile-nav-item svg, .mobile-nav-more svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Modals even tighter */
+  .modal-content,
+  .link-modal,
+  .about-modal {
+    padding: 15px 12px !important;
+  }
+}
+
+/* ===== MEDIUM SCREENS (tablets) ===== */
+@media (min-width: 769px) and (max-width: 1024px) {
+
+  .navbar-item {
+    padding: 10px 12px;
+    font-size: 0.85rem;
+    gap: 5px;
+  }
+
+  .navbar-item span {
+    font-size: 0.8rem;
+  }
+
+  .tools-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+
+  .subjects-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+
+  .calendar-day {
+    min-height: 80px;
+  }
+
+  /* Calculator sidebar smaller */
+  div[style*="grid-template-columns: 1fr 300px"] {
+    grid-template-columns: 1fr 220px !important;
+  }
+
+  /* Calendar sidebar narrower */
+  div[style*="grid-template-columns: 350px 1fr"] {
+    grid-template-columns: 280px 1fr !important;
+  }
+}
+
+/* ===== LANDSCAPE MOBILE ===== */
+@media (max-width: 768px) and (orientation: landscape) {
+
+  .page-container {
+    padding-bottom: 60px;
+  }
+
+  .mobile-bottom-nav {
+    padding: 4px 0;
+  }
+
+  .mobile-nav-item, .mobile-nav-more {
+    padding: 4px 10px;
+  }
+
+  .mobile-nav-item svg, .mobile-nav-more svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .mobile-nav-item span, .mobile-nav-more span {
+    font-size: 0.55rem;
+  }
+
+  .calendar-day {
+    min-height: 50px;
+  }
+
+  .timer-time {
+    font-size: 2.5rem !important;
+  }
+}
+
+/* ===== PRINT - hide mobile nav ===== */
+@media print {
+  .mobile-bottom-nav {
+    display: none !important;
+  }
+}
+</style>
 
 <!-- מודאל מידע פרימיום (השוואה) -->
 <div id="premiumInfoModal" class="premium-info-modal hidden">
@@ -19144,7 +20438,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <!-- אבטחה -->
     <div class="security-note">
       <span class="security-icon">🔒</span>
-      <span>תשלום בטוח דרך Stripe. פרטי האשראי אינם נשמרים אצלנו.</span>
+      <span>תשלום בטוח דרך סאמיט. פרטי האשראי אינם נשמרים אצלנו.</span>
     </div>
 
     <!-- שורת הרגעה -->
@@ -20503,4 +21797,13 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 
 .cancel-btn-confirm {
-  padding: 12px 25px;
+  padding: 12px 25px;  background: #ef4444;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+</style>
+</body>
+</html>
