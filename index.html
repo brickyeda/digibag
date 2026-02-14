@@ -9564,6 +9564,15 @@ if (this.currentNotebook && pageId !== 'notebookView') {
           var rotOverlay = document.getElementById('rotateOverlay');
           if (rotOverlay) rotOverlay.classList.add('dismissed');
           exitNotebookLandscapeMode();
+          // Restore toolbars that may have been hidden by view-only mode
+          var mathTb = document.getElementById('mathFormulasToolbar');
+          var fmtTb = document.getElementById('inPageToolbar');
+          var pgHeader = document.querySelector('#notebookView .page-header');
+          if (fmtTb) fmtTb.style.display = '';
+          if (pgHeader) pgHeader.style.display = '';
+          // Reset view-only container class
+          var nbContent = document.getElementById('notebookContent');
+          if (nbContent) nbContent.className = '';
         }
         document.querySelectorAll('.page').forEach(page => {
           page.classList.remove('active');
@@ -9604,8 +9613,16 @@ if (this.currentNotebook && pageId !== 'notebookView') {
           this.updateSubscriptionPage();
         } else if (pageId === 'notebookView') {
           this.renderNotebookContent();
-          // Initialize mobile toolbar on notebook view
-          if (window.innerWidth <= 1024) {
+          // Small screen = view-only mode, hide all toolbars
+          if (isSmallScreen()) {
+            var mathTb = document.getElementById('mathFormulasToolbar');
+            var fmtTb = document.getElementById('inPageToolbar');
+            var pgHeader = document.querySelector('#notebookView .page-header');
+            if (mathTb) mathTb.style.display = 'none';
+            if (fmtTb) fmtTb.style.display = 'none';
+            if (pgHeader) pgHeader.style.display = 'none';
+          } else if (window.innerWidth <= 1024) {
+            // Tablet/medium — normal mobile toolbar
             setTimeout(function() {
               switchToolbarTab(0);
               showRotateOverlayIfNeeded();
@@ -9956,6 +9973,12 @@ applyZoom() {
         
         if (!container || !notebook) return;
         
+        // === VIEW-ONLY MODE for small screens ===
+        if (isSmallScreen()) {
+          this.renderViewOnlyMode(notebook, container);
+          return;
+        }
+        
         container.innerHTML = '';
         
         notebook.pages.forEach((page, index) => {
@@ -9982,6 +10005,172 @@ style="position: sticky !important;"
             });
           }
         });
+      },
+
+      // === VIEW-ONLY MODE for small screens ===
+      renderViewOnlyMode(notebook, container) {
+        const pages = notebook.pages || [];
+        const totalPages = pages.length;
+        
+        // Store current page index
+        if (typeof this.viewOnlyPageIndex !== 'number' || this.viewOnlyPageIndex >= totalPages) {
+          this.viewOnlyPageIndex = 0;
+        }
+        
+        container.innerHTML = '';
+        container.className = 'view-only-container';
+        
+        // Info banner
+        const banner = document.createElement('div');
+        banner.className = 'view-only-banner';
+        banner.innerHTML = `
+          <div class="view-only-banner-content">
+            <span class="view-only-icon">👁️</span>
+            <span class="view-only-text">מצב צפייה בלבד · לעריכה יש להשתמש במסך גדול יותר</span>
+          </div>
+          <button class="view-only-back" onclick="app.showPage('notebooks')">← חזור</button>
+        `;
+        container.appendChild(banner);
+        
+        // Notebook title bar
+        const titleBar = document.createElement('div');
+        titleBar.className = 'view-only-title-bar';
+        titleBar.innerHTML = `
+          <span class="view-only-notebook-icon">${notebook.icon}</span>
+          <span class="view-only-notebook-name">${notebook.title}</span>
+          <span class="view-only-page-counter">${this.viewOnlyPageIndex + 1} / ${totalPages}</span>
+        `;
+        container.appendChild(titleBar);
+        
+        // Page display area
+        const pageArea = document.createElement('div');
+        pageArea.className = 'view-only-page-area';
+        pageArea.id = 'viewOnlyPageArea';
+        container.appendChild(pageArea);
+        
+        // Render current page
+        this.renderViewOnlyPage(pages, this.viewOnlyPageIndex, notebook.pageType);
+        
+        // Navigation bar
+        if (totalPages > 1) {
+          const nav = document.createElement('div');
+          nav.className = 'view-only-nav';
+          nav.innerHTML = `
+            <button class="view-only-nav-btn" id="viewPrevBtn" onclick="app.viewOnlyPrev()">
+              → הקודם
+            </button>
+            <div class="view-only-dots" id="viewOnlyDots"></div>
+            <button class="view-only-nav-btn" id="viewNextBtn" onclick="app.viewOnlyNext()">
+              הבא ←
+            </button>
+          `;
+          container.appendChild(nav);
+          this.updateViewOnlyDots(totalPages);
+        }
+        
+        // Swipe support
+        this.setupViewOnlySwipe(pageArea, totalPages);
+      },
+      
+      renderViewOnlyPage(pages, index, pageType) {
+        const pageArea = document.getElementById('viewOnlyPageArea');
+        if (!pageArea || !pages[index]) return;
+        
+        const page = pages[index];
+        const bgClass = pageType === 'lined' ? 'view-only-lined' : 
+                        pageType === 'grid' ? 'view-only-grid' : 'view-only-blank';
+        
+        pageArea.innerHTML = `
+          <div class="view-only-page ${bgClass}">
+            <div class="view-only-page-header">
+              <span class="view-only-page-title">${page.title || 'דף ' + (index + 1)}</span>
+              <span class="view-only-page-date">${page.date || ''}</span>
+            </div>
+            <div class="view-only-content" dir="rtl">${(page.content || '').replace(/\n/g, '<br>')}</div>
+          </div>
+        `;
+        
+        // Update counter
+        const counter = document.querySelector('.view-only-page-counter');
+        if (counter) counter.textContent = `${index + 1} / ${pages.length}`;
+        
+        // Update nav buttons
+        const prevBtn = document.getElementById('viewPrevBtn');
+        const nextBtn = document.getElementById('viewNextBtn');
+        if (prevBtn) prevBtn.disabled = index === 0;
+        if (nextBtn) nextBtn.disabled = index === pages.length - 1;
+        
+        this.updateViewOnlyDots(pages.length);
+      },
+      
+      viewOnlyPrev() {
+        if (this.viewOnlyPageIndex > 0) {
+          this.viewOnlyPageIndex--;
+          const notebook = this.subjects[this.currentNotebook];
+          this.renderViewOnlyPage(notebook.pages, this.viewOnlyPageIndex, notebook.pageType);
+        }
+      },
+      
+      viewOnlyNext() {
+        const notebook = this.subjects[this.currentNotebook];
+        if (this.viewOnlyPageIndex < notebook.pages.length - 1) {
+          this.viewOnlyPageIndex++;
+          this.renderViewOnlyPage(notebook.pages, this.viewOnlyPageIndex, notebook.pageType);
+        }
+      },
+      
+      updateViewOnlyDots(total) {
+        const dotsContainer = document.getElementById('viewOnlyDots');
+        if (!dotsContainer) return;
+        dotsContainer.innerHTML = '';
+        for (var i = 0; i < Math.min(total, 10); i++) {
+          const dot = document.createElement('span');
+          dot.className = 'view-only-dot' + (i === this.viewOnlyPageIndex ? ' active' : '');
+          dot.setAttribute('data-index', i);
+          dot.onclick = (function(idx) {
+            return function() {
+              app.viewOnlyPageIndex = idx;
+              const nb = app.subjects[app.currentNotebook];
+              app.renderViewOnlyPage(nb.pages, idx, nb.pageType);
+            };
+          })(i);
+          dotsContainer.appendChild(dot);
+        }
+        if (total > 10) {
+          const more = document.createElement('span');
+          more.className = 'view-only-dot-more';
+          more.textContent = '+' + (total - 10);
+          dotsContainer.appendChild(more);
+        }
+      },
+      
+      setupViewOnlySwipe(element, totalPages) {
+        var startX = 0;
+        var startY = 0;
+        var self = this;
+        
+        element.addEventListener('touchstart', function(e) {
+          startX = e.touches[0].clientX;
+          startY = e.touches[0].clientY;
+        }, { passive: true });
+        
+        element.addEventListener('touchend', function(e) {
+          var endX = e.changedTouches[0].clientX;
+          var endY = e.changedTouches[0].clientY;
+          var diffX = endX - startX;
+          var diffY = endY - startY;
+          
+          // Horizontal swipe (min 50px, more horizontal than vertical)
+          if (Math.abs(diffX) > 50 && Math.abs(diffX) > Math.abs(diffY)) {
+            if (diffX > 0) {
+              // Swipe right = next page (RTL)
+              self.viewOnlyNext();
+            } else {
+              // Swipe left = prev page (RTL)
+              self.viewOnlyPrev();
+            }
+          }
+        }, { passive: true });
       },
 
       // יצירת דף מחברת
@@ -19275,6 +19464,7 @@ window.addEventListener('resize', function() {
 // Show overlay when entering notebook view on mobile portrait
 function showRotateOverlayIfNeeded() {
   if (rotateOverlayDismissed) return;
+  if (isSmallScreen()) return; // Small screens get view-only mode, no need to rotate
   var overlay = document.getElementById('rotateOverlay');
   if (!overlay) return;
   
@@ -19287,6 +19477,15 @@ function showRotateOverlayIfNeeded() {
   } else {
     overlay.classList.add('dismissed');
   }
+}
+
+// ===== Screen Size Detection =====
+function isSmallScreen() {
+  // Small screen = physical screen diagonal roughly under 11 inches
+  // We use screen width as proxy: tablets 11.5"+ in landscape are ~1100px+ CSS width
+  // Also check: if screen.width (not window) is small, it's definitely a phone
+  var screenW = Math.max(screen.width, screen.height); // Largest dimension
+  return screenW < 1100;
 }
 
 // ===== Landscape Notebook Immersive Mode =====
@@ -21337,6 +21536,266 @@ document.addEventListener('DOMContentLoaded', function() {
     display: none !important;
   }
   .rotate-overlay {
+    display: none !important;
+  }
+}
+
+/* ============================================= */
+/* ===== VIEW-ONLY MODE (Small Screens) ======== */
+/* ============================================= */
+
+.view-only-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: #f5f6fa;
+}
+
+/* Banner */
+.view-only-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  flex-shrink: 0;
+}
+
+.view-only-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.view-only-icon {
+  font-size: 1rem;
+}
+
+.view-only-text {
+  font-size: 0.75rem;
+  font-weight: 500;
+  opacity: 0.95;
+}
+
+.view-only-back {
+  background: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.4);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s;
+}
+
+.view-only-back:active {
+  background: rgba(255,255,255,0.35);
+}
+
+/* Title bar */
+.view-only-title-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  background: white;
+  border-bottom: 1px solid #e9ecef;
+  flex-shrink: 0;
+}
+
+.view-only-notebook-icon {
+  font-size: 1.3rem;
+}
+
+.view-only-notebook-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.view-only-page-counter {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  background: #f0f2f5;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+/* Page display area */
+.view-only-page-area {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 10px;
+}
+
+.view-only-page {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  min-height: 100%;
+  overflow: hidden;
+}
+
+.view-only-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #f5f7fa, #e8ecf0);
+  border-bottom: 2px solid #d0d7de;
+}
+
+.view-only-page-title {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+
+.view-only-page-date {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.view-only-content {
+  padding: 16px;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--text-primary);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: Arial, sans-serif;
+}
+
+/* Page type backgrounds */
+.view-only-lined {
+  position: relative;
+}
+
+.view-only-lined .view-only-content {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 36px,
+    #d4e2f0 36px,
+    #d4e2f0 37px
+  );
+  background-size: 100% 37px;
+  background-position: 0 0;
+}
+
+.view-only-lined::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 50px;
+  width: 2px;
+  height: 100%;
+  background: #ff6b6b;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.view-only-grid .view-only-content {
+  background-image: 
+    linear-gradient(to right, #e0e8f0 1px, transparent 1px),
+    linear-gradient(to bottom, #e0e8f0 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+
+/* Navigation bar */
+.view-only-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  background: white;
+  border-top: 1px solid #e9ecef;
+  flex-shrink: 0;
+  gap: 10px;
+}
+
+.view-only-nav-btn {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.15s;
+  min-height: 42px;
+}
+
+.view-only-nav-btn:active {
+  transform: scale(0.95);
+}
+
+.view-only-nav-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+  transform: none;
+}
+
+/* Dots */
+.view-only-dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.view-only-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #d0d5dd;
+  cursor: pointer;
+  transition: all 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.view-only-dot.active {
+  background: var(--primary-color);
+  width: 10px;
+  height: 10px;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+.view-only-dot-more {
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+/* View-only mode: hide everything else in the notebook */
+.view-only-container ~ .page-header,
+.view-only-container ~ .math-formulas-toolbar,
+.view-only-container ~ .global-formatting-toolbar {
+  display: none !important;
+}
+
+/* On small screen, when notebookView is active, hide all toolbars */
+@media (max-width: 1100px) {
+  #notebookView .math-formulas-toolbar,
+  #notebookView .global-formatting-toolbar,
+  #notebookView .page-header[style*="sticky"] {
+    /* Only hide when view-only-container is present */
+  }
+  
+  .view-only-container + .page-header {
     display: none !important;
   }
 }
