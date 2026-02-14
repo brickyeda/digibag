@@ -21117,99 +21117,120 @@ document.addEventListener('DOMContentLoaded', function() {
     grid-row: 1;
     grid-column: 2;
     overflow-y: auto !important;
+    overflow-x: hidden !important;
     -webkit-overflow-scrolling: touch;
     padding: 0 !important;
     margin: 0 !important;
     margin-top: 0 !important;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
+    height: 100vh !important;
+    max-height: 100vh !important;
   }
 
-  /* Notebook pages fill the viewport */
-  .notebook-page {
+  /* ======= KILL ALL FIXED HEIGHTS ======= */
+  .notebook-page,
+  #notebookContent .notebook-page {
+    min-height: auto !important;
+    max-height: none !important;
+    height: auto !important;
     margin: 0 !important;
-    margin-bottom: 0 !important;
+    margin-bottom: 2px !important;
     border-radius: 0 !important;
     box-shadow: none !important;
     border: none !important;
+    border-bottom: 2px solid #e0e0e0 !important;
+  }
+
+  /* ======= KILL GIANT PADDINGS ON PAGE TYPES ======= */
+  .lined-page, .grid-page, .blank-page,
+  #notebookContent .lined-page,
+  #notebookContent .grid-page,
+  #notebookContent .blank-page {
+    padding: 4px 8px !important;
     min-height: auto !important;
     height: auto !important;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-
-  /* Compact page header (subject/date/delete) */
-  .notebook-header {
-    padding: 4px 10px !important;
-    gap: 8px;
-    flex-shrink: 0;
-    min-height: auto;
-    border-bottom: 1px solid #e0e0e0 !important;
-    box-shadow: none !important;
-    font-size: 0.8rem;
-  }
-
-  .notebook-header label {
-    font-size: 0.75rem !important;
-    font-weight: 600;
-  }
-
-  .notebook-header input {
-    font-size: 0.8rem !important;
-    padding: 3px 6px !important;
-    min-width: 120px !important;
-    min-height: auto !important;
-    height: 26px !important;
-  }
-
-  .notebook-header span {
-    font-size: 0.75rem !important;
-    padding: 3px 6px !important;
-  }
-
-  .notebook-header .delete-page-btn {
-    padding: 3px 8px !important;
-    font-size: 0.7rem !important;
-    min-height: auto !important;
-  }
-
-  /* Page type container - fill remaining space */
-  .lined-page, .grid-page, .blank-page {
-    padding: 4px 8px !important;
     margin: 0 !important;
     border-radius: 0 !important;
-    min-height: 0 !important;
-    flex: 1 !important;
-    display: flex !important;
-    flex-direction: column !important;
+    box-shadow: none !important;
   }
 
-  /* THE KEY FIX: textarea fills all available space */
+  /* ======= KILL FIXED TEXTAREA HEIGHT ======= */
   .enhanced-textarea,
+  #notebookContent .enhanced-textarea,
   .lined-textarea, .grid-textarea, .blank-textarea,
+  textarea.enhanced-textarea,
   [contenteditable="true"] {
-    height: auto !important;
-    min-height: 0 !important;
-    flex: 1 !important;
-    font-size: 0.95rem !important;
+    height: calc(100vh - 60px) !important;
+    min-height: calc(100vh - 60px) !important;
+    max-height: none !important;
+    font-size: 16px !important;
     padding: 4px 8px !important;
     resize: none !important;
   }
 
-  /* Formatting indicator */
-  .formatting-indicator {
-    font-size: 0.6rem !important;
-    padding: 1px 4px !important;
+  /* ======= COMPACT PAGE HEADER ======= */
+  .notebook-header,
+  #notebookContent .notebook-header {
+    padding: 3px 8px !important;
+    gap: 6px !important;
+    min-height: auto !important;
+    border-bottom: 1px solid #ddd !important;
+    box-shadow: none !important;
+    background: #f8f9fa !important;
   }
 
-  /* Page watermark icon - smaller */
-  .notebook-page img[style*="position: absolute"],
-  .notebook-page .page-watermark {
-    opacity: 0.15 !important;
-    width: 60px !important;
-    height: 60px !important;
+  .notebook-header label {
+    font-size: 0.7rem !important;
+  }
+
+  .notebook-header input[type="text"] {
+    font-size: 0.75rem !important;
+    padding: 2px 6px !important;
+    min-width: 100px !important;
+    min-height: auto !important;
+    height: 22px !important;
+    border-radius: 4px !important;
+  }
+
+  .notebook-header span[style*="font-size"] {
+    font-size: 0.7rem !important;
+    padding: 2px 6px !important;
+  }
+
+  .notebook-header .delete-page-btn,
+  .notebook-header button {
+    padding: 2px 8px !important;
+    font-size: 0.65rem !important;
+    min-height: auto !important;
+    height: 22px !important;
+    border-radius: 4px !important;
+  }
+
+  /* Lined page lines - adjust for small padding */
+  .lined-page::before {
+    top: 4px !important;
+    left: 4px !important;
+    right: 40px !important;
+    bottom: 4px !important;
+  }
+
+  .lined-page::after {
+    right: 35px !important;
+  }
+
+  /* Grid page lines adjust */
+  .grid-page::before,
+  .grid-page::after {
+    top: 4px !important;
+    left: 4px !important;
+    right: 40px !important;
+    bottom: 4px !important;
+  }
+
+  /* Formatting indicator */
+  .formatting-indicator {
+    font-size: 0.55rem !important;
+    padding: 1px 3px !important;
+    top: 2px !important;
   }
 
   /* Page tabs: thin strip at the top of content */
