@@ -21120,28 +21120,96 @@ document.addEventListener('DOMContentLoaded', function() {
     -webkit-overflow-scrolling: touch;
     padding: 0 !important;
     margin: 0 !important;
+    margin-top: 0 !important;
     height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
 
   /* Notebook pages fill the viewport */
   .notebook-page {
     margin: 0 !important;
+    margin-bottom: 0 !important;
     border-radius: 0 !important;
     box-shadow: none !important;
+    border: none !important;
+    min-height: auto !important;
+    height: auto !important;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }
 
+  /* Compact page header (subject/date/delete) */
+  .notebook-header {
+    padding: 4px 10px !important;
+    gap: 8px;
+    flex-shrink: 0;
+    min-height: auto;
+    border-bottom: 1px solid #e0e0e0 !important;
+    box-shadow: none !important;
+    font-size: 0.8rem;
+  }
+
+  .notebook-header label {
+    font-size: 0.75rem !important;
+    font-weight: 600;
+  }
+
+  .notebook-header input {
+    font-size: 0.8rem !important;
+    padding: 3px 6px !important;
+    min-width: 120px !important;
+    min-height: auto !important;
+    height: 26px !important;
+  }
+
+  .notebook-header span {
+    font-size: 0.75rem !important;
+    padding: 3px 6px !important;
+  }
+
+  .notebook-header .delete-page-btn {
+    padding: 3px 8px !important;
+    font-size: 0.7rem !important;
+    min-height: auto !important;
+  }
+
+  /* Page type container - fill remaining space */
   .lined-page, .grid-page, .blank-page {
-    padding: 6px 10px !important;
+    padding: 4px 8px !important;
     margin: 0 !important;
     border-radius: 0 !important;
-    min-height: calc(100vh - 40px) !important;
+    min-height: 0 !important;
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
   }
 
+  /* THE KEY FIX: textarea fills all available space */
+  .enhanced-textarea,
   .lined-textarea, .grid-textarea, .blank-textarea,
-  .enhanced-textarea, [contenteditable="true"] {
-    min-height: calc(100vh - 100px) !important;
+  [contenteditable="true"] {
+    height: auto !important;
+    min-height: 0 !important;
+    flex: 1 !important;
     font-size: 0.95rem !important;
-    padding: 6px 10px !important;
+    padding: 4px 8px !important;
+    resize: none !important;
+  }
+
+  /* Formatting indicator */
+  .formatting-indicator {
+    font-size: 0.6rem !important;
+    padding: 1px 4px !important;
+  }
+
+  /* Page watermark icon - smaller */
+  .notebook-page img[style*="position: absolute"],
+  .notebook-page .page-watermark {
+    opacity: 0.15 !important;
+    width: 60px !important;
+    height: 60px !important;
   }
 
   /* Page tabs: thin strip at the top of content */
