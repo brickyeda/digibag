@@ -17,7 +17,11 @@
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#667eea">
   <title>TIKit - הכלי החכם שלך</title>
   
   <!-- Meta Tags לשיתוף ברשתות חברתיות -->
@@ -6352,36 +6356,55 @@ body:has(.mode-btn[data-mode="programmer"].active) .programmer-displays {
     </div>
   </nav>
 
-  <!-- Mobile Bottom Navigation -->
-  <nav class="mobile-bottom-nav" id="mobileBottomNav">
-    <div class="mobile-nav-item active" onclick="app.showPage('homepage')" data-page="homepage">
-      <i data-lucide="home" class="lucide-icon"></i>
+  <!-- Mobile Tab Bar -->
+  <nav class="m-tabbar" id="mTabbar">
+    <div class="m-tab active" onclick="app.showPage('homepage')" data-page="homepage">
+      <i data-lucide="home"></i>
       <span>בית</span>
     </div>
-    <div class="mobile-nav-item" onclick="app.showPage('notebooks')" data-page="notebooks">
-      <i data-lucide="book-open" class="lucide-icon"></i>
+    <div class="m-tab" onclick="app.showPage('notebooks')" data-page="notebooks">
+      <i data-lucide="book-open"></i>
       <span>מחברות</span>
     </div>
-    <div class="mobile-nav-item" onclick="app.showPage('tasks')" data-page="tasks">
-      <i data-lucide="check-square" class="lucide-icon"></i>
+    <div class="m-tab" onclick="app.showPage('tasks')" data-page="tasks">
+      <i data-lucide="check-square"></i>
       <span>משימות</span>
     </div>
-    <div class="mobile-nav-item" onclick="app.showPage('calendar')" data-page="calendar">
-      <i data-lucide="calendar" class="lucide-icon"></i>
+    <div class="m-tab" onclick="app.showPage('calendar')" data-page="calendar">
+      <i data-lucide="calendar"></i>
       <span>יומן</span>
     </div>
-    <div class="mobile-nav-more" onclick="toggleMobileMore(event)">
-      <i data-lucide="more-horizontal" class="lucide-icon"></i>
+    <div class="m-tab" onclick="moreMenu()" data-page="more">
+      <i data-lucide="grid-2x2"></i>
       <span>עוד</span>
     </div>
-    <div class="mobile-more-menu" id="mobileMoreMenu">
-      <div class="mobile-more-item" onclick="app.showPage('calculator')">🧮 מחשבון</div>
-      <div class="mobile-more-item" onclick="app.showPage('timer')">⏱️ שעון עצר</div>
-      <div class="mobile-more-item" onclick="app.showPage('schedule')">📅 מערכת</div>
-      <div class="mobile-more-item" onclick="app.showPage('mylinks')">🔗 קישורים</div>
-      <div class="mobile-more-item" onclick="app.showPage('subscription')">⭐ מנוי</div>
-    </div>
   </nav>
+
+  <!-- More menu sheet -->
+  <div class="m-sheet-backdrop" id="mSheetBackdrop" onclick="closeMore()"></div>
+  <div class="m-sheet" id="mSheet">
+    <div class="m-sheet-handle"></div>
+    <div class="m-sheet-grid">
+      <div class="m-sheet-item" onclick="app.showPage('calculator');closeMore()">
+        <span class="m-sheet-icon">🧮</span><span>מחשבון</span>
+      </div>
+      <div class="m-sheet-item" onclick="app.showPage('timer');closeMore()">
+        <span class="m-sheet-icon">⏱️</span><span>שעון עצר</span>
+      </div>
+      <div class="m-sheet-item" onclick="app.showPage('schedule');closeMore()">
+        <span class="m-sheet-icon">🗓️</span><span>מערכת</span>
+      </div>
+      <div class="m-sheet-item" onclick="app.showPage('mylinks');closeMore()">
+        <span class="m-sheet-icon">🔗</span><span>קישורים</span>
+      </div>
+      <div class="m-sheet-item" onclick="app.showPage('subscription');closeMore()">
+        <span class="m-sheet-icon">⭐</span><span>מנוי</span>
+      </div>
+      <div class="m-sheet-item" onclick="app.openSettings?.();closeMore()">
+        <span class="m-sheet-icon">⚙️</span><span>הגדרות</span>
+      </div>
+    </div>
+  </div>
 
   <!-- Page Container -->
   <div class="page-container" id="pageContainer">
@@ -6520,24 +6543,6 @@ body:has(.mode-btn[data-mode="programmer"].active) .programmer-displays {
 
     <!-- Individual Notebook View -->
     <div id="notebookView" class="page">
-
-    <!-- Rotate Device Overlay -->
-    <div class="rotate-overlay" id="rotateOverlay">
-      <div class="rotate-overlay-content">
-        <div class="rotate-phone-animation">
-          <div class="rotate-phone">
-            <div class="rotate-phone-screen">
-              <div class="rotate-phone-notch"></div>
-            </div>
-          </div>
-        </div>
-        <h2 class="rotate-title">סובבו את המכשיר לרוחב</h2>
-        <p class="rotate-subtitle">חוויית המחברת מותאמת לצפייה במצב Landscape</p>
-        <button class="rotate-dismiss-btn" onclick="dismissRotateOverlay()">
-          המשך בכל מקרה →
-        </button>
-      </div>
-    </div>
      
 <!-- Math Formulas Toolbar -->
 <div class="math-formulas-toolbar" id="mathFormulasToolbar">
@@ -6629,39 +6634,6 @@ body:has(.mode-btn[data-mode="programmer"].active) .programmer-displays {
 <!-- Drawing Toolbar - Vertical Sidebar -->
       <!-- Formatting Toolbar - בתוך הדף עצמו -->
 <div class="global-formatting-toolbar" id="inPageToolbar" style="position: sticky !important; top: 80px !important; z-index: 999 !important; background: #f8f9fa !important; margin-bottom: 20px;">
-        
-        <!-- Mobile toolbar tab switcher (hidden on desktop, shown on mobile) -->
-        <div class="mobile-toolbar-tabs" id="mobileToolbarTabs">
-          <button class="mobile-toolbar-tab active" data-tab="0" onclick="switchToolbarTab(0)">
-            <span class="tab-icon">Aa</span>
-            <span>גופן</span>
-          </button>
-          <button class="mobile-toolbar-tab" data-tab="1" onclick="switchToolbarTab(1)">
-            <span class="tab-icon">B</span>
-            <span>עיצוב</span>
-          </button>
-          <button class="mobile-toolbar-tab" data-tab="2" onclick="switchToolbarTab(2)">
-            <span class="tab-icon">🎨</span>
-            <span>צבע</span>
-          </button>
-          <button class="mobile-toolbar-tab" data-tab="3" onclick="switchToolbarTab(3)">
-            <span class="tab-icon">≡</span>
-            <span>יישור</span>
-          </button>
-          <button class="mobile-toolbar-tab" data-tab="4" onclick="switchToolbarTab(4)">
-            <span class="tab-icon">•</span>
-            <span>רשימה</span>
-          </button>
-          <button class="mobile-toolbar-tab" data-tab="5" onclick="switchToolbarTab(5)">
-            <span class="tab-icon">🖌️</span>
-            <span>ציור</span>
-          </button>
-          <button class="mobile-toolbar-tab mobile-formula-toggle" data-tab="math" onclick="toggleMobileFormulas()">
-            <span class="tab-icon">📐</span>
-            <span>נוסחאות</span>
-          </button>
-        </div>
-
         <!-- Font Group -->
         <div class="toolbar-group">
           <select class="toolbar-select" id="inPageFontFamily" onchange="app.changeGlobalFontFamily(this.value)">
@@ -6825,7 +6797,7 @@ body:has(.mode-btn[data-mode="programmer"].active) .programmer-displays {
     <div class="export-btn-wrapper">
       <button class="add-page-btn premium-feature-btn" onclick="app.toggleExportMenu(event)">
         <span>📄</span>
-        <span class="btn-text">ייצא ל-PDF</span>
+        ייצא ל-PDF
         <span class="premium-badge">⭐</span>
       </button>
       <div class="export-menu" id="exportMenu">
@@ -6848,15 +6820,15 @@ body:has(.mode-btn[data-mode="programmer"].active) .programmer-displays {
     </div>
     <button class="add-page-btn" onclick="app.toggleGalleryView()" style="background: linear-gradient(135deg, #667eea, #764ba2);">
       <span>📱</span>
-      <span class="btn-text">גלריה</span>
+      תצוגת גלריה
     </button>
     <button class="add-page-btn" onclick="app.addNotebookPage()">
       <span>➕</span>
-      <span class="btn-text">דף</span>
+      הוסף דף
     </button>
     <button class="back-btn" onclick="app.showPage('notebooks')">
       <span>←</span>
-      <span class="btn-text">חזור</span>
+      חזור למחברות
     </button>
   </div>
 </div>
@@ -9558,22 +9530,6 @@ if (this.currentNotebook && pageId !== 'notebookView') {
 }
  
         // הסתר את כל הדפים
-        // Reset rotate overlay for notebooks
-        if (pageId !== 'notebookView') {
-          rotateOverlayDismissed = false;
-          var rotOverlay = document.getElementById('rotateOverlay');
-          if (rotOverlay) rotOverlay.classList.add('dismissed');
-          exitNotebookLandscapeMode();
-          // Restore toolbars that may have been hidden by view-only mode
-          var mathTb = document.getElementById('mathFormulasToolbar');
-          var fmtTb = document.getElementById('inPageToolbar');
-          var pgHeader = document.querySelector('#notebookView .page-header');
-          if (fmtTb) fmtTb.style.display = '';
-          if (pgHeader) pgHeader.style.display = '';
-          // Reset view-only container class
-          var nbContent = document.getElementById('notebookContent');
-          if (nbContent) nbContent.className = '';
-        }
         document.querySelectorAll('.page').forEach(page => {
           page.classList.remove('active');
         });
@@ -9613,22 +9569,6 @@ if (this.currentNotebook && pageId !== 'notebookView') {
           this.updateSubscriptionPage();
         } else if (pageId === 'notebookView') {
           this.renderNotebookContent();
-          // Small screen = view-only mode, hide all toolbars
-          if (isSmallScreen()) {
-            var mathTb = document.getElementById('mathFormulasToolbar');
-            var fmtTb = document.getElementById('inPageToolbar');
-            var pgHeader = document.querySelector('#notebookView .page-header');
-            if (mathTb) mathTb.style.display = 'none';
-            if (fmtTb) fmtTb.style.display = 'none';
-            if (pgHeader) pgHeader.style.display = 'none';
-          } else if (window.innerWidth <= 1024) {
-            // Tablet/medium — normal mobile toolbar
-            setTimeout(function() {
-              switchToolbarTab(0);
-              showRotateOverlayIfNeeded();
-              enterNotebookLandscapeMode();
-            }, 100);
-          }
 } else if (pageId === 'notebooks') {
   // שמור ציורים לפני יציאה מהמחברת
   if (this.currentNotebook) {
@@ -9651,16 +9591,11 @@ if (this.currentNotebook && pageId !== 'notebookView') {
             item.classList.add('active');
           }
         });
-        // Sync mobile bottom nav
-        document.querySelectorAll('.mobile-nav-item').forEach(item => {
-          item.classList.remove('active');
-          if (item.dataset.page === activePageId) {
-            item.classList.add('active');
-          }
+        // Mobile tab bar sync
+        document.querySelectorAll('.m-tab').forEach(t => {
+          t.classList.remove('active');
+          if (t.dataset.page === activePageId) t.classList.add('active');
         });
-        // Close mobile more menu
-        const moreMenu = document.getElementById('mobileMoreMenu');
-        if (moreMenu) moreMenu.classList.remove('show');
       },
 
       // רינדור מחברות
@@ -9973,12 +9908,6 @@ applyZoom() {
         
         if (!container || !notebook) return;
         
-        // === VIEW-ONLY MODE for small screens ===
-        if (isSmallScreen()) {
-          this.renderViewOnlyMode(notebook, container);
-          return;
-        }
-        
         container.innerHTML = '';
         
         notebook.pages.forEach((page, index) => {
@@ -10005,172 +9934,6 @@ style="position: sticky !important;"
             });
           }
         });
-      },
-
-      // === VIEW-ONLY MODE for small screens ===
-      renderViewOnlyMode(notebook, container) {
-        const pages = notebook.pages || [];
-        const totalPages = pages.length;
-        
-        // Store current page index
-        if (typeof this.viewOnlyPageIndex !== 'number' || this.viewOnlyPageIndex >= totalPages) {
-          this.viewOnlyPageIndex = 0;
-        }
-        
-        container.innerHTML = '';
-        container.className = 'view-only-container';
-        
-        // Info banner
-        const banner = document.createElement('div');
-        banner.className = 'view-only-banner';
-        banner.innerHTML = `
-          <div class="view-only-banner-content">
-            <span class="view-only-icon">👁️</span>
-            <span class="view-only-text">מצב צפייה בלבד · לעריכה יש להשתמש במסך גדול יותר</span>
-          </div>
-          <button class="view-only-back" onclick="app.showPage('notebooks')">← חזור</button>
-        `;
-        container.appendChild(banner);
-        
-        // Notebook title bar
-        const titleBar = document.createElement('div');
-        titleBar.className = 'view-only-title-bar';
-        titleBar.innerHTML = `
-          <span class="view-only-notebook-icon">${notebook.icon}</span>
-          <span class="view-only-notebook-name">${notebook.title}</span>
-          <span class="view-only-page-counter">${this.viewOnlyPageIndex + 1} / ${totalPages}</span>
-        `;
-        container.appendChild(titleBar);
-        
-        // Page display area
-        const pageArea = document.createElement('div');
-        pageArea.className = 'view-only-page-area';
-        pageArea.id = 'viewOnlyPageArea';
-        container.appendChild(pageArea);
-        
-        // Render current page
-        this.renderViewOnlyPage(pages, this.viewOnlyPageIndex, notebook.pageType);
-        
-        // Navigation bar
-        if (totalPages > 1) {
-          const nav = document.createElement('div');
-          nav.className = 'view-only-nav';
-          nav.innerHTML = `
-            <button class="view-only-nav-btn" id="viewPrevBtn" onclick="app.viewOnlyPrev()">
-              → הקודם
-            </button>
-            <div class="view-only-dots" id="viewOnlyDots"></div>
-            <button class="view-only-nav-btn" id="viewNextBtn" onclick="app.viewOnlyNext()">
-              הבא ←
-            </button>
-          `;
-          container.appendChild(nav);
-          this.updateViewOnlyDots(totalPages);
-        }
-        
-        // Swipe support
-        this.setupViewOnlySwipe(pageArea, totalPages);
-      },
-      
-      renderViewOnlyPage(pages, index, pageType) {
-        const pageArea = document.getElementById('viewOnlyPageArea');
-        if (!pageArea || !pages[index]) return;
-        
-        const page = pages[index];
-        const bgClass = pageType === 'lined' ? 'view-only-lined' : 
-                        pageType === 'grid' ? 'view-only-grid' : 'view-only-blank';
-        
-        pageArea.innerHTML = `
-          <div class="view-only-page ${bgClass}">
-            <div class="view-only-page-header">
-              <span class="view-only-page-title">${page.title || 'דף ' + (index + 1)}</span>
-              <span class="view-only-page-date">${page.date || ''}</span>
-            </div>
-            <div class="view-only-content" dir="rtl">${(page.content || '').replace(/\n/g, '<br>')}</div>
-          </div>
-        `;
-        
-        // Update counter
-        const counter = document.querySelector('.view-only-page-counter');
-        if (counter) counter.textContent = `${index + 1} / ${pages.length}`;
-        
-        // Update nav buttons
-        const prevBtn = document.getElementById('viewPrevBtn');
-        const nextBtn = document.getElementById('viewNextBtn');
-        if (prevBtn) prevBtn.disabled = index === 0;
-        if (nextBtn) nextBtn.disabled = index === pages.length - 1;
-        
-        this.updateViewOnlyDots(pages.length);
-      },
-      
-      viewOnlyPrev() {
-        if (this.viewOnlyPageIndex > 0) {
-          this.viewOnlyPageIndex--;
-          const notebook = this.subjects[this.currentNotebook];
-          this.renderViewOnlyPage(notebook.pages, this.viewOnlyPageIndex, notebook.pageType);
-        }
-      },
-      
-      viewOnlyNext() {
-        const notebook = this.subjects[this.currentNotebook];
-        if (this.viewOnlyPageIndex < notebook.pages.length - 1) {
-          this.viewOnlyPageIndex++;
-          this.renderViewOnlyPage(notebook.pages, this.viewOnlyPageIndex, notebook.pageType);
-        }
-      },
-      
-      updateViewOnlyDots(total) {
-        const dotsContainer = document.getElementById('viewOnlyDots');
-        if (!dotsContainer) return;
-        dotsContainer.innerHTML = '';
-        for (var i = 0; i < Math.min(total, 10); i++) {
-          const dot = document.createElement('span');
-          dot.className = 'view-only-dot' + (i === this.viewOnlyPageIndex ? ' active' : '');
-          dot.setAttribute('data-index', i);
-          dot.onclick = (function(idx) {
-            return function() {
-              app.viewOnlyPageIndex = idx;
-              const nb = app.subjects[app.currentNotebook];
-              app.renderViewOnlyPage(nb.pages, idx, nb.pageType);
-            };
-          })(i);
-          dotsContainer.appendChild(dot);
-        }
-        if (total > 10) {
-          const more = document.createElement('span');
-          more.className = 'view-only-dot-more';
-          more.textContent = '+' + (total - 10);
-          dotsContainer.appendChild(more);
-        }
-      },
-      
-      setupViewOnlySwipe(element, totalPages) {
-        var startX = 0;
-        var startY = 0;
-        var self = this;
-        
-        element.addEventListener('touchstart', function(e) {
-          startX = e.touches[0].clientX;
-          startY = e.touches[0].clientY;
-        }, { passive: true });
-        
-        element.addEventListener('touchend', function(e) {
-          var endX = e.changedTouches[0].clientX;
-          var endY = e.changedTouches[0].clientY;
-          var diffX = endX - startX;
-          var diffY = endY - startY;
-          
-          // Horizontal swipe (min 50px, more horizontal than vertical)
-          if (Math.abs(diffX) > 50 && Math.abs(diffX) > Math.abs(diffY)) {
-            if (diffX > 0) {
-              // Swipe right = next page (RTL)
-              self.viewOnlyNext();
-            } else {
-              // Swipe left = prev page (RTL)
-              self.viewOnlyPrev();
-            }
-          }
-        }, { passive: true });
       },
 
       // יצירת דף מחברת
@@ -19352,2454 +19115,19 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-// Mobile bottom nav - more menu toggle
-function toggleMobileMore(e) {
-  e.stopPropagation();
-  const menu = document.getElementById('mobileMoreMenu');
-  menu.classList.toggle('show');
+// ===== MOBILE APP =====
+function moreMenu() {
+  document.getElementById('mSheetBackdrop').classList.add('show');
+  document.getElementById('mSheet').classList.add('show');
 }
-document.addEventListener('click', function(e) {
-  const menu = document.getElementById('mobileMoreMenu');
-  if (menu && !e.target.closest('.mobile-nav-more')) {
-    menu.classList.remove('show');
-  }
-});
-
-// Mobile toolbar tab switching
-function switchToolbarTab(index) {
-  // Works on mobile portrait (<768) and landscape tablet (<1024)
-  var isMobile = window.innerWidth <= 768 && window.innerHeight > window.innerWidth;
-  var isLandscape = window.innerWidth <= 1024 && window.innerWidth > window.innerHeight;
-  if (!isMobile && !isLandscape) return;
-  
-  const groups = document.querySelectorAll('#inPageToolbar .toolbar-group');
-  const tabs = document.querySelectorAll('.mobile-toolbar-tab:not(.mobile-formula-toggle)');
-  
-  // Close formulas panel if open
-  const mathToolbar = document.getElementById('mathFormulasToolbar');
-  if (mathToolbar) mathToolbar.classList.remove('mobile-show');
-  
-  // Toggle: if same tab clicked, close it
-  const clickedTab = tabs[index];
-  if (clickedTab && clickedTab.classList.contains('active') && groups[index] && groups[index].classList.contains('mobile-active')) {
-    groups[index].classList.remove('mobile-active');
-    clickedTab.classList.remove('active');
-    return;
-  }
-  
-  // Deactivate all
-  groups.forEach(g => g.classList.remove('mobile-active'));
-  tabs.forEach(t => t.classList.remove('active'));
-  
-  // Activate selected
-  if (groups[index]) groups[index].classList.add('mobile-active');
-  if (clickedTab) clickedTab.classList.add('active');
+function closeMore() {
+  document.getElementById('mSheetBackdrop').classList.remove('show');
+  document.getElementById('mSheet').classList.remove('show');
 }
-
-// Mobile formulas toggle
-function toggleMobileFormulas() {
-  var isMobile = window.innerWidth <= 768 && window.innerHeight > window.innerWidth;
-  var isLandscape = window.innerWidth <= 1024 && window.innerWidth > window.innerHeight;
-  if (!isMobile && !isLandscape) return;
-  
-  const mathToolbar = document.getElementById('mathFormulasToolbar');
-  const formulaTab = document.querySelector('.mobile-formula-toggle');
-  
-  // Close toolbar groups
-  document.querySelectorAll('#inPageToolbar .toolbar-group').forEach(g => g.classList.remove('mobile-active'));
-  document.querySelectorAll('.mobile-toolbar-tab:not(.mobile-formula-toggle)').forEach(t => t.classList.remove('active'));
-  
-  if (mathToolbar) {
-    mathToolbar.classList.toggle('mobile-show');
-    if (formulaTab) formulaTab.classList.toggle('active');
-  }
-}
-
-// Close formula panel when tapping outside
-document.addEventListener('click', function(e) {
-  if (window.innerWidth > 768 && window.innerHeight > window.innerWidth) return;
-  const mathToolbar = document.getElementById('mathFormulasToolbar');
-  if (mathToolbar && mathToolbar.classList.contains('mobile-show')) {
-    if (!e.target.closest('.math-formulas-toolbar') && !e.target.closest('.mobile-formula-toggle')) {
-      mathToolbar.classList.remove('mobile-show');
-      const ft = document.querySelector('.mobile-formula-toggle');
-      if (ft) ft.classList.remove('active');
-    }
-  }
-});
-
-// ===== Rotate Overlay for Notebooks =====
-var rotateOverlayDismissed = false;
-
-function dismissRotateOverlay() {
-  rotateOverlayDismissed = true;
-  var overlay = document.getElementById('rotateOverlay');
-  if (overlay) {
-    overlay.classList.add('dismissed');
-  }
-}
-
-// Auto-dismiss overlay when orientation changes to landscape
-window.addEventListener('orientationchange', function() {
-  setTimeout(function() {
-    if (window.innerWidth > window.innerHeight) {
-      dismissRotateOverlay();
-    }
-  }, 300);
-});
-
-// Also check with resize for browsers that don't fire orientationchange
-window.addEventListener('resize', function() {
-  var overlay = document.getElementById('rotateOverlay');
-  if (overlay && !rotateOverlayDismissed) {
-    if (window.innerWidth > window.innerHeight) {
-      overlay.classList.add('dismissed');
-    } else if (window.innerWidth <= 1024) {
-      // Re-show if user rotated back to portrait (and didn't manually dismiss)
-      overlay.classList.remove('dismissed');
-    }
-  }
-});
-
-// Show overlay when entering notebook view on mobile portrait
-function showRotateOverlayIfNeeded() {
-  if (rotateOverlayDismissed) return;
-  if (isSmallScreen()) return; // Small screens get view-only mode, no need to rotate
-  var overlay = document.getElementById('rotateOverlay');
-  if (!overlay) return;
-  
-  // Only show on non-desktop portrait
-  var isMobileOrTablet = window.innerWidth <= 1024;
-  var isPortrait = window.innerHeight > window.innerWidth;
-  
-  if (isMobileOrTablet && isPortrait) {
-    overlay.classList.remove('dismissed');
-  } else {
-    overlay.classList.add('dismissed');
-  }
-}
-
-// ===== Screen Size Detection =====
-function isSmallScreen() {
-  // Small screen = physical screen diagonal roughly under 11 inches
-  // We use screen width as proxy: tablets 11.5"+ in landscape are ~1100px+ CSS width
-  // Also check: if screen.width (not window) is small, it's definitely a phone
-  var screenW = Math.max(screen.width, screen.height); // Largest dimension
-  return screenW < 1100;
-}
-
-// ===== Landscape Notebook Immersive Mode =====
-function enterNotebookLandscapeMode() {
-  var isLandscape = window.innerWidth > window.innerHeight;
-  var isMobileOrTablet = Math.min(window.innerWidth, window.innerHeight) <= 1024;
-  var notebookActive = document.querySelector('#notebookView.active');
-  
-  if (isLandscape && isMobileOrTablet && notebookActive) {
-    // Hide navbar and bottom nav (fallback for no :has() support)
-    var navbar = document.querySelector('.navbar');
-    var bottomNav = document.querySelector('.mobile-bottom-nav');
-    var pageContainer = document.querySelector('.page-container');
-    
-    if (navbar) navbar.classList.add('nb-landscape-hide');
-    if (bottomNav) bottomNav.classList.add('nb-landscape-hide');
-    if (pageContainer) pageContainer.classList.add('nb-landscape-active');
-    
-    // Add back button to the mobile toolbar tabs if not already there
-    addBackButtonToSidebar();
-    // Add action buttons (add page, export) to sidebar
-    addNotebookActionsToSidebar();
-  } else {
-    exitNotebookLandscapeMode();
-  }
-}
-
-function exitNotebookLandscapeMode() {
-  var navbar = document.querySelector('.navbar');
-  var bottomNav = document.querySelector('.mobile-bottom-nav');
-  var pageContainer = document.querySelector('.page-container');
-  
-  if (navbar) navbar.classList.remove('nb-landscape-hide');
-  if (bottomNav) bottomNav.classList.remove('nb-landscape-hide');
-  if (pageContainer) pageContainer.classList.remove('nb-landscape-active');
-  
-  // Remove dynamically added sidebar buttons
-  document.querySelectorAll('.nb-back-tab, .nb-action-tab').forEach(function(el) {
-    el.remove();
-  });
-}
-
-function addBackButtonToSidebar() {
-  var tabs = document.getElementById('mobileToolbarTabs');
-  if (!tabs || tabs.querySelector('.nb-back-tab')) return;
-  
-  // Back button
-  var backBtn = document.createElement('button');
-  backBtn.className = 'mobile-toolbar-tab nb-back-tab';
-  backBtn.innerHTML = '<span class="tab-icon">←</span>';
-  backBtn.onclick = function() {
-    exitNotebookLandscapeMode();
-    app.showPage('notebooks');
-  };
-  backBtn.title = 'חזור למחברות';
-  tabs.appendChild(backBtn);
-}
-
-function addNotebookActionsToSidebar() {
-  var tabs = document.getElementById('mobileToolbarTabs');
-  if (!tabs || tabs.querySelector('.nb-action-tab')) return;
-  
-  // Add page button
-  var addBtn = document.createElement('button');
-  addBtn.className = 'mobile-toolbar-tab nb-action-tab';
-  addBtn.innerHTML = '<span class="tab-icon">➕</span>';
-  addBtn.onclick = function() { app.addNotebookPage(); };
-  addBtn.title = 'הוסף דף';
-  
-  // Insert before back button
-  var backBtn = tabs.querySelector('.nb-back-tab');
-  if (backBtn) {
-    tabs.insertBefore(addBtn, backBtn);
-  } else {
-    tabs.appendChild(addBtn);
-  }
-}
-
-// Listen for orientation changes to toggle immersive mode
-window.addEventListener('resize', function() {
-  var notebookActive = document.querySelector('#notebookView.active');
-  if (notebookActive) {
-    enterNotebookLandscapeMode();
-  }
-});
-
-window.addEventListener('orientationchange', function() {
-  setTimeout(function() {
-    var notebookActive = document.querySelector('#notebookView.active');
-    if (notebookActive) {
-      enterNotebookLandscapeMode();
-    }
-  }, 300);
-});
-
-// Re-initialize lucide icons for mobile nav
-document.addEventListener('DOMContentLoaded', function() {
-  setTimeout(function() {
-    if (typeof lucide !== 'undefined') lucide.createIcons();
-  }, 100);
-});
+// Re-init icons for tab bar
+setTimeout(function(){ if(typeof lucide!=='undefined') lucide.createIcons(); }, 200);
 
   </script>
-
-<!-- מודאל מידע פרימיום - responsive styles injected above -->
-<style>
-/* ======================================================= */
-/* ============ COMPREHENSIVE RESPONSIVE DESIGN ========== */
-/* ======================================================= */
-
-/* --- Mobile Bottom Navigation --- */
-.mobile-bottom-nav {
-  display: none;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-  z-index: 1000;
-  padding: 6px 0 max(6px, env(safe-area-inset-bottom));
-  box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
-  justify-content: space-around;
-  align-items: center;
-}
-
-/* Desktop: hide mobile-only elements */
-.mobile-toolbar-tabs {
-  display: none !important;
-}
-
-.mobile-formula-toggle {
-  display: none !important;
-}
-
-.mobile-nav-item, .mobile-nav-more {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  color: rgba(255,255,255,0.7);
-  font-size: 0.65rem;
-  font-weight: 500;
-  cursor: pointer;
-  padding: 6px 12px;
-  border-radius: 10px;
-  transition: all 0.2s ease;
-  -webkit-tap-highlight-color: transparent;
-  position: relative;
-}
-
-.mobile-nav-item svg, .mobile-nav-more svg {
-  width: 22px;
-  height: 22px;
-}
-
-.mobile-nav-item.active {
-  color: white;
-  background: rgba(255,255,255,0.2);
-}
-
-.mobile-nav-more {
-  position: relative;
-}
-
-.mobile-more-menu {
-  display: none;
-  position: absolute;
-  bottom: 60px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.25);
-  min-width: 180px;
-  overflow: hidden;
-  z-index: 1001;
-}
-
-.mobile-more-menu.show {
-  display: block;
-  animation: slideUpFade 0.2s ease;
-}
-
-@keyframes slideUpFade {
-  from { opacity: 0; transform: translateX(-50%) translateY(10px); }
-  to { opacity: 1; transform: translateX(-50%) translateY(0); }
-}
-
-.mobile-more-item {
-  padding: 14px 20px;
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: var(--text-primary);
-  cursor: pointer;
-  transition: background 0.15s;
-  border-bottom: 1px solid #f0f0f0;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.mobile-more-item:last-child {
-  border-bottom: none;
-}
-
-.mobile-more-item:active {
-  background: #f0f2ff;
-}
-
-/* ===== TOUCH-FRIENDLY GLOBAL ENHANCEMENTS ===== */
-@media (max-width: 768px) {
-
-  /* Show mobile nav, hide desktop nav menu */
-  .mobile-bottom-nav {
-    display: flex;
-  }
-
-  .navbar-menu {
-    display: none !important;
-  }
-
-  /* Navbar compact */
-  .navbar {
-    height: 56px;
-    padding: 0 12px;
-  }
-
-  .navbar-brand {
-    font-size: 1.2rem;
-    gap: 8px;
-  }
-
-  .navbar-brand .logo {
-    width: 32px;
-    height: 32px;
-  }
-
-  .navbar-user {
-    gap: 8px;
-  }
-
-  .user-time {
-    font-size: 1rem;
-  }
-
-  .user-date {
-    font-size: 0.75rem;
-  }
-
-  .datetime-display {
-    gap: 8px;
-  }
-
-  .logout-btn {
-    padding: 6px 12px;
-    font-size: 0.8rem;
-  }
-
-  .fullscreen-icon {
-    font-size: 1.2rem;
-  }
-
-  .premium-star-btn {
-    font-size: 1rem;
-  }
-
-  /* Page container - account for fixed navbar + bottom nav */
-  .page-container {
-    margin-top: 56px;
-    min-height: calc(100vh - 56px);
-    padding-bottom: 80px; /* Space for mobile bottom nav */
-  }
-
-  .page {
-    padding: 15px 12px;
-    min-height: auto;
-  }
-
-  /* ===== HOMEPAGE ===== */
-  .welcome-section {
-    padding: 15px 0;
-  }
-
-  .welcome-content {
-    grid-template-columns: 1fr !important;
-    gap: 15px;
-    text-align: center;
-  }
-
-  .welcome-text h1 {
-    font-size: 1.5rem;
-  }
-
-  .welcome-text .subtitle {
-    font-size: 0.95rem;
-  }
-
-  .welcome-text .institution {
-    font-size: 0.85rem;
-  }
-
-  .welcome-stats {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    width: 100%;
-  }
-
-  .stat-item {
-    padding: 12px 8px;
-    min-width: auto;
-  }
-
-  .stat-number {
-    font-size: 1.3rem;
-  }
-
-  .stat-label {
-    font-size: 0.75rem;
-  }
-
-  .tools-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 12px;
-  }
-
-  .tool-card {
-    padding: 15px 10px;
-    min-height: auto;
-  }
-
-  .tool-card .icon {
-    font-size: 1.8rem;
-  }
-
-  .tool-card h3 {
-    font-size: 0.9rem;
-  }
-
-  .tool-status {
-    font-size: 0.75rem;
-  }
-
-  /* ===== PAGE HEADERS ===== */
-  .page-header {
-    flex-direction: column;
-    gap: 12px;
-    text-align: center;
-    margin-bottom: 15px;
-  }
-
-  .page-title {
-    font-size: 1.3rem;
-  }
-
-  .page-header div[style*="display: flex"] {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px !important;
-  }
-
-  .add-page-btn, .back-btn {
-    padding: 10px 16px;
-    font-size: 0.85rem;
-    min-height: 44px; /* Touch target */
-  }
-
-  /* ===== NOTEBOOKS ===== */
-  .subjects-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 12px;
-  }
-
-  .subject-card {
-    padding: 15px 12px;
-    min-height: auto;
-  }
-
-  .subject-card .icon {
-    font-size: 2rem;
-  }
-
-  .subject-card h3 {
-    font-size: 0.9rem;
-  }
-
-  /* ===== NOTEBOOK VIEW - MOBILE APP REDESIGN ===== */
-
-  /* Math formulas toolbar - collapsed by default on mobile */
-  .math-formulas-toolbar {
-    display: none !important;
-  }
-
-  .math-formulas-toolbar.mobile-show {
-    display: block !important;
-    position: fixed;
-    bottom: 70px;
-    left: 0;
-    right: 0;
-    z-index: 998;
-    max-height: 40vh;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    background: white;
-    border-radius: 16px 16px 0 0;
-    box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
-    padding: 12px !important;
-    animation: slideUpPanel 0.25s ease;
-  }
-
-  @keyframes slideUpPanel {
-    from { transform: translateY(100%); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
-
-  .math-formulas-toolbar.mobile-show .formulas-container {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .math-formulas-toolbar.mobile-show .formula-group {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
-  }
-
-  .math-formulas-toolbar.mobile-show .formula-item {
-    font-size: 0.75rem;
-    padding: 8px 6px;
-    text-align: center;
-    min-height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .math-formulas-toolbar.mobile-show .formula-preview {
-    display: none;
-  }
-
-  /* Main formatting toolbar - redesigned as compact mobile toolbar */
-  .global-formatting-toolbar {
-    position: fixed !important;
-    top: auto !important;
-    bottom: 70px !important;
-    left: 0 !important;
-    right: 0 !important;
-    z-index: 997 !important;
-    background: white !important;
-    margin-bottom: 0 !important;
-    padding: 0 !important;
-    border-radius: 0 !important;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.1) !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 0 !important;
-    overflow: visible !important;
-  }
-
-  /* Mobile toolbar category tabs */
-  .global-formatting-toolbar .toolbar-group {
-    display: none !important;
-    padding: 8px !important;
-    gap: 4px !important;
-    flex-wrap: wrap !important;
-    justify-content: center !important;
-    background: #f8f9fa;
-    border-top: 1px solid #e9ecef;
-    animation: slideUpPanel 0.2s ease;
-  }
-
-  .global-formatting-toolbar .toolbar-group.mobile-active {
-    display: flex !important;
-  }
-
-  /* Mobile category switcher bar */
-  .mobile-toolbar-tabs {
-    display: flex !important;
-    justify-content: space-around;
-    background: white;
-    border-top: 1px solid #e9ecef;
-    padding: 4px 6px;
-    gap: 2px;
-  }
-
-  .mobile-toolbar-tab {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1px;
-    padding: 6px 4px;
-    border-radius: 8px;
-    border: none;
-    background: transparent;
-    color: var(--text-secondary);
-    font-size: 0.6rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.15s ease;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  .mobile-toolbar-tab .tab-icon {
-    font-size: 1.1rem;
-  }
-
-  .mobile-toolbar-tab.active {
-    color: var(--primary-color);
-    background: rgba(102, 126, 234, 0.1);
-  }
-
-  /* Toolbar buttons in mobile - touch friendly */
-  .global-formatting-toolbar .toolbar-btn {
-    min-width: 40px !important;
-    height: 40px !important;
-    padding: 6px !important;
-    font-size: 0.9rem !important;
-    border-radius: 8px !important;
-    border: 1px solid #e9ecef !important;
-    background: white !important;
-  }
-
-  .global-formatting-toolbar .toolbar-btn:active {
-    background: rgba(102, 126, 234, 0.15) !important;
-    transform: scale(0.92);
-  }
-
-  .global-formatting-toolbar .toolbar-btn.active {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
-    color: white !important;
-    border-color: transparent !important;
-  }
-
-  .global-formatting-toolbar .toolbar-select {
-    min-width: 80px !important;
-    height: 40px !important;
-    font-size: 0.85rem !important;
-    border-radius: 8px !important;
-    border: 1px solid #e9ecef !important;
-    padding: 4px 8px !important;
-  }
-
-  /* Notebook page header - compact mobile version */
-  #notebookView .page-header {
-    position: sticky !important;
-    top: 56px !important;
-    z-index: 100;
-    background: var(--background-main);
-    padding: 8px 0 !important;
-    margin-bottom: 8px !important;
-    flex-direction: row !important;
-    justify-content: space-between;
-    align-items: center;
-    gap: 8px !important;
-    flex-wrap: nowrap;
-  }
-
-  #notebookView .page-title {
-    font-size: 1rem !important;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 40%;
-  }
-
-  /* Notebook action buttons - compact on mobile */
-  #notebookView .page-header div[style*="display: flex"] {
-    gap: 6px !important;
-    flex-wrap: nowrap !important;
-    justify-content: flex-start !important;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  #notebookView .add-page-btn,
-  #notebookView .back-btn {
-    padding: 8px 10px !important;
-    font-size: 0.75rem !important;
-    min-height: 38px;
-    white-space: nowrap;
-    border-radius: 8px;
-  }
-
-  /* Hide button text on mobile, show only emoji icon */
-  #notebookView .btn-text {
-    display: none;
-  }
-
-  /* Also compact the premium badge */
-  #notebookView .premium-badge {
-    font-size: 0.65rem;
-    margin-right: 0;
-  }
-
-  /* Zoom controls compact */
-  .zoom-controls {
-    gap: 2px;
-  }
-
-  .zoom-btn {
-    min-width: 32px;
-    min-height: 32px;
-    padding: 4px;
-    font-size: 0.85rem;
-  }
-
-  .zoom-level {
-    font-size: 0.75rem;
-    min-width: 40px;
-  }
-
-  /* Export menu mobile */
-  .export-menu {
-    left: auto;
-    right: 0;
-    min-width: 200px;
-  }
-
-  .export-btn-wrapper {
-    position: relative;
-  }
-
-  /* Notebook pages - more room for content */
-  .lined-page, .grid-page, .blank-page {
-    padding: 10px !important;
-    margin-bottom: 80px; /* Space for fixed toolbar */
-  }
-
-  .lined-textarea, .grid-textarea, .blank-textarea {
-    min-height: 250px;
-    font-size: 1rem !important;
-    padding: 10px !important;
-  }
-
-  .enhanced-textarea,
-  [contenteditable="true"] {
-    font-size: 1rem !important;
-    min-height: 200px;
-    -webkit-user-select: text;
-    user-select: text;
-    touch-action: manipulation;
-  }
-
-  /* Notebook page tabs */
-  .notebook-pages-tabs {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    flex-wrap: nowrap;
-    padding-bottom: 4px;
-    margin-bottom: 0;
-  }
-
-  .notebook-pages-tabs .tab-btn {
-    min-height: 36px;
-    white-space: nowrap;
-    padding: 6px 12px;
-    font-size: 0.8rem;
-  }
-
-  /* Notebook page wrapper - account for fixed bottom toolbar */
-  #notebookContent {
-    padding-bottom: 120px !important;
-  }
-
-  /* Drawing tools in mobile */
-  #thicknessSlider {
-    width: 60px !important;
-  }
-
-  #drawingColor {
-    width: 36px !important;
-    height: 36px !important;
-  }
-
-  /* Formula toolbar toggle button visible */
-  .mobile-formula-toggle {
-    display: flex !important;
-  }
-
-  /* ===== TASKS ===== */
-  .tasks-grid {
-    grid-template-columns: 1fr !important;
-    gap: 15px;
-  }
-
-  .tasks-header {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-  }
-
-  .tasks-stats {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-  }
-
-  .task-creator {
-    position: static !important;
-    order: -1;
-    margin-bottom: 15px;
-  }
-
-  .task-creator input,
-  .task-creator select,
-  .task-creator textarea {
-    min-height: 44px;
-    font-size: 1rem;
-    padding: 10px 12px;
-  }
-
-  .task-card {
-    padding: 15px;
-  }
-
-  .task-actions button {
-    min-width: 44px;
-    min-height: 44px;
-    padding: 8px;
-  }
-
-  /* ===== CALENDAR ===== */
-  .calendar-nav {
-    flex-direction: column;
-    gap: 12px;
-    padding: 15px;
-  }
-
-  .calendar-nav-left {
-    justify-content: center;
-    gap: 12px;
-  }
-
-  .calendar-nav-right {
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .current-month {
-    font-size: 1.3rem;
-  }
-
-  .nav-btn {
-    width: 44px;
-    height: 44px;
-  }
-
-  .today-btn {
-    min-height: 44px;
-    padding: 10px 16px;
-  }
-
-  .view-btn {
-    padding: 10px 12px;
-    font-size: 0.85rem;
-    min-height: 44px;
-  }
-
-  .calendar-stats {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 10px;
-  }
-
-  .calendar-stat {
-    padding: 12px;
-  }
-
-  /* Calendar grid + sidebar - stack on mobile */
-  div[style*="grid-template-columns: 350px 1fr"] {
-    grid-template-columns: 1fr !important;
-    gap: 15px !important;
-  }
-
-  .calendar-sidebar {
-    order: 2;
-    margin-bottom: 15px;
-  }
-
-  .calendar-container {
-    padding: 10px;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .calendar-header {
-    gap: 0;
-  }
-
-  .calendar-day-header {
-    padding: 8px 2px;
-    font-size: 0.7rem;
-  }
-
-  .calendar-grid {
-    gap: 0;
-  }
-
-  .calendar-day {
-    min-height: 60px;
-    padding: 4px;
-    font-size: 0.8rem;
-  }
-
-  .day-number {
-    font-size: 0.75rem;
-    margin-bottom: 2px;
-  }
-
-  .event-item {
-    font-size: 0.6rem;
-    padding: 1px 3px;
-    border-radius: 3px;
-  }
-
-  .event-more {
-    font-size: 0.6rem;
-  }
-
-  /* Quick events */
-  .quick-events {
-    padding: 15px;
-  }
-
-  .quick-event-buttons {
-    flex-wrap: wrap;
-    gap: 8px;
-    justify-content: center;
-  }
-
-  .quick-btn {
-    padding: 10px 14px;
-    font-size: 0.85rem;
-    min-height: 44px;
-  }
-
-  /* Events sidebar on mobile */
-  .events-search {
-    padding: 12px;
-  }
-
-  .events-list-sidebar {
-    max-height: 250px;
-    padding: 12px;
-  }
-
-  .search-form input,
-  .search-form select {
-    min-height: 44px;
-    font-size: 1rem;
-  }
-
-  /* ===== CALCULATOR ===== */
-  /* Calculator layout - stack on mobile */
-  div[style*="grid-template-columns: 1fr 300px"] {
-    grid-template-columns: 1fr !important;
-    gap: 15px !important;
-  }
-
-  /* Calculator display */
-  #displayCurrent {
-    font-size: 2rem !important;
-    min-height: 45px !important;
-  }
-
-  #displayHistory {
-    font-size: 0.85rem !important;
-  }
-
-  /* Calculator buttons */
-  .button-grid.basic-mode {
-    gap: 6px !important;
-  }
-
-  .button-grid.basic-mode button,
-  .button-grid.scientific-mode button,
-  .button-grid.programmer-mode button {
-    padding: 16px 8px !important;
-    font-size: 1.1rem !important;
-    min-height: 52px;
-    border-radius: 10px !important;
-  }
-
-  .button-grid.scientific-mode {
-    grid-template-columns: repeat(4, 1fr) !important;
-    gap: 5px !important;
-  }
-
-  .button-grid.scientific-mode button {
-    padding: 12px 6px !important;
-    font-size: 0.8rem !important;
-    min-height: 46px;
-  }
-
-  .button-grid.programmer-mode {
-    grid-template-columns: repeat(4, 1fr) !important;
-    gap: 5px !important;
-  }
-
-  .mode-btn {
-    padding: 10px 8px !important;
-    font-size: 0.85rem !important;
-    min-height: 44px;
-  }
-
-  /* Calculator history sidebar on mobile */
-  .calculator-history {
-    max-height: 200px;
-  }
-
-  /* ===== TIMER ===== */
-  #timer.page {
-    padding: 8px;
-  }
-
-  .timer-container {
-    border-radius: 16px;
-    padding: 15px;
-  }
-
-  .timer-header h1 {
-    font-size: 1.3rem;
-  }
-
-  .timer-time {
-    font-size: 2.5rem !important;
-  }
-
-  .timer-tabs {
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .timer-tab {
-    min-height: 44px;
-    padding: 10px 14px;
-    font-size: 0.85rem;
-  }
-
-  .timer-presets {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 8px;
-  }
-
-  .timer-preset {
-    padding: 12px 8px;
-    min-height: 44px;
-  }
-
-  .timer-input-group input {
-    width: 55px !important;
-    font-size: 1.2rem !important;
-    padding: 10px 6px !important;
-    min-height: 44px;
-  }
-
-  .timer-controls button {
-    min-height: 48px;
-    font-size: 1rem;
-    padding: 12px 16px;
-  }
-
-  .timer-main {
-    flex-direction: column;
-    gap: 15px;
-  }
-
-  .timer-laps {
-    max-height: 200px;
-  }
-
-  .timer-lap-item {
-    padding: 10px;
-    font-size: 0.85rem;
-  }
-
-  /* ===== SCHEDULE TABLE ===== */
-  .schedule-container {
-    padding: 12px;
-    border-radius: 12px;
-  }
-
-  .schedule-table {
-    min-width: 600px;
-  }
-
-  .schedule-table th,
-  .schedule-table td {
-    min-width: 75px;
-    padding: 6px 3px;
-    font-size: 0.7rem;
-    height: 55px;
-  }
-
-  .schedule-stats {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-  }
-
-  .schedule-stat {
-    padding: 10px 15px;
-    min-width: 100px;
-  }
-
-  .schedule-actions {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-  }
-
-  .schedule-action-btn {
-    padding: 10px 16px;
-    font-size: 0.85rem;
-    min-height: 44px;
-  }
-
-  .schedule-modal {
-    padding: 18px;
-    margin: 10px;
-    border-radius: 16px;
-  }
-
-  .schedule-modal input,
-  .schedule-modal select {
-    min-height: 44px;
-    font-size: 1rem;
-  }
-
-  .schedule-modal-buttons button {
-    min-height: 44px;
-    font-size: 0.9rem;
-  }
-
-  /* ===== LINKS PAGE ===== */
-  .links-grid {
-    grid-template-columns: 1fr !important;
-    gap: 10px;
-  }
-
-  .links-stats {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .links-stat {
-    padding: 10px 15px;
-  }
-
-  .links-actions {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-  }
-
-  .links-action-btn {
-    padding: 10px 16px;
-    font-size: 0.9rem;
-    min-height: 44px;
-  }
-
-  .links-search input {
-    min-height: 44px;
-    font-size: 1rem;
-  }
-
-  .link-card {
-    padding: 12px;
-  }
-
-  .link-card-actions button {
-    min-width: 44px;
-    min-height: 44px;
-  }
-
-  /* ===== MODALS ===== */
-  .modal-content,
-  .link-modal,
-  .about-modal,
-  .upgrade-modal-content,
-  .cancel-modal-content,
-  .premium-info-content {
-    width: 95% !important;
-    max-width: 95vw !important;
-    margin: 8px !important;
-    padding: 20px 15px !important;
-    border-radius: 16px !important;
-    max-height: 85vh;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .modal-footer {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .modal-footer .btn,
-  .link-modal-buttons button,
-  .schedule-modal-buttons button {
-    width: 100%;
-    min-height: 48px;
-    justify-content: center;
-    font-size: 1rem;
-  }
-
-  /* Event modal */
-  .event-type-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 8px;
-  }
-
-  .event-type-option {
-    min-height: 44px;
-    padding: 10px;
-  }
-
-  .time-inputs {
-    grid-template-columns: 1fr !important;
-    gap: 8px;
-  }
-
-  .time-inputs input {
-    min-height: 44px;
-    font-size: 1rem;
-  }
-
-  /* Page type grid (notebook creation) */
-  .page-type-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 8px;
-  }
-
-  .page-type-option {
-    padding: 12px;
-    min-height: 44px;
-  }
-
-  .color-grid {
-    grid-template-columns: repeat(5, 1fr) !important;
-    gap: 8px;
-  }
-
-  .color-option {
-    width: 40px;
-    height: 40px;
-    min-width: 40px;
-  }
-
-  /* ===== SUBSCRIPTION PAGE ===== */
-  .subscription-container {
-    gap: 15px;
-  }
-
-  .subscription-card {
-    padding: 20px 15px;
-  }
-
-  .upgrade-plans-container {
-    grid-template-columns: 1fr !important;
-    gap: 15px;
-  }
-
-  .upgrade-plan {
-    padding: 20px 15px;
-  }
-
-  .upgrade-plan.premium {
-    transform: none;
-  }
-
-  .upgrade-btn {
-    min-height: 48px;
-    padding: 14px 20px;
-    font-size: 1rem;
-  }
-
-  /* ===== FOOTER ===== */
-  .app-footer {
-    padding: 15px 12px;
-    margin-bottom: 70px; /* Space for mobile bottom nav */
-  }
-
-  .footer-content {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .footer-about-btn {
-    min-height: 44px;
-  }
-
-  /* ===== GENERAL TOUCH IMPROVEMENTS ===== */
-  button, a, .clickable, [onclick] {
-    -webkit-tap-highlight-color: rgba(102, 126, 234, 0.1);
-  }
-
-  input, select, textarea {
-    font-size: 16px !important; /* Prevent iOS zoom */
-    -webkit-appearance: none;
-    border-radius: 10px;
-  }
-
-  select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: left 10px center;
-    padding-left: 30px !important;
-  }
-
-  /* Scrollbar styling for mobile */
-  ::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: rgba(102, 126, 234, 0.3);
-    border-radius: 4px;
-  }
-
-  /* Drawing canvas on mobile */
-  .drawing-canvas-container,
-  .drawing-canvas {
-    touch-action: none;
-  }
-
-  .drawing-tools button {
-    min-width: 44px;
-    min-height: 44px;
-    padding: 8px;
-  }
-
-  /* Interactive shapes on mobile */
-  .interactive-shape {
-    touch-action: none;
-  }
-
-  .shape-resize-handle {
-    width: 16px;
-    height: 16px;
-  }
-
-  .shape-rotate-handle {
-    width: 28px;
-    height: 28px;
-  }
-
-  /* Notifications panel */
-  .notifications-panel {
-    width: 90vw !important;
-    max-width: 350px;
-    right: 5vw !important;
-    left: auto !important;
-  }
-
-  /* Settings modal */
-  .settings-content {
-    width: 95% !important;
-    max-height: 80vh;
-    overflow-y: auto;
-  }
-
-  /* Tutorial tooltips */
-  .tutorial-tooltip {
-    max-width: 85vw !important;
-    font-size: 0.9rem;
-  }
-
-  /* Upgrade modal */
-  .upgrade-page {
-    padding: 15px !important;
-  }
-
-  .upgrade-header h1 {
-    font-size: 1.5rem !important;
-  }
-
-  /* Auto-logout warning */
-  .auto-logout-warning {
-    width: 90% !important;
-    max-width: 350px;
-    padding: 20px !important;
-  }
-
-} /* End 768px */
-
-/* ===== EXTRA SMALL SCREENS (< 480px) ===== */
-@media (max-width: 480px) {
-
-  .navbar {
-    height: 50px;
-    padding: 0 8px;
-  }
-
-  .navbar-brand {
-    font-size: 1rem;
-    gap: 6px;
-  }
-
-  .navbar-brand .logo {
-    width: 28px;
-    height: 28px;
-  }
-
-  .page-container {
-    margin-top: 50px;
-  }
-
-  .page {
-    padding: 10px 8px;
-  }
-
-  .welcome-stats {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 6px;
-  }
-
-  .tools-grid {
-    grid-template-columns: 1fr 1fr !important;
-    gap: 8px;
-  }
-
-  .subjects-grid {
-    grid-template-columns: 1fr !important;
-    gap: 10px;
-  }
-
-  .calendar-day {
-    min-height: 50px;
-    padding: 3px;
-  }
-
-  .calendar-day-header {
-    font-size: 0.6rem;
-    padding: 6px 1px;
-  }
-
-  .day-number {
-    font-size: 0.65rem;
-  }
-
-  .event-item {
-    font-size: 0.55rem;
-    padding: 1px 2px;
-  }
-
-  /* Calculator - bigger buttons for small screens */
-  .button-grid.basic-mode button {
-    padding: 14px 6px !important;
-    font-size: 1rem !important;
-    min-height: 48px;
-  }
-
-  #displayCurrent {
-    font-size: 1.8rem !important;
-  }
-
-  /* Schedule table even smaller */
-  .schedule-table {
-    min-width: 500px;
-  }
-
-  .schedule-table th,
-  .schedule-table td {
-    min-width: 65px;
-    font-size: 0.65rem;
-    height: 45px;
-  }
-
-  /* Timer compact */
-  .timer-time {
-    font-size: 2rem !important;
-  }
-
-  .timer-presets {
-    grid-template-columns: 1fr 1fr !important;
-    gap: 6px;
-  }
-
-  /* Mobile nav items tighter */
-  .mobile-nav-item, .mobile-nav-more {
-    padding: 4px 8px;
-    font-size: 0.6rem;
-  }
-
-  .mobile-nav-item svg, .mobile-nav-more svg {
-    width: 20px;
-    height: 20px;
-  }
-
-  /* Modals even tighter */
-  .modal-content,
-  .link-modal,
-  .about-modal {
-    padding: 15px 12px !important;
-  }
-}
-
-/* ===== MEDIUM SCREENS (tablets) ===== */
-@media (min-width: 769px) and (max-width: 1024px) {
-
-  .navbar-item {
-    padding: 10px 12px;
-    font-size: 0.85rem;
-    gap: 5px;
-  }
-
-  .navbar-item span {
-    font-size: 0.8rem;
-  }
-
-  .tools-grid {
-    grid-template-columns: repeat(3, 1fr) !important;
-  }
-
-  .subjects-grid {
-    grid-template-columns: repeat(3, 1fr) !important;
-  }
-
-  .calendar-day {
-    min-height: 80px;
-  }
-
-  /* Calculator sidebar smaller */
-  div[style*="grid-template-columns: 1fr 300px"] {
-    grid-template-columns: 1fr 220px !important;
-  }
-
-  /* Calendar sidebar narrower */
-  div[style*="grid-template-columns: 350px 1fr"] {
-    grid-template-columns: 280px 1fr !important;
-  }
-}
-
-/* ============================================= */
-/* ===== ROTATE OVERLAY & NOTEBOOK LANDSCAPE ==== */
-/* ============================================= */
-
-/* Rotate overlay - hidden by default */
-.rotate-overlay {
-  display: none;
-}
-
-/* Show overlay on non-desktop portrait screens */
-@media (max-width: 1024px) and (orientation: portrait) {
-  .rotate-overlay {
-    display: flex;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    z-index: 10001;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    animation: overlayFadeIn 0.4s ease;
-  }
-
-  .rotate-overlay.dismissed {
-    display: none !important;
-  }
-}
-
-/* Hide on desktop or landscape */
-@media (min-width: 1025px), (orientation: landscape) {
-  .rotate-overlay {
-    display: none !important;
-  }
-}
-
-@keyframes overlayFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.rotate-overlay-content {
-  padding: 40px 30px;
-  max-width: 340px;
-}
-
-.rotate-title {
-  color: white;
-  font-size: 1.6rem;
-  font-weight: 700;
-  margin-bottom: 10px;
-}
-
-.rotate-subtitle {
-  color: rgba(255,255,255,0.85);
-  font-size: 1rem;
-  margin-bottom: 30px;
-  line-height: 1.5;
-}
-
-.rotate-dismiss-btn {
-  background: rgba(255,255,255,0.2);
-  border: 2px solid rgba(255,255,255,0.5);
-  color: white;
-  padding: 14px 28px;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: inherit;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.rotate-dismiss-btn:active {
-  background: rgba(255,255,255,0.35);
-  transform: scale(0.96);
-}
-
-/* Phone rotation animation */
-.rotate-phone-animation {
-  margin-bottom: 30px;
-  display: flex;
-  justify-content: center;
-}
-
-.rotate-phone {
-  width: 64px;
-  height: 110px;
-  border: 3px solid white;
-  border-radius: 14px;
-  position: relative;
-  animation: rotatePhone 2.5s ease-in-out infinite;
-  transform-origin: center center;
-}
-
-.rotate-phone-screen {
-  position: absolute;
-  top: 8px; left: 4px; right: 4px; bottom: 8px;
-  background: rgba(255,255,255,0.15);
-  border-radius: 6px;
-}
-
-.rotate-phone-notch {
-  position: absolute;
-  top: -1px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 20px;
-  height: 4px;
-  background: rgba(255,255,255,0.5);
-  border-radius: 0 0 4px 4px;
-}
-
-@keyframes rotatePhone {
-  0%, 15% {
-    transform: rotate(0deg);
-  }
-  40%, 60% {
-    transform: rotate(-90deg);
-  }
-  85%, 100% {
-    transform: rotate(0deg);
-  }
-}
-
-/* ===================================================== */
-/* ===== LANDSCAPE NOTEBOOK - IMMERSIVE MODE ============ */
-/* ===================================================== */
-
-@media (max-width: 1024px) and (orientation: landscape) {
-
-  /* --- HIDE CHROME: Full immersive mode in notebook --- */
-  body:has(#notebookView.active) .navbar {
-    display: none !important;
-  }
-
-  body:has(#notebookView.active) .mobile-bottom-nav {
-    display: none !important;
-  }
-
-  body:has(#notebookView.active) .page-container {
-    margin-top: 0 !important;
-    padding-bottom: 0 !important;
-  }
-
-  body:has(#notebookView.active) #notebookView {
-    padding: 0 !important;
-  }
-
-  /* --- For browsers without :has() support, use .notebook-landscape class --- */
-  .navbar.nb-landscape-hide {
-    display: none !important;
-  }
-
-  .mobile-bottom-nav.nb-landscape-hide {
-    display: none !important;
-  }
-
-  .page-container.nb-landscape-active {
-    margin-top: 0 !important;
-    padding-bottom: 0 !important;
-  }
-
-  /* --- Notebook View: Full screen layout --- */
-  #notebookView.page {
-    padding: 0 !important;
-    height: 100vh !important;
-    max-height: 100vh !important;
-    display: grid !important;
-    grid-template-columns: 44px 1fr;
-    grid-template-rows: 1fr;
-    overflow: hidden !important;
-  }
-
-  #notebookView.page.active {
-    display: grid !important;
-  }
-
-  /* --- Hide the old page header completely --- */
-  #notebookView .page-header {
-    display: none !important;
-  }
-
-  /* --- Hide math toolbar by default --- */
-  .math-formulas-toolbar {
-    display: none !important;
-  }
-
-  /* --- SIDE TOOLBAR: Vertical icon strip on the right --- */
-  .global-formatting-toolbar {
-    position: relative !important;
-    top: auto !important;
-    bottom: auto !important;
-    left: auto !important;
-    right: auto !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border-radius: 0 !important;
-    background: #2c3e50 !important;
-    box-shadow: none !important;
-    border: none !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 0 !important;
-    overflow: visible !important;
-    grid-row: 1;
-    grid-column: 1;
-    height: 100vh;
-    z-index: 100;
-  }
-
-  /* --- Vertical tab switcher --- */
-  .mobile-toolbar-tabs {
-    display: flex !important;
-    flex-direction: column !important;
-    padding: 4px 2px !important;
-    gap: 2px !important;
-    background: #2c3e50 !important;
-    border-radius: 0 !important;
-    height: 100%;
-    overflow-y: auto;
-    justify-content: flex-start;
-    align-items: center;
-    border: none;
-  }
-
-  .mobile-toolbar-tab {
-    width: 36px;
-    height: 36px;
-    min-height: 36px;
-    padding: 0 !important;
-    border-radius: 8px !important;
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    color: rgba(255,255,255,0.55);
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    transition: all 0.15s;
-    flex-shrink: 0;
-  }
-
-  .mobile-toolbar-tab .tab-icon {
-    font-size: 1rem !important;
-  }
-
-  .mobile-toolbar-tab span:not(.tab-icon) {
-    display: none !important;
-  }
-
-  .mobile-toolbar-tab.active {
-    color: white !important;
-    background: rgba(255,255,255,0.15) !important;
-  }
-
-  .mobile-toolbar-tab:active {
-    transform: scale(0.9);
-  }
-
-  /* --- Notebook back button at bottom of sidebar --- */
-  .mobile-toolbar-tab.nb-back-tab {
-    margin-top: auto !important;
-    color: rgba(255,255,255,0.7);
-    border-top: 1px solid rgba(255,255,255,0.1);
-    padding-top: 6px !important;
-    border-radius: 0 !important;
-  }
-
-  /* --- Floating tool panel (pops out from sidebar) --- */
-  .global-formatting-toolbar .toolbar-group {
-    display: none !important;
-    position: absolute !important;
-    right: auto;
-    left: 44px;
-    top: 0;
-    bottom: 0;
-    width: auto;
-    min-width: 50px;
-    max-width: 320px;
-    max-height: 100vh;
-    overflow-y: auto;
-    background: white !important;
-    border-radius: 0 12px 12px 0 !important;
-    box-shadow: 4px 0 20px rgba(0,0,0,0.15) !important;
-    padding: 8px 6px !important;
-    gap: 4px !important;
-    flex-wrap: wrap !important;
-    align-content: flex-start !important;
-    justify-content: center !important;
-    z-index: 99;
-    animation: panelSlideRight 0.2s ease;
-  }
-
-  @keyframes panelSlideRight {
-    from { opacity: 0; transform: translateX(-10px); }
-    to { opacity: 1; transform: translateX(0); }
-  }
-
-  .global-formatting-toolbar .toolbar-group.mobile-active {
-    display: flex !important;
-  }
-
-  .global-formatting-toolbar .toolbar-btn {
-    min-width: 34px !important;
-    height: 34px !important;
-    padding: 4px !important;
-    font-size: 0.85rem !important;
-    border-radius: 8px !important;
-    border: 1px solid #e9ecef !important;
-    background: white !important;
-  }
-
-  .global-formatting-toolbar .toolbar-btn:active {
-    background: rgba(102, 126, 234, 0.15) !important;
-  }
-
-  .global-formatting-toolbar .toolbar-btn.active {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
-    color: white !important;
-    border-color: transparent !important;
-  }
-
-  .global-formatting-toolbar .toolbar-select {
-    min-width: 70px !important;
-    height: 34px !important;
-    font-size: 0.8rem !important;
-    padding: 2px 6px !important;
-    border-radius: 8px !important;
-  }
-
-  /* --- Math formulas: side panel --- */
-  .math-formulas-toolbar.mobile-show {
-    display: block !important;
-    position: fixed !important;
-    top: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    left: auto !important;
-    width: 200px;
-    z-index: 998;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    background: white;
-    border-radius: 12px 0 0 12px;
-    box-shadow: -4px 0 20px rgba(0,0,0,0.15);
-    padding: 8px !important;
-    animation: slideFromRight 0.25s ease;
-  }
-
-  @keyframes slideFromRight {
-    from { transform: translateX(100%); }
-    to { transform: translateX(0); }
-  }
-
-  .math-formulas-toolbar.mobile-show .formulas-title {
-    font-size: 0.8rem;
-    margin-bottom: 6px;
-    padding-bottom: 6px;
-    border-bottom: 1px solid #eee;
-  }
-
-  .math-formulas-toolbar.mobile-show .formulas-container {
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .math-formulas-toolbar.mobile-show .formula-group {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3px;
-  }
-
-  .math-formulas-toolbar.mobile-show .formula-item {
-    font-size: 0.7rem;
-    padding: 5px 3px;
-    text-align: center;
-    min-height: 28px;
-  }
-
-  .math-formulas-toolbar.mobile-show .formula-preview {
-    display: none;
-  }
-
-  .math-formulas-toolbar.mobile-show .nuschon-link-btn {
-    font-size: 0.7rem;
-    padding: 5px 8px;
-    min-height: 28px;
-  }
-
-  /* --- NOTEBOOK CONTENT: Full remaining space --- */
-  #notebookContent {
-    grid-row: 1;
-    grid-column: 2;
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
-    -webkit-overflow-scrolling: touch;
-    padding: 0 !important;
-    margin: 0 !important;
-    margin-top: 0 !important;
-    height: 100vh !important;
-    max-height: 100vh !important;
-  }
-
-  /* ======= KILL ALL FIXED HEIGHTS ======= */
-  .notebook-page,
-  #notebookContent .notebook-page {
-    min-height: auto !important;
-    max-height: none !important;
-    height: auto !important;
-    margin: 0 !important;
-    margin-bottom: 2px !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    border: none !important;
-    border-bottom: 2px solid #e0e0e0 !important;
-  }
-
-  /* ======= KILL GIANT PADDINGS ON PAGE TYPES ======= */
-  .lined-page, .grid-page, .blank-page,
-  #notebookContent .lined-page,
-  #notebookContent .grid-page,
-  #notebookContent .blank-page {
-    padding: 4px 8px !important;
-    min-height: auto !important;
-    height: auto !important;
-    margin: 0 !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-  }
-
-  /* ======= KILL FIXED TEXTAREA HEIGHT ======= */
-  .enhanced-textarea,
-  #notebookContent .enhanced-textarea,
-  .lined-textarea, .grid-textarea, .blank-textarea,
-  textarea.enhanced-textarea,
-  [contenteditable="true"] {
-    height: calc(100vh - 60px) !important;
-    min-height: calc(100vh - 60px) !important;
-    max-height: none !important;
-    font-size: 16px !important;
-    padding: 4px 8px !important;
-    resize: none !important;
-  }
-
-  /* ======= COMPACT PAGE HEADER ======= */
-  .notebook-header,
-  #notebookContent .notebook-header {
-    padding: 3px 8px !important;
-    gap: 6px !important;
-    min-height: auto !important;
-    border-bottom: 1px solid #ddd !important;
-    box-shadow: none !important;
-    background: #f8f9fa !important;
-  }
-
-  .notebook-header label {
-    font-size: 0.7rem !important;
-  }
-
-  .notebook-header input[type="text"] {
-    font-size: 0.75rem !important;
-    padding: 2px 6px !important;
-    min-width: 100px !important;
-    min-height: auto !important;
-    height: 22px !important;
-    border-radius: 4px !important;
-  }
-
-  .notebook-header span[style*="font-size"] {
-    font-size: 0.7rem !important;
-    padding: 2px 6px !important;
-  }
-
-  .notebook-header .delete-page-btn,
-  .notebook-header button {
-    padding: 2px 8px !important;
-    font-size: 0.65rem !important;
-    min-height: auto !important;
-    height: 22px !important;
-    border-radius: 4px !important;
-  }
-
-  /* Lined page lines - adjust for small padding */
-  .lined-page::before {
-    top: 4px !important;
-    left: 4px !important;
-    right: 40px !important;
-    bottom: 4px !important;
-  }
-
-  .lined-page::after {
-    right: 35px !important;
-  }
-
-  /* Grid page lines adjust */
-  .grid-page::before,
-  .grid-page::after {
-    top: 4px !important;
-    left: 4px !important;
-    right: 40px !important;
-    bottom: 4px !important;
-  }
-
-  /* Formatting indicator */
-  .formatting-indicator {
-    font-size: 0.55rem !important;
-    padding: 1px 3px !important;
-    top: 2px !important;
-  }
-
-  /* Page tabs: thin strip at the top of content */
-  .notebook-pages-tabs {
-    padding: 2px 4px;
-    margin: 0;
-    flex-shrink: 0;
-    background: #f8f9fa;
-    border-bottom: 1px solid #e9ecef;
-  }
-
-  .notebook-pages-tabs .tab-btn {
-    min-height: 24px;
-    padding: 2px 8px;
-    font-size: 0.65rem;
-  }
-
-  /* Page info bar (subject/date) - compact */
-  .page-info-bar, .notebook-page-header {
-    padding: 2px 8px !important;
-    font-size: 0.75rem !important;
-  }
-
-  /* Drawing */
-  #thicknessSlider { width: 50px !important; }
-  #drawingColor { width: 28px !important; height: 28px !important; }
-
-  /* Zoom controls - inside sidebar or hidden */
-  .zoom-controls { display: none !important; }
-
-  /* Export menu */
-  .export-btn-wrapper { display: none !important; }
-
-  /* Gallery button */
-  .gallery-view { z-index: 200; }
-
-  /* General non-notebook landscape */
-  .page:not(#notebookView) {
-    padding-bottom: 50px;
-  }
-
-  /* Non-notebook pages: keep the normal compact layout */
-  body:not(:has(#notebookView.active)) .navbar,
-  .navbar:not(.nb-landscape-hide) {
-    height: 40px;
-    padding: 0 10px;
-  }
-
-  body:not(:has(#notebookView.active)) .navbar .navbar-brand,
-  .navbar:not(.nb-landscape-hide) .navbar-brand {
-    font-size: 1rem;
-    gap: 6px;
-  }
-
-  body:not(:has(#notebookView.active)) .navbar .navbar-brand .logo,
-  .navbar:not(.nb-landscape-hide) .logo {
-    width: 26px;
-    height: 26px;
-  }
-
-  body:not(:has(#notebookView.active)) .page-container {
-    margin-top: 40px;
-  }
-
-  .mobile-bottom-nav:not(.nb-landscape-hide) {
-    padding: 2px 0;
-    height: 40px;
-  }
-
-  .mobile-bottom-nav:not(.nb-landscape-hide) .mobile-nav-item,
-  .mobile-bottom-nav:not(.nb-landscape-hide) .mobile-nav-more {
-    padding: 2px 10px;
-    gap: 1px;
-  }
-
-  .mobile-bottom-nav:not(.nb-landscape-hide) .mobile-nav-item svg,
-  .mobile-bottom-nav:not(.nb-landscape-hide) .mobile-nav-more svg {
-    width: 16px;
-    height: 16px;
-  }
-
-  .mobile-bottom-nav:not(.nb-landscape-hide) .mobile-nav-item span,
-  .mobile-bottom-nav:not(.nb-landscape-hide) .mobile-nav-more span {
-    font-size: 0.5rem;
-  }
-}
-
-/* ===== PORTRAIT MOBILE + NOTEBOOK ADJUSTMENTS ===== */
-@media (max-width: 768px) and (orientation: portrait) {
-
-  /* Notebook page bottom padding for fixed toolbar */
-  #notebookContent {
-    padding-bottom: 130px !important;
-  }
-
-  .lined-page, .grid-page, .blank-page {
-    margin-bottom: 90px;
-  }
-}
-
-/* ===== PRINT - hide mobile nav ===== */
-@media print {
-  .mobile-bottom-nav {
-    display: none !important;
-  }
-  .rotate-overlay {
-    display: none !important;
-  }
-}
-
-/* ============================================= */
-/* ===== VIEW-ONLY MODE (Small Screens) ======== */
-/* ============================================= */
-
-.view-only-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  padding: 0 !important;
-  margin: 0 !important;
-  background: #f5f6fa;
-}
-
-/* Banner */
-.view-only-banner {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 12px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  flex-shrink: 0;
-}
-
-.view-only-banner-content {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.view-only-icon {
-  font-size: 1rem;
-}
-
-.view-only-text {
-  font-size: 0.75rem;
-  font-weight: 500;
-  opacity: 0.95;
-}
-
-.view-only-back {
-  background: rgba(255,255,255,0.2);
-  border: 1px solid rgba(255,255,255,0.4);
-  color: white;
-  padding: 6px 14px;
-  border-radius: 8px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: inherit;
-  -webkit-tap-highlight-color: transparent;
-  transition: background 0.15s;
-}
-
-.view-only-back:active {
-  background: rgba(255,255,255,0.35);
-}
-
-/* Title bar */
-.view-only-title-bar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 14px;
-  background: white;
-  border-bottom: 1px solid #e9ecef;
-  flex-shrink: 0;
-}
-
-.view-only-notebook-icon {
-  font-size: 1.3rem;
-}
-
-.view-only-notebook-name {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  flex: 1;
-}
-
-.view-only-page-counter {
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-  background: #f0f2f5;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-weight: 600;
-}
-
-/* Page display area */
-.view-only-page-area {
-  flex: 1;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  padding: 10px;
-}
-
-.view-only-page {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-  min-height: 100%;
-  overflow: hidden;
-}
-
-.view-only-page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 16px;
-  background: linear-gradient(135deg, #f5f7fa, #e8ecf0);
-  border-bottom: 2px solid #d0d7de;
-}
-
-.view-only-page-title {
-  font-weight: 700;
-  font-size: 1rem;
-  color: var(--text-primary);
-}
-
-.view-only-page-date {
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-}
-
-.view-only-content {
-  padding: 16px;
-  font-size: 1rem;
-  line-height: 1.8;
-  color: var(--text-primary);
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  font-family: Arial, sans-serif;
-}
-
-/* Page type backgrounds */
-.view-only-lined {
-  position: relative;
-}
-
-.view-only-lined .view-only-content {
-  background-image: repeating-linear-gradient(
-    to bottom,
-    transparent 0px,
-    transparent 36px,
-    #d4e2f0 36px,
-    #d4e2f0 37px
-  );
-  background-size: 100% 37px;
-  background-position: 0 0;
-}
-
-.view-only-lined::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 50px;
-  width: 2px;
-  height: 100%;
-  background: #ff6b6b;
-  opacity: 0.4;
-  pointer-events: none;
-}
-
-.view-only-grid .view-only-content {
-  background-image: 
-    linear-gradient(to right, #e0e8f0 1px, transparent 1px),
-    linear-gradient(to bottom, #e0e8f0 1px, transparent 1px);
-  background-size: 30px 30px;
-}
-
-/* Navigation bar */
-.view-only-nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 14px;
-  background: white;
-  border-top: 1px solid #e9ecef;
-  flex-shrink: 0;
-  gap: 10px;
-}
-
-.view-only-nav-btn {
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-  color: white;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 10px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: inherit;
-  -webkit-tap-highlight-color: transparent;
-  transition: all 0.15s;
-  min-height: 42px;
-}
-
-.view-only-nav-btn:active {
-  transform: scale(0.95);
-}
-
-.view-only-nav-btn:disabled {
-  opacity: 0.35;
-  cursor: default;
-  transform: none;
-}
-
-/* Dots */
-.view-only-dots {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.view-only-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #d0d5dd;
-  cursor: pointer;
-  transition: all 0.2s;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.view-only-dot.active {
-  background: var(--primary-color);
-  width: 10px;
-  height: 10px;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
-}
-
-.view-only-dot-more {
-  font-size: 0.65rem;
-  color: var(--text-secondary);
-  font-weight: 600;
-}
-
-/* View-only mode: hide everything else in the notebook */
-.view-only-container ~ .page-header,
-.view-only-container ~ .math-formulas-toolbar,
-.view-only-container ~ .global-formatting-toolbar {
-  display: none !important;
-}
-
-/* On small screen, when notebookView is active, hide all toolbars */
-@media (max-width: 1100px) {
-  #notebookView .math-formulas-toolbar,
-  #notebookView .global-formatting-toolbar,
-  #notebookView .page-header[style*="sticky"] {
-    /* Only hide when view-only-container is present */
-  }
-  
-  .view-only-container + .page-header {
-    display: none !important;
-  }
-}
-</style>
 
 <!-- מודאל מידע פרימיום (השוואה) -->
 <div id="premiumInfoModal" class="premium-info-modal hidden">
@@ -22747,6 +20075,410 @@ document.addEventListener('DOMContentLoaded', function() {
     padding: 25px 20px;
   }
 }
+</style>
+
+<!-- ========================================== -->
+<!-- ===== MOBILE APP COMPLETE OVERRIDE ======= -->
+<!-- ========================================== -->
+<style>
+/* ===================== RESET FOR MOBILE ===================== */
+/* Hide desktop navbar menu */
+.navbar-menu { display: none !important; }
+.fullscreen-icon { display: none !important; }
+.settings-icon { display: none !important; }
+
+/* Compact top bar - status bar style */
+.navbar {
+  height: 52px !important;
+  padding: 0 14px !important;
+  background: linear-gradient(135deg, #667eea, #764ba2) !important;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.12) !important;
+}
+.navbar-content { height: 52px !important; }
+.navbar-brand { font-size: 1.15rem !important; gap: 8px !important; }
+.navbar-brand .logo { width: 30px !important; height: 30px !important; animation: none !important; }
+.navbar-user { gap: 10px !important; }
+.user-time { font-size: 1.05rem !important; font-weight: 700 !important; }
+.user-date { font-size: 0.7rem !important; }
+.datetime-display { gap: 8px !important; }
+.logout-btn { padding: 5px 12px !important; font-size: 0.75rem !important; border-radius: 6px !important; }
+.premium-star-btn { font-size: 1.1rem !important; }
+
+/* Page container */
+.page-container {
+  margin-top: 52px !important;
+  min-height: calc(100vh - 52px) !important;
+  padding-bottom: 72px !important;
+}
+.page {
+  padding: 14px 14px 20px !important;
+  max-width: 100% !important;
+  min-height: auto !important;
+  animation: mPageIn 0.3s ease !important;
+}
+@keyframes mPageIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===================== BOTTOM TAB BAR ===================== */
+.m-tabbar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: calc(60px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background: #fff;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 -1px 12px rgba(0,0,0,0.08);
+  z-index: 9999;
+  border-top: 1px solid #eee;
+}
+.m-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 0;
+  color: #94a3b8;
+  font-size: 0.6rem;
+  font-weight: 600;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 0.15s;
+  flex: 1;
+}
+.m-tab svg { width: 22px; height: 22px; stroke-width: 2; }
+.m-tab.active { color: #667eea; }
+.m-tab.active svg { stroke-width: 2.5; }
+.m-tab:active { transform: scale(0.9); }
+
+/* ===================== MORE SHEET ===================== */
+.m-sheet-backdrop {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 10000;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s;
+}
+.m-sheet-backdrop.show { opacity: 1; pointer-events: auto; }
+.m-sheet {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: #fff;
+  border-radius: 20px 20px 0 0;
+  padding: 12px 20px calc(24px + env(safe-area-inset-bottom, 0px));
+  z-index: 10001;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.m-sheet.show { transform: translateY(0); }
+.m-sheet-handle {
+  width: 36px; height: 4px;
+  background: #d0d5dd; border-radius: 4px;
+  margin: 0 auto 16px;
+}
+.m-sheet-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.m-sheet-item {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 6px;
+  padding: 16px 8px;
+  border-radius: 14px;
+  background: #f8f9fb;
+  font-size: 0.8rem; font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s;
+}
+.m-sheet-item:active { background: #eef0f4; transform: scale(0.96); }
+.m-sheet-icon { font-size: 1.6rem; }
+
+/* ===================== HOMEPAGE ===================== */
+.welcome-section { padding: 0 !important; }
+.welcome-content {
+  grid-template-columns: 1fr !important;
+  gap: 16px !important;
+  text-align: right !important;
+}
+.welcome-text h1 { font-size: 1.5rem !important; }
+.welcome-text .subtitle { font-size: 0.9rem !important; }
+.welcome-text .institution { font-size: 0.8rem !important; }
+/* Hide logout button on homepage (use settings) */
+.welcome-text button[onclick*="logout"] { display: none !important; }
+
+.welcome-stats {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 10px !important;
+  width: 100% !important;
+}
+.stat-item {
+  padding: 14px 10px !important;
+  border-radius: 14px !important;
+  min-width: 0 !important;
+}
+.stat-number { font-size: 1.2rem !important; }
+.stat-label { font-size: 0.7rem !important; }
+
+.tools-grid {
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 10px !important;
+  margin-top: 16px !important;
+}
+.tool-card {
+  padding: 16px 12px !important;
+  border-radius: 16px !important;
+  min-height: auto !important;
+}
+.tool-card .tool-icon { font-size: 1.8rem !important; }
+.tool-card .tool-title { font-size: 0.85rem !important; }
+.tool-card .tool-description { font-size: 0.7rem !important; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.tool-card .tool-status { font-size: 0.65rem !important; }
+
+.app-footer { padding: 14px !important; margin-top: 20px !important; margin-bottom: 0 !important; }
+.footer-content { flex-direction: column !important; gap: 8px !important; }
+.footer-copyright { font-size: 0.75rem !important; }
+.footer-about-btn { font-size: 0.75rem !important; padding: 6px 14px !important; }
+
+/* ===================== PAGE HEADERS ===================== */
+.page-header {
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin-bottom: 14px !important;
+  text-align: right !important;
+}
+.page-title { font-size: 1.15rem !important; }
+.page-header div[style*="display: flex"] {
+  gap: 8px !important;
+}
+.add-page-btn, .back-btn {
+  padding: 8px 14px !important;
+  font-size: 0.8rem !important;
+  border-radius: 10px !important;
+  min-height: 40px !important;
+  white-space: nowrap;
+}
+
+/* ===================== NOTEBOOKS LIST ===================== */
+.subjects-grid {
+  grid-template-columns: 1fr 1fr !important;
+  gap: 10px !important;
+}
+.subject-card {
+  padding: 14px !important;
+  border-radius: 14px !important;
+}
+
+/* ===================== NOTEBOOK VIEW ===================== */
+/* Formatting toolbar - compact bottom strip */
+.global-formatting-toolbar {
+  position: fixed !important;
+  bottom: 60px !important;
+  left: 0 !important; right: 0 !important;
+  top: auto !important;
+  border-radius: 0 !important;
+  padding: 6px 8px !important;
+  gap: 4px !important;
+  z-index: 900 !important;
+  background: #fff !important;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.08) !important;
+  border: none !important;
+  border-top: 1px solid #eee !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch;
+  flex-wrap: nowrap !important;
+  margin: 0 !important;
+}
+.toolbar-group {
+  flex-shrink: 0 !important;
+  gap: 3px !important;
+  padding: 0 4px !important;
+  border-left: 1px solid #e9ecef !important;
+}
+.toolbar-btn {
+  min-width: 36px !important; height: 36px !important;
+  padding: 4px !important; font-size: 0.85rem !important;
+  border-radius: 8px !important;
+}
+.toolbar-select {
+  min-width: 60px !important; height: 36px !important;
+  font-size: 0.8rem !important; border-radius: 8px !important;
+}
+
+/* Math toolbar */
+.math-formulas-toolbar { display: none !important; }
+
+/* Notebook page header - inline */
+#notebookView .page-header {
+  position: sticky !important;
+  top: 52px !important;
+  z-index: 100 !important;
+  background: var(--background-main) !important;
+  padding: 6px 0 !important;
+}
+.zoom-controls { display: none !important; }
+
+/* Notebook content padding for bottom toolbar */
+#notebookContent { padding-bottom: 120px !important; margin-top: 0 !important; }
+
+/* Pages */
+.notebook-page { min-height: auto !important; margin-bottom: 16px !important; border-radius: 12px !important; }
+.notebook-header { padding: 8px 12px !important; }
+.lined-page, .grid-page, .blank-page { padding: 14px !important; }
+.enhanced-textarea { height: 350px !important; font-size: 16px !important; }
+
+/* ===================== TASKS ===================== */
+.tasks-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
+.tasks-header { flex-direction: column !important; gap: 10px !important; }
+.tasks-stats { justify-content: center !important; flex-wrap: wrap !important; gap: 8px !important; }
+.task-creator {
+  position: static !important;
+  order: -1 !important;
+  margin-bottom: 12px !important;
+}
+.task-creator input, .task-creator select, .task-creator textarea {
+  min-height: 44px !important; font-size: 16px !important;
+}
+.task-card { padding: 14px !important; border-radius: 14px !important; }
+.task-actions button { min-width: 40px !important; min-height: 40px !important; }
+
+/* ===================== CALENDAR ===================== */
+.calendar-nav {
+  flex-direction: column !important;
+  gap: 10px !important;
+  padding: 12px !important;
+}
+.calendar-nav-left { justify-content: center !important; gap: 10px !important; }
+.calendar-nav-right { justify-content: center !important; flex-wrap: wrap !important; gap: 6px !important; }
+.current-month { font-size: 1.2rem !important; }
+.nav-btn { width: 40px !important; height: 40px !important; }
+.today-btn { min-height: 40px !important; }
+.view-btn { min-height: 40px !important; padding: 8px 12px !important; }
+
+.calendar-stats { grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; }
+.calendar-stat { padding: 10px !important; border-radius: 12px !important; }
+
+/* Calendar grid + sidebar stack */
+div[style*="grid-template-columns: 350px 1fr"] {
+  grid-template-columns: 1fr !important;
+  gap: 14px !important;
+}
+.calendar-container { padding: 8px !important; border-radius: 12px !important; }
+.calendar-day-header { padding: 6px 2px !important; font-size: 0.7rem !important; }
+.calendar-day { min-height: 52px !important; padding: 4px !important; }
+.day-number { font-size: 0.75rem !important; }
+.event-item { font-size: 0.6rem !important; padding: 1px 3px !important; }
+.quick-events { padding: 14px !important; }
+.quick-btn { padding: 10px 14px !important; min-height: 42px !important; }
+.events-search { padding: 12px !important; }
+.events-list-sidebar { max-height: 250px !important; padding: 12px !important; }
+
+/* ===================== CALCULATOR ===================== */
+div[style*="grid-template-columns: 1fr 300px"] {
+  grid-template-columns: 1fr !important;
+  gap: 14px !important;
+}
+#displayCurrent { font-size: 2.2rem !important; min-height: 50px !important; }
+.button-grid.basic-mode button,
+.button-grid.scientific-mode button,
+.button-grid.programmer-mode button {
+  padding: 16px !important;
+  font-size: 1.1rem !important;
+  min-height: 52px !important;
+  border-radius: 12px !important;
+}
+.button-grid.scientific-mode { grid-template-columns: repeat(4, 1fr) !important; gap: 6px !important; }
+.button-grid.scientific-mode button { padding: 12px 6px !important; font-size: 0.85rem !important; min-height: 44px !important; }
+.mode-btn { min-height: 42px !important; }
+
+/* ===================== TIMER ===================== */
+#timer.page { padding: 10px !important; }
+.timer-container { border-radius: 16px !important; }
+.timer-header h1 { font-size: 1.3rem !important; }
+.timer-time { font-size: 3rem !important; }
+.timer-presets { grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; }
+.timer-preset { min-height: 44px !important; }
+.timer-main { flex-direction: column !important; gap: 14px !important; }
+.timer-input-group input { width: 60px !important; font-size: 1.3rem !important; min-height: 44px !important; }
+.timer-controls button { min-height: 48px !important; }
+
+/* ===================== SCHEDULE ===================== */
+.schedule-container { padding: 10px !important; border-radius: 12px !important; overflow-x: auto !important; }
+.schedule-table { min-width: 550px !important; }
+.schedule-table th, .schedule-table td {
+  min-width: 70px !important; padding: 6px 3px !important;
+  font-size: 0.7rem !important; height: 50px !important;
+}
+.schedule-stats { flex-wrap: wrap !important; justify-content: center !important; gap: 8px !important; }
+.schedule-actions { flex-wrap: wrap !important; justify-content: center !important; gap: 6px !important; }
+.schedule-action-btn { min-height: 42px !important; font-size: 0.85rem !important; }
+
+/* ===================== LINKS ===================== */
+.links-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
+.links-actions { flex-wrap: wrap !important; justify-content: center !important; gap: 8px !important; }
+.links-action-btn { min-height: 42px !important; }
+.links-search input { min-height: 44px !important; font-size: 16px !important; }
+
+/* ===================== SUBSCRIPTION ===================== */
+.upgrade-plans-container { grid-template-columns: 1fr !important; }
+.upgrade-plan.premium { transform: none !important; }
+
+/* ===================== ALL MODALS ===================== */
+.modal-content, .link-modal, .about-modal, .upgrade-modal-content,
+.cancel-modal-content, .premium-info-content, .schedule-modal {
+  width: 94% !important;
+  max-width: 94vw !important;
+  margin: auto !important;
+  padding: 20px 16px !important;
+  border-radius: 18px !important;
+  max-height: 85vh !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+}
+.modal-footer { flex-direction: column !important; gap: 8px !important; }
+.modal-footer .btn { width: 100% !important; min-height: 46px !important; justify-content: center !important; }
+.event-type-grid { grid-template-columns: repeat(2, 1fr) !important; }
+.time-inputs { grid-template-columns: 1fr !important; }
+.page-type-grid { grid-template-columns: repeat(2, 1fr) !important; }
+.color-grid { grid-template-columns: repeat(5, 1fr) !important; }
+
+/* ===================== TOUCH & INPUT ===================== */
+button, [onclick] { -webkit-tap-highlight-color: rgba(102,126,234,0.1); }
+input, select, textarea { font-size: 16px !important; }
+select {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+
+/* Notifications panel */
+.notifications-panel {
+  width: 90vw !important;
+  max-width: 340px !important;
+}
+
+/* Scrollbar thin */
+::-webkit-scrollbar { width: 3px; height: 3px; }
+::-webkit-scrollbar-thumb { background: rgba(102,126,234,0.25); border-radius: 3px; }
+
+/* ===================== ANIMATIONS ===================== */
+.tool-card, .subject-card, .task-card, .stat-item, .link-card {
+  transition: transform 0.15s, box-shadow 0.15s !important;
+}
+.tool-card:active, .subject-card:active, .task-card:active, .stat-item:active, .link-card:active {
+  transform: scale(0.97) !important;
+}
+
+/* Upgrade page responsive */
+.upgrade-page { padding: 16px !important; }
+.upgrade-header h1 { font-size: 1.5rem !important; }
 </style>
 
 <!-- חלונית התראות - מחוץ לכל האלמנטים -->
