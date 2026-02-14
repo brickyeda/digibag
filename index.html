@@ -6520,6 +6520,24 @@ body:has(.mode-btn[data-mode="programmer"].active) .programmer-displays {
 
     <!-- Individual Notebook View -->
     <div id="notebookView" class="page">
+
+    <!-- Rotate Device Overlay -->
+    <div class="rotate-overlay" id="rotateOverlay">
+      <div class="rotate-overlay-content">
+        <div class="rotate-phone-animation">
+          <div class="rotate-phone">
+            <div class="rotate-phone-screen">
+              <div class="rotate-phone-notch"></div>
+            </div>
+          </div>
+        </div>
+        <h2 class="rotate-title">סובבו את המכשיר לרוחב</h2>
+        <p class="rotate-subtitle">חוויית המחברת מותאמת לצפייה במצב Landscape</p>
+        <button class="rotate-dismiss-btn" onclick="dismissRotateOverlay()">
+          המשך בכל מקרה →
+        </button>
+      </div>
+    </div>
      
 <!-- Math Formulas Toolbar -->
 <div class="math-formulas-toolbar" id="mathFormulasToolbar">
@@ -9540,6 +9558,12 @@ if (this.currentNotebook && pageId !== 'notebookView') {
 }
  
         // הסתר את כל הדפים
+        // Reset rotate overlay for notebooks
+        if (pageId !== 'notebookView') {
+          rotateOverlayDismissed = false;
+          var rotOverlay = document.getElementById('rotateOverlay');
+          if (rotOverlay) rotOverlay.classList.add('dismissed');
+        }
         document.querySelectorAll('.page').forEach(page => {
           page.classList.remove('active');
         });
@@ -9580,9 +9604,10 @@ if (this.currentNotebook && pageId !== 'notebookView') {
         } else if (pageId === 'notebookView') {
           this.renderNotebookContent();
           // Initialize mobile toolbar on notebook view
-          if (window.innerWidth <= 768) {
+          if (window.innerWidth <= 1024) {
             setTimeout(function() {
               switchToolbarTab(0);
+              showRotateOverlayIfNeeded();
             }, 100);
           }
 } else if (pageId === 'notebooks') {
@@ -19151,7 +19176,10 @@ document.addEventListener('click', function(e) {
 
 // Mobile toolbar tab switching
 function switchToolbarTab(index) {
-  if (window.innerWidth > 768) return;
+  // Works on mobile portrait (<768) and landscape tablet (<1024)
+  var isMobile = window.innerWidth <= 768 && window.innerHeight > window.innerWidth;
+  var isLandscape = window.innerWidth <= 1024 && window.innerWidth > window.innerHeight;
+  if (!isMobile && !isLandscape) return;
   
   const groups = document.querySelectorAll('#inPageToolbar .toolbar-group');
   const tabs = document.querySelectorAll('.mobile-toolbar-tab:not(.mobile-formula-toggle)');
@@ -19179,7 +19207,9 @@ function switchToolbarTab(index) {
 
 // Mobile formulas toggle
 function toggleMobileFormulas() {
-  if (window.innerWidth > 768) return;
+  var isMobile = window.innerWidth <= 768 && window.innerHeight > window.innerWidth;
+  var isLandscape = window.innerWidth <= 1024 && window.innerWidth > window.innerHeight;
+  if (!isMobile && !isLandscape) return;
   
   const mathToolbar = document.getElementById('mathFormulasToolbar');
   const formulaTab = document.querySelector('.mobile-formula-toggle');
@@ -19196,7 +19226,7 @@ function toggleMobileFormulas() {
 
 // Close formula panel when tapping outside
 document.addEventListener('click', function(e) {
-  if (window.innerWidth > 768) return;
+  if (window.innerWidth > 768 && window.innerHeight > window.innerWidth) return;
   const mathToolbar = document.getElementById('mathFormulasToolbar');
   if (mathToolbar && mathToolbar.classList.contains('mobile-show')) {
     if (!e.target.closest('.math-formulas-toolbar') && !e.target.closest('.mobile-formula-toggle')) {
@@ -19206,6 +19236,56 @@ document.addEventListener('click', function(e) {
     }
   }
 });
+
+// ===== Rotate Overlay for Notebooks =====
+var rotateOverlayDismissed = false;
+
+function dismissRotateOverlay() {
+  rotateOverlayDismissed = true;
+  var overlay = document.getElementById('rotateOverlay');
+  if (overlay) {
+    overlay.classList.add('dismissed');
+  }
+}
+
+// Auto-dismiss overlay when orientation changes to landscape
+window.addEventListener('orientationchange', function() {
+  setTimeout(function() {
+    if (window.innerWidth > window.innerHeight) {
+      dismissRotateOverlay();
+    }
+  }, 300);
+});
+
+// Also check with resize for browsers that don't fire orientationchange
+window.addEventListener('resize', function() {
+  var overlay = document.getElementById('rotateOverlay');
+  if (overlay && !rotateOverlayDismissed) {
+    if (window.innerWidth > window.innerHeight) {
+      overlay.classList.add('dismissed');
+    } else if (window.innerWidth <= 1024) {
+      // Re-show if user rotated back to portrait (and didn't manually dismiss)
+      overlay.classList.remove('dismissed');
+    }
+  }
+});
+
+// Show overlay when entering notebook view on mobile portrait
+function showRotateOverlayIfNeeded() {
+  if (rotateOverlayDismissed) return;
+  var overlay = document.getElementById('rotateOverlay');
+  if (!overlay) return;
+  
+  // Only show on non-desktop portrait
+  var isMobileOrTablet = window.innerWidth <= 1024;
+  var isPortrait = window.innerHeight > window.innerWidth;
+  
+  if (isMobileOrTablet && isPortrait) {
+    overlay.classList.remove('dismissed');
+  } else {
+    overlay.classList.add('dismissed');
+  }
+}
 
 // Re-initialize lucide icons for mobile nav
 document.addEventListener('DOMContentLoaded', function() {
@@ -20547,42 +20627,467 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 }
 
-/* ===== LANDSCAPE MOBILE ===== */
-@media (max-width: 768px) and (orientation: landscape) {
+/* ============================================= */
+/* ===== ROTATE OVERLAY & NOTEBOOK LANDSCAPE ==== */
+/* ============================================= */
+
+/* Rotate overlay - hidden by default */
+.rotate-overlay {
+  display: none;
+}
+
+/* Show overlay on non-desktop portrait screens */
+@media (max-width: 1024px) and (orientation: portrait) {
+  .rotate-overlay {
+    display: flex;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 10001;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    animation: overlayFadeIn 0.4s ease;
+  }
+
+  .rotate-overlay.dismissed {
+    display: none !important;
+  }
+}
+
+/* Hide on desktop or landscape */
+@media (min-width: 1025px), (orientation: landscape) {
+  .rotate-overlay {
+    display: none !important;
+  }
+}
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.rotate-overlay-content {
+  padding: 40px 30px;
+  max-width: 340px;
+}
+
+.rotate-title {
+  color: white;
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.rotate-subtitle {
+  color: rgba(255,255,255,0.85);
+  font-size: 1rem;
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+.rotate-dismiss-btn {
+  background: rgba(255,255,255,0.2);
+  border: 2px solid rgba(255,255,255,0.5);
+  color: white;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.rotate-dismiss-btn:active {
+  background: rgba(255,255,255,0.35);
+  transform: scale(0.96);
+}
+
+/* Phone rotation animation */
+.rotate-phone-animation {
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.rotate-phone {
+  width: 64px;
+  height: 110px;
+  border: 3px solid white;
+  border-radius: 14px;
+  position: relative;
+  animation: rotatePhone 2.5s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+.rotate-phone-screen {
+  position: absolute;
+  top: 8px; left: 4px; right: 4px; bottom: 8px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 6px;
+}
+
+.rotate-phone-notch {
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 4px;
+  background: rgba(255,255,255,0.5);
+  border-radius: 0 0 4px 4px;
+}
+
+@keyframes rotatePhone {
+  0%, 15% {
+    transform: rotate(0deg);
+  }
+  40%, 60% {
+    transform: rotate(-90deg);
+  }
+  85%, 100% {
+    transform: rotate(0deg);
+  }
+}
+
+/* ===================================================== */
+/* ===== LANDSCAPE NOTEBOOK - FULL OPTIMIZATION ========= */
+/* ===================================================== */
+
+@media (max-width: 1024px) and (orientation: landscape) {
+
+  /* --- General landscape adjustments --- */
+  .page-container {
+    padding-bottom: 50px;
+  }
+
+  .navbar {
+    height: 40px;
+    padding: 0 10px;
+  }
+
+  .navbar-brand {
+    font-size: 1rem;
+    gap: 6px;
+  }
+
+  .navbar-brand .logo {
+    width: 26px;
+    height: 26px;
+  }
 
   .page-container {
-    padding-bottom: 60px;
+    margin-top: 40px;
   }
 
   .mobile-bottom-nav {
-    padding: 4px 0;
+    padding: 2px 0;
+    height: 40px;
   }
 
   .mobile-nav-item, .mobile-nav-more {
-    padding: 4px 10px;
+    padding: 2px 10px;
+    gap: 1px;
   }
 
   .mobile-nav-item svg, .mobile-nav-more svg {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
   }
 
   .mobile-nav-item span, .mobile-nav-more span {
-    font-size: 0.55rem;
+    font-size: 0.5rem;
   }
 
-  .calendar-day {
-    min-height: 50px;
+  /* --- Notebook View: Landscape Layout --- */
+  #notebookView.page {
+    padding: 4px 8px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    height: calc(100vh - 40px) !important; /* full height minus navbar */
+    overflow: hidden !important;
   }
 
-  .timer-time {
-    font-size: 2.5rem !important;
+  #notebookView.page.active {
+    display: flex !important;
+  }
+
+  /* --- Notebook Header: Ultra-compact --- */
+  #notebookView .page-header {
+    position: relative !important;
+    top: auto !important;
+    flex-direction: row !important;
+    align-items: center;
+    padding: 3px 4px !important;
+    margin-bottom: 2px !important;
+    gap: 6px !important;
+    min-height: 32px;
+    flex-shrink: 0;
+    background: transparent;
+  }
+
+  #notebookView .page-title {
+    font-size: 0.85rem !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+  }
+
+  #notebookView .page-header div[style*="display: flex"] {
+    gap: 4px !important;
+  }
+
+  #notebookView .add-page-btn,
+  #notebookView .back-btn {
+    padding: 4px 8px !important;
+    min-height: 28px;
+    font-size: 0.7rem !important;
+    border-radius: 6px;
+  }
+
+  #notebookView .btn-text {
+    display: none;
+  }
+
+  .zoom-controls {
+    gap: 1px;
+  }
+
+  .zoom-btn {
+    min-width: 26px;
+    min-height: 26px;
+    padding: 2px;
+    font-size: 0.75rem;
+  }
+
+  .zoom-level {
+    font-size: 0.65rem;
+    min-width: 32px;
+  }
+
+  /* --- Main Formatting Toolbar: Horizontal compact bar --- */
+  .global-formatting-toolbar {
+    position: relative !important;
+    top: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    right: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 8px !important;
+    background: white !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08) !important;
+    border: 1px solid #e9ecef !important;
+    flex-shrink: 0;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+    overflow: visible !important;
+  }
+
+  /* Mobile toolbar tabs in landscape - single row */
+  .mobile-toolbar-tabs {
+    display: flex !important;
+    padding: 2px 4px;
+    gap: 1px;
+    background: white;
+    border-radius: 8px 8px 0 0;
+  }
+
+  .mobile-toolbar-tab {
+    padding: 3px 6px;
+    font-size: 0.5rem;
+    gap: 0;
+    border-radius: 6px;
+  }
+
+  .mobile-toolbar-tab .tab-icon {
+    font-size: 0.85rem;
+  }
+
+  .mobile-toolbar-tab span:not(.tab-icon) {
+    display: none; /* Hide labels in landscape, icons only */
+  }
+
+  /* Toolbar groups in landscape */
+  .global-formatting-toolbar .toolbar-group {
+    display: none !important;
+    padding: 4px 6px !important;
+    gap: 3px !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    background: #f8f9fa;
+    border-top: 1px solid #eee;
+  }
+
+  .global-formatting-toolbar .toolbar-group.mobile-active {
+    display: flex !important;
+  }
+
+  .global-formatting-toolbar .toolbar-btn {
+    min-width: 32px !important;
+    height: 30px !important;
+    padding: 3px 5px !important;
+    font-size: 0.8rem !important;
+    border-radius: 6px !important;
+  }
+
+  .global-formatting-toolbar .toolbar-select {
+    min-width: 65px !important;
+    height: 30px !important;
+    font-size: 0.75rem !important;
+    padding: 2px 4px !important;
+    border-radius: 6px !important;
+  }
+
+  /* --- Math Formulas Toolbar in Landscape --- */
+  .math-formulas-toolbar {
+    display: none !important;
+  }
+
+  .math-formulas-toolbar.mobile-show {
+    display: block !important;
+    position: fixed;
+    top: 40px;
+    right: 0;
+    bottom: 40px;
+    left: auto;
+    width: 220px;
+    z-index: 998;
+    max-height: none;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    background: white;
+    border-radius: 0;
+    box-shadow: -4px 0 20px rgba(0,0,0,0.15);
+    padding: 10px !important;
+    animation: slideFromRight 0.25s ease;
+  }
+
+  @keyframes slideFromRight {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+  }
+
+  .math-formulas-toolbar.mobile-show .formulas-title {
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+  }
+
+  .math-formulas-toolbar.mobile-show .formulas-container {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .math-formulas-toolbar.mobile-show .formula-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+  }
+
+  .math-formulas-toolbar.mobile-show .formula-item {
+    font-size: 0.7rem;
+    padding: 6px 4px;
+    text-align: center;
+    min-height: 32px;
+  }
+
+  .math-formulas-toolbar.mobile-show .formula-preview {
+    display: none;
+  }
+
+  .math-formulas-toolbar.mobile-show .nuschon-link-btn {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+    min-height: 30px;
+  }
+
+  /* --- Notebook Content: Fill remaining space --- */
+  #notebookContent {
+    flex: 1 !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 10px !important;
+    margin-top: 0 !important;
+  }
+
+  /* Notebook page styles in landscape */
+  .notebook-page {
+    margin-bottom: 10px;
+  }
+
+  .lined-page, .grid-page, .blank-page {
+    padding: 8px !important;
+    margin-bottom: 10px;
+  }
+
+  .lined-textarea, .grid-textarea, .blank-textarea,
+  .enhanced-textarea, [contenteditable="true"] {
+    min-height: calc(100vh - 200px) !important;
+    font-size: 0.95rem !important;
+    padding: 8px !important;
+  }
+
+  /* Page tabs in landscape */
+  .notebook-pages-tabs {
+    padding: 2px 0;
+    margin-bottom: 2px;
+    flex-shrink: 0;
+  }
+
+  .notebook-pages-tabs .tab-btn {
+    min-height: 28px;
+    padding: 4px 10px;
+    font-size: 0.7rem;
+  }
+
+  /* Drawing canvas in landscape */
+  .page-canvas {
+    touch-action: none;
+  }
+
+  /* Drawing toolbar items in landscape */
+  #thicknessSlider {
+    width: 50px !important;
+  }
+
+  #drawingColor {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  #thicknessDisplay {
+    font-size: 0.65rem !important;
+  }
+
+  /* Hide the notebook margin for more space */
+  #notebookView .page {
+    padding: 4px !important;
+  }
+}
+
+/* ===== PORTRAIT MOBILE + NOTEBOOK ADJUSTMENTS ===== */
+@media (max-width: 768px) and (orientation: portrait) {
+
+  /* Notebook page bottom padding for fixed toolbar */
+  #notebookContent {
+    padding-bottom: 130px !important;
+  }
+
+  .lined-page, .grid-page, .blank-page {
+    margin-bottom: 90px;
   }
 }
 
 /* ===== PRINT - hide mobile nav ===== */
 @media print {
   .mobile-bottom-nav {
+    display: none !important;
+  }
+  .rotate-overlay {
     display: none !important;
   }
 }
